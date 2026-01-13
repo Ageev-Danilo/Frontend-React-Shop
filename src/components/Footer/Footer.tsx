@@ -29,7 +29,7 @@ export const Footer = () => {
                     <a href="">Кабінет</a>
                 </div>
                 <hr />
-                <p>© 2025 Drones Всі права захищені.</p>
+                <p className="copyright">© 2025 Drones Всі права захищені.</p>
             </div>
         </footer>
     );

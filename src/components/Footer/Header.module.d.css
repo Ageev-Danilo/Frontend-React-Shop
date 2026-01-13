@@ -1,7 +1,8 @@
 footer {
-    background-color: gray;
+    background-color: #CDD5DD;
     width: 100%;
     height: 600px;
+    padding: 20px;
 }
 
 footer .upper {
@@ -14,9 +15,34 @@ footer .upper {
     border-bottom-right-radius: 200px;
 }
 
-footer .column {
+footer .column, footer .row {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 12px;
+}
+
+footer .row a {
+    text-transform: uppercase;
+    color: #0C122A;
+}
+
+footer hr {
+    background-color: #F4F4F4;
+}
+
+.copyright {
+    height: 18px;
+    font-family: 'GT Walsheim Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 18px;
+    text-align: center;
+    color: #9EA0AB;
+    color: color(display-p3 0.620 0.627 0.667);
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
 }

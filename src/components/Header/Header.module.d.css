@@ -24,3 +24,17 @@ header a {
     text-transform: uppercase;
     color: #9EA0AB;
 }
+
+header .logo {
+    background-image: url(../../assets/media/logo.svg);
+    background-size: cover;
+    background-position: center;
+    width: 108px;
+    height: 21px;
+}
+
+header button {
+    background-image: url(../../assets/media/cart.svg);
+    background-size: cover;
+    background-position: center;
+}
