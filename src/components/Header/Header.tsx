@@ -3,9 +3,12 @@ import styles from './Header.module.css';
 export const Header = () => {
     return (
         <header className={styles.header}>
-            <a href="">КАТАЛОГ</a>
-            <a href="">ПРО НАС</a>
-            <a href="">КОНТАКТИ</a>
+            <a href="">Каталог</a>
+            <a href="">Про нас</a>
+            <a href="">Контакти</a>
+            <div className="logo"></div>
+            <button className="cart-btn"></button>
+            <button className="profile-btn"></button>
         </header>
     );
 };
