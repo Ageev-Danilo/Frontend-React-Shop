@@ -1,4 +1,4 @@
-export const About = () => {
+export function About(){
     return (
         <div>
             <h1>Про нас</h1>

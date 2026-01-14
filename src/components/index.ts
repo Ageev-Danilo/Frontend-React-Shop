@@ -1,3 +1,3 @@
-export { default as Header } from './Header/Header';
-export { default as Footer } from './Footer/Footer';
-export { default as Main } from './Main/Main';
+export {  Header } from './Header/Header';
+export {  Footer } from './Footer/Footer';
+export {  Main } from './Main/Main';
