@@ -2,7 +2,7 @@ import styles from './Footer.module.css';
 import footerSvg from '../../assets/media/footer.svg';
 
 
-export const Footer = () => {
+export function Footer() {
     return (
         <footer className={styles.footer}>
             <div className="upper">

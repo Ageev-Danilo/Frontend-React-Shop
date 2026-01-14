@@ -1,6 +1,6 @@
-import styles from './Header.module.css';
+import styles from "./Header.module.css"
 
-export const Header = () => {
+export function Header ()  {
     return (
         <header className={styles.header}>
             <a href="">Каталог</a>

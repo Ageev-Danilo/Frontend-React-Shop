@@ -1,13 +1,14 @@
-import { Routes, Route } from 'react-router-dom';
-import { Layout } from './Layout';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Layout } from './layout/Layout';
 import { About, NotFound } from '../pages';
 
-export const AppRoutes = () => {
+export function AppRoutes(){
     return (
-        <Layout>
+        <BrowserRouter>
+  
             <Routes>
                 {/* Головна сторінка */}
-                <Route path="/" element={<div><h1>Головна сторінка</h1></div>} />
+                <Route path="/" element={<Layout />} />
                 
                 {/* Сторінка "About" */}
                 <Route path="/about" element={<About />} />
@@ -15,6 +16,7 @@ export const AppRoutes = () => {
                 {/* Сторінка NotF 404 */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
-        </Layout>
+
+     </BrowserRouter>
     );
 };
