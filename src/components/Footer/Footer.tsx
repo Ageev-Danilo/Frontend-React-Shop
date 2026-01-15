@@ -5,7 +5,7 @@ import footerSvg from '../../assets/media/footer.svg';
 export function Footer() {
     return (
         <footer className={styles.footer}>
-            <div className="upper">
+            <div className={styles.upper}>
                 <div className="column">
                     <h2>1к+</h2>
                     <p>Успішних відправок</p>

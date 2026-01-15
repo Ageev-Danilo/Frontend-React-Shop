@@ -9,10 +9,11 @@ footer .upper {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: white;
+    background-image: url(../../assets/media/bg.svg);
+    background-size: cover;
+    background-position: center;
     width: 100%;
-    border-bottom-left-radius: 200px;
-    border-bottom-right-radius: 200px;
+    height: 400px;
 }
 
 footer .column, footer .row {
