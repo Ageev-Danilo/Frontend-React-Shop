@@ -1,11 +1,12 @@
+import { Link } from "react-router-dom";
 import styles from "./Header.module.css"
 
 export const Header = () => {
     return (
         <header className={styles.header}>
-            <a href="">КАТАЛОГ</a>
-            <a href="">ПРО НАС</a>
-            <a href="">КОНТАКТИ</a>
+            <Link to="/">КАТАЛОГ</Link>
+            <Link to="/about">ПРО НАС</Link>
+            <Link to="/contacts">КОНТАКТИ</Link> 
         </header>
     );
 };

@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Header, Footer, Main } from '../../components';
 import { Outlet } from 'react-router-dom';
+import styles from './layout.module.css';
 
 
 // interface LayoutProps {
@@ -8,14 +9,18 @@ import { Outlet } from 'react-router-dom';
 // }
 // { children }: LayoutProps
 
-export function Layout(){
+export function Layout() {
     return (
-        <div className="app-wrapper">
+        <div className={styles.appWrapper}>
             <Header />
-            <Main>
-                <Outlet/>
-            </Main>
-            <Footer />
+            <div className={styles.content}>
+                <Main>
+                    <Outlet />
+                </Main>
+            </div>
+            <div className={styles.footerWrapper}>
+                <Footer />
+            </div>
         </div>
     );
-};
+}
