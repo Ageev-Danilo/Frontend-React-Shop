@@ -1,0 +1,71 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; 
+    position: relative;
+    padding: 120px 40px; 
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 60px;
+}
+
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'GT Walsheim Pro', sans-serif;
+    font-weight: 900;
+    font-size: 350px; 
+    color: #F8F8F8;
+    z-index: -1;
+    pointer-events: none;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+}
+
+.leftSide {
+    flex: 1;
+}
+
+.leftSide h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #18181B;
+    margin: 0 0 16px 0; 
+    line-height: 1.2;
+}
+
+.descriptionText {
+    color: #71717A;
+    font-size: 16px;
+}
+
+.rightSide {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-top: 8px; 
+}
+
+.message {
+    color: #9EA0AB;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.btn {
+    align-self: flex-start; 
+    background: #0F172A;
+    color: #FFFFFF;
+    padding: 14px 45px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    transition: background 0.2s;
+}
