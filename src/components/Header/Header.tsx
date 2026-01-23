@@ -1,14 +1,16 @@
 import styles from "./Header.module.css"
+import { Link } from 'react-router-dom'
+
 
 export function Header ()  {
     return (
         <header className={styles.header}>
             <div className={styles.gap}>
-                <a href="">Каталог</a>
-                <a href="">Про нас</a>
-                <a href="">Контакти</a>
+                <Link to={"catalog"}>Каталог</Link>
+                <Link to={"about"}>Про нас</Link>
+                <Link to={"contacts"}>Контакти</Link>
             </div>
-            <div className={styles.logo}></div>
+            <Link to={"/"} className={styles.logo}></Link>
             <div className={styles.gap}>
                 <button className={styles.cartBtn}></button>
                 <button className={styles.profileBtn}></button>
