@@ -16,7 +16,24 @@ a, img {
 }
 
 main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    background-color: #CDD5DD;
+    background-color: white;
     padding: 20px;
+}
+
+main .new, main .about, main .catalog {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main .about p {
+    width: 500px;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }

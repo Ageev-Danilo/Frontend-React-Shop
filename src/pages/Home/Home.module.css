@@ -1,3 +1,7 @@
+* {
+    font-family: 'GT Walsheim Pro';
+}
+
 .wrapper {
     display: flex;
     align-items: center;
@@ -28,4 +32,44 @@
 .row {
     display: flex;
     align-items: center;
+}
+
+.centr {
+    display: flex;
+    justify-content: center;
+}
+
+
+.bottomHeader {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    overflow-x: hidden;
+    padding-right: 100px;
+    width: 100vw;
+    height: 50vh;
+}
+
+.description {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 120px;
+}
+
+.description p {
+    margin-block-end: 40px;
+}
+
+.bottomBackground {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110vw;
+    height: 50vh;
+    background-color: #FFFFFF;
+    border-radius: 50% 50% 0 0 / 50% 50% 0 0;
+    z-index: -1;
 }
