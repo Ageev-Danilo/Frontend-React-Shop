@@ -1,25 +1,27 @@
 import { Header, Footer, Main } from '../../components';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import styles from './layout.module.css';
 
 
-// interface LayoutProps {
-//     children: ReactNode;
-// }
-// { children }: LayoutProps
+export function Layout(){
+    const location = useLocation();
+    const isHome = location.pathname === '/';
 
-export function Layout() {
     return (
-        <div className={styles.appWrapper}>
-            <Header />
-            <div className={styles.content}>
-                <Main>
-                    <Outlet />
-                </Main>
-            </div>
-            <div className={styles.footerWrapper}>
-                <Footer />
-            </div>
+        <div className={styles.app}>
+            <Header>
+                {isHome && (
+                    <div className={styles.column + ' ' + styles.title}>
+                        <h1 className={styles.h1}>Технології</h1>
+                        <h1 className={styles.h1}>Які змінюють реальність</h1>
+                    </div>
+                )}
+            </Header>
+            <div style={{'height': '94px'}}/>
+            <Main>
+                <Outlet/>
+            </Main>
+            <Footer />
         </div>
-    );  
-}
+    );
+};

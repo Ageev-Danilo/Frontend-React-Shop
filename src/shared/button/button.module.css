@@ -1,0 +1,31 @@
+.fill {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 40px;
+    background-color: #0C122A;
+    border-radius: 45px;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+}
+
+.outline {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0A122C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 40px;
+    background-color: transparent;
+    border: 1.5px solid #0A122C;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+}

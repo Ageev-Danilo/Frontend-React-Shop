@@ -1,11 +1,11 @@
 import styles from './Footer.module.css';
-import footerSvg from '../../assets/media/footer.svg';
+import deco from '../../assets/img/deco.svg';
 
 
 export function Footer() {
     return (
-        <footer className={styles.footer}>
-            <div className={styles.upper}>
+        <footer className={`${styles.footer} center`}>
+            <div className={`${styles.upper} row`}>
                 <div className="column">
                     <h2>1к+</h2>
                     <p>Успішних відправок</p>
@@ -20,8 +20,8 @@ export function Footer() {
                 </div>
             </div>
             <div>
-                <img src={footerSvg}/>
-                <div className="row">
+                <img src={deco}/>
+                <div className="row centr">
                     <a href="">Каталог</a>
                     <a href="">Про нас</a>
                     <a href="">Контакти</a>

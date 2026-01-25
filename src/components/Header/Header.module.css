@@ -31,7 +31,7 @@ header a {
 }
 
 header .logo {
-    background-image: url(../../assets/media/logo.svg);
+    background-image: url(../../assets/img/logo.svg);
     background-size: cover;
     background-position: center;
     width: 108px;
@@ -62,11 +62,11 @@ header button:hover {
 }
 
 .cartBtn {
-    background-image: url(../../assets/media/cart.svg);
+    background-image: url(../../assets/img/cart.svg);
 }
 
 .profileBtn {
-    background-image: url(../../assets/media/user.svg);
+    background-image: url(../../assets/img/user.svg);
 }
 
 .tr {
