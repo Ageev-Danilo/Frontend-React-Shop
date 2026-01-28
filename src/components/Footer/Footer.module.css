@@ -1,0 +1,79 @@
+.footer {
+    background-color: #CDD5DD;
+    width: 100%;
+    height: 600px;
+}
+
+.footer .upper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url(../../assets/img/bg.svg);
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 400px;
+    gap: 180px;
+}
+
+.footer .column, footer .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer .row a {
+    text-transform: uppercase;
+    color: #0C122A;
+}
+
+.footer hr {
+    background-color: #f4f4f488;
+    width: calc(100% - 200px);
+    min-height: 2px;
+    border: none;
+}
+
+.copyright {
+    width: 100%;
+    height: 100px;
+}
+
+.copyright p {
+    height: 18px;
+    font-family: 'GT Walsheim Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 18px;
+    text-align: center;
+    color: #9EA0AB;
+    color: color(display-p3 0.620 0.627 0.667);
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.bottomFooter {
+    gap: 50px;
+}
+
+.footerLinks {
+    gap: 27px;
+}
+
+.footerLinks a {
+    font-family: 'GT Walsheim Pro';
+    font-weight: 500;
+    font-size: 16px;
+    color: #0C122A;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.footerLinks a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}

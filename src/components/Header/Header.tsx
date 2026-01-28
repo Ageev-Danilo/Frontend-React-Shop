@@ -1,12 +1,26 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 import styles from "./Header.module.css"
+import { HeaderProps } from "./header.types";
 
-export const Header = () => {
+
+export function Header (props: HeaderProps)  {
     return (
-        <header className={styles.header}>
-            <Link to="/">КАТАЛОГ</Link>
-            <Link to="/about">ПРО НАС</Link>
-            <Link to="/contacts">КОНТАКТИ</Link> 
+        <header>
+            <div className={styles.header}>
+                <div className={styles.gap}>
+                    <Link to={"catalog"}>Каталог</Link>
+                    <Link to={"about"}>Про нас</Link>
+                    <Link to={"contacts"}>Контакти</Link>
+                </div>
+                <Link to={"/"} className={styles.logo}></Link>
+                <div className={styles.gap}>
+                    <button className={styles.cartBtn}></button>
+                    <button className={styles.profileBtn}></button>
+                </div>
+            </div>
+            <div className="bottom">
+                {props.children}
+            </div>
         </header>
     );
 };
