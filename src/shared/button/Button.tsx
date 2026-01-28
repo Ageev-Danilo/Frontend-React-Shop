@@ -3,6 +3,13 @@ import styles from './button.module.css';
 
 
 export function Button(props: ButtonProps) {
+    const {type = "fill", className, ...restProps} = props
+
+    return (
+        <button 
+            className={`${styles.button} ${styles[type]} ${className}`}
+            {...restProps}
+        >
     const {type = "fill", className, children, icon, pos, ...restProps} = props
 
     return (
