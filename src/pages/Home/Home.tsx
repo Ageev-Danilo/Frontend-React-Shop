@@ -12,9 +12,10 @@ import '../../assets/fonts/font.css';
 
 export function Home(){
     return (
+        //artemiy
         <div className={styles.wrapper}>
             <div className={styles.about + ' ' + base.column}>
-                <h2 className={styles.title}>Про нас</h2>
+                <h2 className={base.title}>Про нас</h2>
                 <p>
                     Ми — команда, що об'єднує технології та надійність. Пропонуємо дрони й тепловізори, перевірені у найскладніших умовах. Обираємо тільки те, чому довіряємо самі.
                 </p>
@@ -26,7 +27,7 @@ export function Home(){
                 </Button>
             </div>
             <div>
-                <h2 className={styles.title}>Нове на сайті</h2>
+                <h2 className={base.title}>Нове на сайті</h2>
                 <div className={`${base.row} ${styles.new}`}>
                     <div className={styles.dronePrev + ' ' + styles.first + ' ' + base.column}>
                         <img src={minik} alt="" />
@@ -58,7 +59,7 @@ export function Home(){
                 </div>
             </div>
             <div className={styles.catalog + ' ' + base.column}>
-                <h2 className={styles.title}>Каталог</h2>
+                <h2 className={base.title}>Каталог</h2>
                 <div className={base.row}>
                     <div className="drone">
                         <img src={mini} alt="" />

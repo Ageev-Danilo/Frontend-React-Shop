@@ -1,3 +1,3 @@
-export * from './About/About';
-export * from './NotFound/NotFound';
-export * from './Home/Home';
+export { About } from './About/About';
+export { Home } from './Home/Home';
+export { NotFound } from './NotFound/NotFound';
