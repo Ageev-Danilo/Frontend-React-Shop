@@ -1,0 +1,72 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 200px;
+}
+
+.bottomHeader {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    overflow-x: hidden;
+    padding-right: 100px;
+    width: 100vw;
+    height: 50vh;
+}
+
+.bottomBackground {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110vw;
+    height: 50vh;
+    background-color: #FFFFFF;
+    border-radius: 50% 50% 0 0 / 50% 50% 0 0;
+    z-index: -1;
+}
+
+.about {
+    width: 530px;
+    margin-top: 150px;
+    gap: 24px;
+}
+
+.new {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.dronePrev {
+    background-position: center;
+    background-size: cover;
+    color: white;
+    width: 437px;
+    height: 437px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.dronePrev div {
+    background: linear-gradient(180deg, rgba(22, 39, 26, 0) 0%, #16271A 100%);
+    background: linear-gradient(180deg, color(display-p3 0.102 0.153 0.106 / 0) 0%, color(display-p3 0.102 0.153 0.106) 100%);
+}
+
+.first {
+    background-image: url('../../assets/static/bg/1.png');
+}
+
+.second {
+    background-image: url('../../assets/static/bg/2.png');
+}
+
+.third {
+    background-image: url('../../assets/static/bg/3.png');
+}
+
+.catalog {
+    gap: 24px;
+}

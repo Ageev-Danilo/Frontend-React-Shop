@@ -1,0 +1,30 @@
+* {
+    font-family: 'GT Walsheim Pro';
+}
+
+.column {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.title {
+    font-family: 'GT Walsheim Pro';
+    font-weight: 900;
+    font-size: 44px;
+    color: #CDD5DD;
+    text-align: center;
+    text-transform: uppercase;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+}
+
+.centr {
+    display: flex;
+    justify-content: center;
+}

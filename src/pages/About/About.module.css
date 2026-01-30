@@ -1,0 +1,30 @@
+.about {
+    gap: 160px;
+}
+
+.top {
+    gap: 70px;
+}
+
+.description {
+    width: 720px;
+}
+
+.card {
+    gap: 40px;
+}
+
+.card h2 {
+    font-weight: 400;
+    font-size: 44px;
+    text-transform: uppercase;
+    max-width: 640px;
+}
+
+.card p {
+    max-width: 640px;
+}
+
+.team {
+    flex-direction: row-reverse;
+}
