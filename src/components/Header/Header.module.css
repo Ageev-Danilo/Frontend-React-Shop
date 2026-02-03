@@ -20,6 +20,7 @@ header h1 {
     justify-content: space-between;
     align-items: center;
     padding: 10px 40px;
+    padding-right: 20px;
     gap: 90px;
     width: calc(100% - 40px);
     height: 64px;
@@ -28,6 +29,13 @@ header h1 {
     backdrop-filter: blur(32px);
     border-radius: 62px;
     transform: translateX(20px);
+    transition: all 0.3s;
+}
+
+.scrolled {
+    position: sticky;
+    top: 20px;
+    z-index: 1;
 }
 
 .header a {

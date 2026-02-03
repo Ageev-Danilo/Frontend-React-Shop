@@ -37,22 +37,53 @@
 .new {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 180px;
+}
+
+.newRow {
+    gap: 40px;
 }
 
 .dronePrev {
+    position: relative;
     background-position: center;
     background-size: cover;
     color: white;
     width: 437px;
     height: 437px;
     border-radius: 10px;
-    overflow: hidden;
 }
 
-.dronePrev div {
+.dronePrev img {
+    position: absolute;
+    top: -30%;
+}
+
+.dronePrev > div {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
     background: linear-gradient(180deg, rgba(22, 39, 26, 0) 0%, #16271A 100%);
     background: linear-gradient(180deg, color(display-p3 0.102 0.153 0.106 / 0) 0%, color(display-p3 0.102 0.153 0.106) 100%);
+    width: 100%;
+    padding: 24px;
+    border-radius: 10px;
+    gap: 69px;
+}
+
+.dronePrev div h3 {
+    font-size: 44px;
+    font-weight: 500;
+}
+
+.dronePrev div div {
+    justify-content: space-between;
+}
+
+.dronePrev div button {
+    color: white;
+    border-color: #FFFFFF;
 }
 
 .first {
