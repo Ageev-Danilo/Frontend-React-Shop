@@ -26,34 +26,46 @@ export function Home(){
                     Читати більше
                 </Button>
             </div>
-            <div>
+            <div className={styles.new + ' ' + base.column}>
                 <h2 className={base.title}>Нове на сайті</h2>
-                <div className={`${base.row} ${styles.new}`}>
+                <div className={`${base.row} ${styles.newRow}`}>
                     <div className={styles.dronePrev + ' ' + styles.first + ' ' + base.column}>
                         <img src={minik} alt="" />
                         <div>
-                            <h3>DJI Mini 4K</h3>
-                            <p>Easy-To-Use Mini Camera Drone</p>
-                            from to $299
-                            <Button className="buy-btn" type='outline'>Купити</Button>
+                            <div>
+                                <h3>DJI Mini 4K</h3>
+                                <p>Easy-To-Use Mini Camera Drone</p>
+                            </div>
+                            <div className={base.row}>
+                                from to $299
+                                <Button className="buy-btn" type='outline'>Купити</Button>
+                            </div>
                         </div>
                     </div>
                     <div className={styles.dronePrev + ' ' + styles.second + ' ' + base.column}>
                         <img src={mini} alt="" />
                         <div>
-                            <h3>DJI Mini 4K</h3>
-                            <p>Easy-To-Use Mini Camera Drone</p>
-                            from to $299
-                            <Button className="buy-btn" type='outline'>Купити</Button>
+                            <div>
+                                <h3>DJI Mini 4K</h3>
+                                <p>Easy-To-Use Mini Camera Drone</p>
+                            </div>
+                            <div className={base.row}>
+                                from to $299
+                                <Button className="buy-btn" type='outline'>Купити</Button>
+                            </div>
                         </div>
                     </div>
                     <div className={styles.dronePrev + ' ' + styles.third + ' ' + base.column}>
                         <img src={minik} alt="" />
                         <div>
-                            <h3>DJI Mini 4K</h3>
-                            <p>Easy-To-Use Mini Camera Drone</p>
-                            from to $299
-                            <Button className="buy-btn" type='outline'>Купити</Button>
+                            <div>
+                                <h3>DJI Mini 4K</h3>
+                                <p>Easy-To-Use Mini Camera Drone</p>
+                            </div>
+                            <div className={base.row}>
+                                from to $299
+                                <Button className="buy-btn" type='outline'>Купити</Button>
+                            </div>
                         </div>
                     </div>
                 </div>
