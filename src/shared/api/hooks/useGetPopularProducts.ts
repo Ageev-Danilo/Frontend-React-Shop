@@ -16,9 +16,12 @@ export function useGetPopularProducts(): UseGetPopularProducts {
     useEffect(() => {
         async function getPopularProducts() {
             try {
+                
                 setIsLoading(true);
                 const response = await fetch(`${API_URL}/products/suggestions?popularProducts=true&limitPerPage=4`, {
                     method: "GET",
+                    body: "product",
+                    headers:  {"Content-Type": "application/json"}
                 });
 
                 if (!response.ok) {

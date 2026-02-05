@@ -2,22 +2,23 @@ import { useState, useEffect } from 'react';
 import { API_URL } from '../api-url';
 import { Product } from '../../types/product';
 
-interface UseGetNewProducts {
+interface UseGetSameProducts {
     products: Product[];
     isLoading: boolean;
     error: string | null;
 }
 
-export function useGetNewProducts(): UseGetNewProducts {
+export function useGetPopularProducts(): UseGetSameProducts {
     const [products, setProducts] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        async function getNewProducts() {
+        async function getPopularProducts() {
             try {
+                
                 setIsLoading(true);
-                const response = await fetch(`${API_URL}/products/suggestions?newProducts=true&limitPerPage=4`, {
+                const response = await fetch(`${API_URL}/products/same`, {
                     method: "GET",
                     body: "product",
                     headers:  {"Content-Type": "application/json"}
@@ -38,8 +39,8 @@ export function useGetNewProducts(): UseGetNewProducts {
                 setIsLoading(false);
             }
         }
-        
-        getNewProducts();
+
+        getPopularProducts();
     }, []);
 
     return { products, isLoading, error };
