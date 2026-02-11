@@ -99,7 +99,7 @@ const mockProducts: ICatalogProduct[] = [
         id: 12, 
         name: 'Тепловізор ATN OTS-XLT 160 2.5-10X', 
         price: 29900, 
-        img: thermalxlt160
+        img: thermalxlt160,
     },
 ];
 
