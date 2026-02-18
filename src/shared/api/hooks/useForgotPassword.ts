@@ -1,29 +1,26 @@
 import { useState } from 'react';
 import { API_URL } from '../api-url';
 
-interface AuthData {
-    name?: string;
+interface ForgotPasswordData {
     email: string;
-    password: string;
 }
 
-interface AuthResponse {
-    token?: string;
+interface ForgotPasswordResponse {
     message?: string;
 }
 
-export const useAuth = () => {
+export const useForgotPassword = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [data, setData] = useState<AuthResponse | null>(null);
+    const [data, setData] = useState<ForgotPasswordResponse | null>(null);
 
-    const execute = async (endpoint: string, body: AuthData): Promise<AuthResponse | null> => {
+    const execute = async (body: ForgotPasswordData): Promise<ForgotPasswordResponse | null> => {
         setIsLoading(true);
         setError(null);
         setData(null);
 
         try {
-            const response = await fetch(`${API_URL}${endpoint}`, {
+            const response = await fetch(`${API_URL}/auth/forgot-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,7 +29,7 @@ export const useAuth = () => {
                 body: JSON.stringify(body),
             });
 
-            const result: AuthResponse = await response.json();
+            const result: ForgotPasswordResponse = await response.json();
 
             if (!response.ok) {
                 throw new Error(result.message || 'Помилка запиту');

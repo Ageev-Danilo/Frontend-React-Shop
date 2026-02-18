@@ -1,4 +1,8 @@
-export { About } from './About/About';
 export { Home } from './Home/Home';
-export { NotFound } from './NotFound/NotFound';
+export { About } from './About/About';
 export { Catalog } from './Catalog/Catalog';
+export { NotFound } from './NotFound/NotFound';
+export { LoginPage } from './Login/LoginPage';
+export { RegisterPage } from './Register/RegisterPage';
+export { ForgotPasswordPage } from './ForgotPassword/ForgotPasswordPage';
+export { ResetPasswordPage } from './ResetPassword/ResetPasswordPage';
