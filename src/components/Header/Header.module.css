@@ -63,6 +63,16 @@ header h1 {
     display: flex;
     align-items: center;
     gap: 27px;
+    width:22vw;
+}
+
+.buttonsDiv{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 27px;
+    width:22vw;
+
 }
 
 .header button {
