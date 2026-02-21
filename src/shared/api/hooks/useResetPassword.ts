@@ -22,7 +22,7 @@ export const useResetPassword = () => {
         setData(null);
 
         try {
-            const response = await fetch(`${API_URL}/auth/reset-password`, {
+            const response = await fetch(`${API_URL}/password_upload`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

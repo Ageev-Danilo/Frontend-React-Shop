@@ -46,7 +46,7 @@ export function Header (props: HeaderProps)  {
             <Link to={"/"} className={styles.logo} onClick={handleLogoClick}></Link>
             <div className={styles.buttonsDiv}>
                 <button className={styles.cartBtn}></button>
-                <button className={styles.profileBtn}></button>
+                <Link to = {"register"}><button className={styles.profileBtn }></button></Link>
             </div>
         </div>
     )

@@ -23,7 +23,7 @@ export const useAuth = () => {
         setData(null);
 
         try {
-            const response = await fetch(`${API_URL}${endpoint}`, {
+            const response = await fetch(`${API_URL}/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,12 +36,14 @@ export const useAuth = () => {
 
             if (!response.ok) {
                 throw new Error(result.message || 'Помилка запиту');
+                
             }
 
             setData(result);
             return result;
         } catch (err: any) {
             setError(err.message || 'Щось пішло не так');
+            console.log(err.message)
             return null;
         } finally {
             setIsLoading(false);
