@@ -12,7 +12,7 @@ interface AuthResponse {
     message?: string;
 }
 
-export const useAuth = () => {
+export const useRegister = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [data, setData] = useState<AuthResponse | null>(null);

@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import styles from './AuthForm.module.css';
-import { useAuth } from '../../shared/api/hooks/useAuth';
+import { useRegister } from '../../shared/api/hooks/useRegister';
 import { useForgotPassword } from '../../shared/api/hooks/useForgotPassword';
 import { useResetPassword } from '../../shared/api/hooks/useResetPassword';
+import {useLogin} from "../../shared/api/hooks/useLogin"
 
 type AuthView = 'login' | 'register' | 'forgotPassword' | 'newPassword' | 'resetSuccess' | 'registerSuccess';
 
@@ -32,7 +33,9 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
     const [view, setView] = useState<AuthView>(initialMode);
     const navigate = useNavigate();
 
-    const { execute: authExecute, isLoading: authLoading, error: authError } = useAuth();
+    const { execute: registerExecute, isLoading: registerLoading, error: registerError } = useRegister();
+    const { execute: loginExecute, isLoading: loginLoading, error: loginError } = useLogin();
+
     const { execute: forgotExecute, isLoading: forgotLoading, error: forgotError } = useForgotPassword();
     const { execute: resetExecute, isLoading: resetLoading, error: resetError } = useResetPassword();
 
@@ -50,12 +53,12 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
     const handleClose = () => navigate('/');
 
     const onLoginSubmit = async (data: any) => {
-        const result = await authExecute('/auth/login', data);
+        const result = await loginExecute('/auth/login', data);
         if (result) navigate('/');
     };
 
     const onRegisterSubmit = async (data: any) => {
-        const result = await authExecute('/auth/register', data);
+        const result = await registerExecute('/auth/register', data);
         if (result) setView('registerSuccess');
     };
 
@@ -154,12 +157,12 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
                             Забули пароль?
                         </button>
 
-                        {authError && <p className={styles.apiError}>{authError}</p>}
+                        {loginError && <p className={styles.apiError}>{loginError}</p>}
 
                         <div className={styles.btnRow}>
                             <button type="button" className={styles.cancelBtn} onClick={handleClose}>СКАСУВАТИ</button>
-                            <button type="submit" className={styles.submitBtn} disabled={authLoading}>
-                                {authLoading ? 'Завантаження...' : 'УВІЙТИ'}
+                            <button type="submit" className={styles.submitBtn} disabled={loginLoading}>
+                                {loginLoading ? 'Завантаження...' : 'УВІЙТИ'}
                             </button>
                         </div>
                     </form>
@@ -236,12 +239,12 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
                             Вже в акаунті? Увійти
                         </button>
 
-                        {authError && <p className={styles.apiError}>{authError}</p>}
+                        {registerError && <p className={styles.apiError}>{registerError}</p>}
 
                         <div className={styles.btnRow}>
                             <button type="button" className={styles.cancelBtn} onClick={handleClose}>СКАСУВАТИ</button>
-                            <button type="submit" className={styles.submitBtn} disabled={authLoading}>
-                                {authLoading ? 'Завантаження...' : 'ЗАРЕЄСТРУВАТИСЯ'}
+                            <button type="submit" className={styles.submitBtn} disabled={registerLoading}>
+                                {registerLoading ? 'Завантаження...' : 'ЗАРЕЄСТРУВАТИСЯ'}
                             </button>
                         </div>
 
