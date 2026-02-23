@@ -4,7 +4,7 @@ import { API_URL } from '../api-url';
 interface ResetPasswordData {
     password: string;
     confirmPassword: string;
-    token?: string;
+    token: string; 
 }
 
 interface ResetPasswordResponse {
@@ -22,7 +22,7 @@ export const useResetPassword = () => {
         setData(null);
 
         try {
-            const response = await fetch(`${API_URL}/password_upload`, {
+            const response = await fetch(`${API_URL}/email/reset-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './AuthForm.module.css';
 import { useRegister } from '../../shared/api/hooks/useRegister';
 import { useForgotPassword } from '../../shared/api/hooks/useForgotPassword';
 import { useResetPassword } from '../../shared/api/hooks/useResetPassword';
-import {useLogin} from "../../shared/api/hooks/useLogin"
+import { useLogin } from "../../shared/api/hooks/useLogin"
 
 type AuthView = 'login' | 'register' | 'forgotPassword' | 'newPassword' | 'resetSuccess' | 'registerSuccess';
 
@@ -32,10 +32,12 @@ const EyeIcon = ({ show, onToggle }: { show: boolean; onToggle: () => void }) =>
 export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => {
     const [view, setView] = useState<AuthView>(initialMode);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    const token = searchParams.get('token');
 
     const { execute: registerExecute, isLoading: registerLoading, error: registerError } = useRegister();
     const { execute: loginExecute, isLoading: loginLoading, error: loginError } = useLogin();
-
     const { execute: forgotExecute, isLoading: forgotLoading, error: forgotError } = useForgotPassword();
     const { execute: resetExecute, isLoading: resetLoading, error: resetError } = useResetPassword();
 
@@ -49,6 +51,12 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
     const registerForm = useForm({ mode: 'onBlur' });
     const forgotForm = useForm({ mode: 'onBlur' });
     const newPasswordForm = useForm({ mode: 'onBlur' });
+ 
+    useEffect(() => {
+        if (view === 'newPassword' && !token) {
+            navigate('/forgot-password');
+        }
+    }, [view, token, navigate]);
 
     const handleClose = () => navigate('/');
 
@@ -64,11 +72,22 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
 
     const onForgotSubmit = async (data: any) => {
         const result = await forgotExecute(data);
-        if (result) navigate('/reset-password');
+        if (result) {
+            alert('Лист з посиланням для відновлення пароля відправлено на вашу пошту');
+        }
     };
 
     const onNewPasswordSubmit = async (data: any) => {
-        const result = await resetExecute(data);
+        if (!token) {
+            return;
+        }
+
+        const dataWithToken = {
+            ...data,
+            token
+        };
+
+        const result = await resetExecute(dataWithToken);
         if (result) setView('resetSuccess');
     };
 
@@ -285,6 +304,13 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
 
                 {view === 'newPassword' && (
                     <form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className={styles.form}>
+                        
+                        {!token && (
+                            <p className={styles.apiError}>
+                                Токен відсутній. Будь ласка, скористайтесь посиланням з email.
+                            </p>
+                        )}
+
                         <div className={styles.field}>
                             <label className={styles.label}>Пароль</label>
                             <div className={styles.inputWrap}>
@@ -327,7 +353,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
 
                         <div className={styles.btnRow}>
                             <button type="button" className={styles.cancelBtn} onClick={handleClose}>СКАСУВАТИ</button>
-                            <button type="submit" className={styles.submitBtn} disabled={resetLoading}>
+                            <button type="submit" className={styles.submitBtn} disabled={resetLoading || !token}>
                                 {resetLoading ? 'Збереження...' : 'ЗБЕРЕГТИ НОВИЙ ПАРОЛЬ'}
                             </button>
                         </div>
