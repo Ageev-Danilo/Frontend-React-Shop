@@ -1,44 +1,43 @@
 import { useState } from 'react';
 import { API_URL } from '../api-url';
+import { UserProfile } from './useGetProfile';
 
-interface ForgotPasswordData {
-    email: string;
-}
-
-interface ForgotPasswordResponse {
+interface UpdateProfileResponse {
     message?: string;
 }
 
-export const useForgotPassword = () => {
+export const useUpdateProfile = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [data, setData] = useState<ForgotPasswordResponse | null>(null);
+    const [data, setData] = useState<UpdateProfileResponse | null>(null);
 
-    const execute = async (body: ForgotPasswordData): Promise<ForgotPasswordResponse | null> => {
+    const execute = async (profileData: Partial<UserProfile>): Promise<UpdateProfileResponse | null> => {
         setIsLoading(true);
         setError(null);
         setData(null);
 
         try {
-            const response = await fetch(`${API_URL}/email/forgot-password`, {
-                method: 'POST',
+            const token = localStorage.getItem('authToken');
+
+            const response = await fetch(`${API_URL}/users/profile`, {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify(body),
+                body: JSON.stringify(profileData),
             });
 
-            const result: ForgotPasswordResponse = await response.json();
+            const result: UpdateProfileResponse = await response.json();
 
             if (!response.ok) {
-                throw new Error(result.message || 'Помилка запиту');
+                throw new Error(result.message || 'Помилка оновлення');
             }
 
             setData(result);
             return result;
         } catch (err: any) {
-            console.log(err.message)
             setError(err.message || 'Щось пішло не так');
             return null;
         } finally {

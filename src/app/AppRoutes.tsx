@@ -5,6 +5,8 @@ import { LoginPage } from '../pages/Login/LoginPage';
 import { RegisterPage } from '../pages/Register/RegisterPage';
 import { ForgotPasswordPage } from '../pages/ForgotPassword/ForgotPasswordPage';
 import { ResetPasswordPage } from '../pages/ResetPassword/ResetPasswordPage';
+import { ProfileContactsPage } from '../pages/ProfileContacts/ProfileContactsPage';
+import { ProfileAddressPage } from '../pages/ProfileAddress/ProfileAddressPage';
 
 export function AppRoutes() {
     return (
@@ -14,10 +16,15 @@ export function AppRoutes() {
                     <Route index element={<Home />} />
                     <Route path="about" element={<About />} />
                     <Route path="catalog" element={<Catalog />} />
+                    
                     <Route path="login" element={<LoginPage />} />
                     <Route path="register" element={<RegisterPage />} />
                     <Route path="forgot-password" element={<ForgotPasswordPage />} />
                     <Route path="reset-password" element={<ResetPasswordPage />} />
+                    
+                    <Route path="profile/contacts" element={<ProfileContactsPage />} />
+                    <Route path="profile/address" element={<ProfileAddressPage />} />
+                    
                     <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>

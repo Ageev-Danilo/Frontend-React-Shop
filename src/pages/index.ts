@@ -6,3 +6,5 @@ export { LoginPage } from './Login/LoginPage';
 export { RegisterPage } from './Register/RegisterPage';
 export { ForgotPasswordPage } from './ForgotPassword/ForgotPasswordPage';
 export { ResetPasswordPage } from './ResetPassword/ResetPasswordPage';
+export { ProfileContactsPage } from './ProfileContacts/ProfileContactsPage';
+export { ProfileAddressPage } from './ProfileAddress/ProfileAddressPage';
