@@ -42,7 +42,7 @@ export const ProfileContactsPage = () => {
                 </aside>
 
                 <main className={styles.content}>
-                    <h1 className={styles.pageTitle}>КОНТАКТНІ ДАНІ</h1>
+                    <h1 className={styles.pageTitle}>Контакті дані</h1>
                     
                     <form onSubmit={handleSubmit((data) => execute(data))} className={styles.form}>
                         <div className={styles.field}>
