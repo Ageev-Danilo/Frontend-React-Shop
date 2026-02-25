@@ -7,7 +7,7 @@ import { ForgotPasswordPage } from '../pages/ForgotPassword/ForgotPasswordPage';
 import { ResetPasswordPage } from '../pages/ResetPassword/ResetPasswordPage';
 import { ProfileContactsPage } from '../pages/ProfileContacts/ProfileContactsPage';
 import { ProfileAddressPage } from '../pages/ProfileAddress/ProfileAddressPage';
-
+import { ProfileOrdersPage } from '../pages/ProfileOrders/ProfileOrdersPage';
 export function AppRoutes() {
     return (
         <BrowserRouter>
@@ -24,6 +24,7 @@ export function AppRoutes() {
                     
                     <Route path="profile/contacts" element={<ProfileContactsPage />} />
                     <Route path="profile/address" element={<ProfileAddressPage />} />
+                    <Route path="profile/orders" element={<ProfileOrdersPage />} />
                     
                     <Route path="*" element={<NotFound />} />
                 </Route>
