@@ -17,7 +17,8 @@ export function useGetPopularProducts(): UseGetPopularProducts {
         async function getPopularProducts() {
             try {
                 setIsLoading(true);
-                const response = await fetch(`${API_URL}/products/suggestions?popular=true&limit=4`, {
+                const response = await fetch(`${API_URL}/products`, {
+                    // /suggestions?popular=true&limit=4
                     method: "GET",
                 });
 

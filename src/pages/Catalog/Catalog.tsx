@@ -7,13 +7,13 @@ import dj from '../../assets/static/dj.png';
 import flip from '../../assets/static/flip.png'; 
 import thermalxlt160 from '../../assets/static/thermal/thermalxlt160.png'; 
 
-const IMAGES_MAP: Record<string, string> = {
-    'minik': minik,
-    'dj': dj,
-    'flip': flip,
-    'thermalxlt160': thermalxlt160,
-    'mini': mini, 
-};
+// const IMAGES_MAP: Record<string, string> = {
+//     'minik': minik,
+//     'dj': dj,
+//     'flip': flip,
+//     'thermalxlt160': thermalxlt160,
+//     'mini': mini, 
+// };
 
 interface IProduct {
     id: number;
@@ -43,7 +43,7 @@ export function Catalog() {
     const [totalPages, setTotalPages] = useState(1);
     
     const LIMIT = 12;
-    const API_URL = 'http://localhost:8000/api'; 
+    const API_URL = 'http://localhost:8000'; 
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -102,9 +102,9 @@ export function Catalog() {
         }
     };
 
-    const getProductImage = (imgKey: string) => {
-        return IMAGES_MAP[imgKey] || minik;
-    };
+    // const getProductImage = (imgKey: string) => {
+    //     return IMAGES_MAP[imgKey] || minik;
+    // };
 
     return (
         <div className={styles.wrapper}>
@@ -143,7 +143,7 @@ export function Catalog() {
                                 <div key={product.id} className={styles.card}>
                                     <div className={styles.imageWrapper}>
                                         <img 
-                                            src={getProductImage(product.media)} 
+                                            // src={getProductImage(product.media)} 
                                             alt={product.name} 
                                         />
                                     </div>

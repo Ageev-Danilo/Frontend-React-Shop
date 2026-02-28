@@ -45,3 +45,6 @@
     transform: translateX(-55%) scale(1.6, -1.8);
     z-index: -1;
 }
+header{
+    background-color: white;
+}
