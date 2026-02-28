@@ -1,64 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useGetDelivery } from '../../shared/api/hooks/useGetDelivery';
+import { useUpdateDelivery } from '../../shared/api/hooks/useUpdateDelivery';
 import styles from './ProfileAddressPage.module.css';
 
-type Address = {
-    id: number;
+type AddressFormData = {
     city: string;
     street: string;
     building: string;
     apartment: string;
     entrance: string;
-    full: string;
 };
 
 const CITIES = ['Вінниця', 'Одеса', 'Харків', 'Дніпро', 'Київ', 'Львів'];
 
-const INITIAL_ADDRESSES: Address[] = [
-    { id: 1, city: 'Київ', street: 'вул. Жулянська', building: '11', apartment: '', entrance: '', full: 'м. Київ, Відділення №3: вул. Жулянська, 11' },
-    { id: 2, city: 'Дніпро', street: 'вул. Маршала Малиновського', building: '114', apartment: '', entrance: '', full: 'м. Дніпро, Відділення №1: вул. Маршала Малиновського, 114' },
-];
-
 export const ProfileAddressPage = () => {
-    const [addresses, setAddresses] = useState<Address[]>(INITIAL_ADDRESSES);
-    const [selectedId, setSelectedId] = useState<number | null>(null);
-    const [editingId, setEditingId] = useState<number | null>(null);
+    const { delivery, isLoading } = useGetDelivery();
+    const { execute, isLoading: updating, error, data: updateSuccess } = useUpdateDelivery();
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [isSelected, setIsSelected] = useState(false);
     const [showNewForm, setShowNewForm] = useState(false);
 
-    const { register, handleSubmit, reset, setValue, watch } = useForm<Omit<Address, 'id' | 'full'>>();
+    const { register, handleSubmit, reset, setValue, watch } = useForm<AddressFormData>();
     const cityValue = watch('city');
 
-    const handleEdit = (addr: Address) => {
-        setEditingId(addr.id);
-        setShowNewForm(false);
-        reset({
-            city: addr.city,
-            street: addr.street,
-            building: addr.building,
-            apartment: addr.apartment,
-            entrance: addr.entrance,
-        });
-    };
-
-    const handleAddNew = () => {
-        setShowNewForm(true);
-        setEditingId(null);
-        reset({ city: '', street: '', building: '', apartment: '', entrance: '' });
-    };
-
-    const onSubmit = (data: Omit<Address, 'id' | 'full'>) => {
-        const full = `м. ${data.city}, вул. ${data.street}, ${data.building}`;
-        if (editingId !== null) {
-            setAddresses(prev =>
-                prev.map(a => (a.id === editingId ? { ...a, ...data, full } : a))
-            );
-            setEditingId(null);
-        } else {
-            const newAddr: Address = { id: Date.now(), ...data, full };
-            setAddresses(prev => [...prev, newAddr]);
-            setShowNewForm(false);
+    useEffect(() => {
+        if (delivery) {
+            reset({
+                city: delivery.city || '',
+                street: delivery.street || '',
+                building: delivery.building || '',
+                apartment: delivery.apartment || '',
+                entrance: delivery.entrance || '',
+            });
         }
+    }, [delivery, reset]);
+
+    const onSubmit = async (data: AddressFormData) => {
+        await execute(data);
+        setIsEditing(false);
+        setShowNewForm(false);
     };
+
+    const getFullAddress = () => {
+        if (!delivery?.city) return 'Адресу не вказано';
+        return `м. ${delivery.city}, вул. ${delivery.street}, ${delivery.building}`;
+    };
+
+    if (isLoading) return <div className={styles.loader}>Завантаження...</div>;
 
     const renderForm = () => (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
@@ -99,8 +89,11 @@ export const ProfileAddressPage = () => {
                 <input {...register('entrance')} className={styles.input} placeholder="Номер під'їзду" />
             </div>
 
-            <button type="submit" className={styles.submitBtn}>
-                ЗБЕРЕГТИ ЗМІНИ
+            {updateSuccess && <p className={styles.successMsg}>Дані збережено!</p>}
+            {error && <p className={styles.errorMsg}>{error}</p>}
+
+            <button type="submit" className={styles.submitBtn} disabled={updating}>
+                {updating ? 'ЗБЕРЕЖЕННЯ...' : 'ЗБЕРЕГТИ ЗМІНИ'}
             </button>
         </form>
     );
@@ -123,44 +116,40 @@ export const ProfileAddressPage = () => {
                     <h1 className={styles.pageTitle}>Адреса доставки</h1>
 
                     <div className={styles.addressList}>
-                        {addresses.map(addr => (
-                            <div
-                                key={addr.id}
-                                className={`${styles.addressCard} ${editingId === addr.id ? styles.addressCardActive : ''}`}
-                            >
-                                <div className={styles.addressCardHeader}>
-                                    <div
-                                        className={styles.radioLabel}
-                                        onClick={() => setSelectedId(addr.id)}
-                                    >
-                                        <span className={`${styles.radioCustom} ${selectedId === addr.id ? styles.radioCustomSelected : ''}`}>
-                                            {selectedId === addr.id && <span className={styles.radioDot}></span>}
-                                        </span>
-                                        <span className={styles.addressText}>{addr.full}</span>
-                                    </div>
-
-                                    <button
-                                        className={styles.editIconBtn}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            editingId === addr.id ? setEditingId(null) : handleEdit(addr);
-                                        }}
-                                        aria-label="Редагувати"
-                                    >
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                                        </svg>
-                                    </button>
+                        <div className={`${styles.addressCard} ${isEditing ? styles.addressCardActive : ''}`}>
+                            <div className={styles.addressCardHeader}>
+                                <div
+                                    className={styles.radioLabel}
+                                    onClick={() => setIsSelected(s => !s)}
+                                >
+                                    <span className={`${styles.radioCustom} ${isSelected ? styles.radioCustomSelected : ''}`}>
+                                        {isSelected && <span className={styles.radioDot} />}
+                                    </span>
+                                    <span className={styles.addressText}>{getFullAddress()}</span>
                                 </div>
 
-                                {editingId === addr.id && (
-                                    <div className={styles.formWrapper}>
-                                        {renderForm()}
-                                    </div>
-                                )}
+                                <button
+                                    className={styles.editIconBtn}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsEditing(prev => !prev);
+                                        setShowNewForm(false);
+                                    }}
+                                    aria-label="Редагувати"
+                                >
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                    </svg>
+                                </button>
                             </div>
-                        ))}
+
+                            {isEditing && (
+                                <div className={styles.formWrapper}>
+                                    {renderForm()}
+                                </div>
+                            )}
+                        </div>
 
                         {showNewForm && (
                             <div className={`${styles.addressCard} ${styles.addressCardActive}`}>
@@ -172,7 +161,14 @@ export const ProfileAddressPage = () => {
                     </div>
 
                     {!showNewForm && (
-                        <button className={styles.addAddressBtn} onClick={handleAddNew}>
+                        <button
+                            className={styles.addAddressBtn}
+                            onClick={() => {
+                                setShowNewForm(true);
+                                setIsEditing(false);
+                                reset({ city: '', street: '', building: '', apartment: '', entrance: '' });
+                            }}
+                        >
                             + ДОДАТИ АДРЕСУ
                         </button>
                     )}

@@ -1,6 +1,9 @@
 header {
     position: relative;
-    padding: 20px;
+    padding: 0; 
+    background: transparent; 
+    width: 100%;
+    
 }
 
 header h1 {
@@ -24,18 +27,20 @@ header h1 {
     gap: 90px;
     width: calc(100% - 40px);
     height: 64px;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.459);
     border: 1px solid #E4E4E7;
     backdrop-filter: blur(32px);
     border-radius: 62px;
-    transform: translateX(20px);
+    margin: 20px auto 0; 
     transition: all 0.3s;
 }
+
 
 .scrolled {
     position: sticky;
     top: 20px;
-    z-index: 1;
+    z-index: 1000; 
+    margin-top: 0;
 }
 
 .header a {

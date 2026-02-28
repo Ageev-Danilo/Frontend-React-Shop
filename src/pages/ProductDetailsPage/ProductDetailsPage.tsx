@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './ProductDetailsPage.module.css';
 
+import dronImg       from '../../assets/static/product_page/dron.png';
+import cameraImg     from '../../assets/static/product_page/camera.png';
+import forVideoImg   from '../../assets/static/product_page/for video.png';
+import inAirImg      from '../../assets/static/product_page/in air.png';
+import storage512Img from '../../assets/static/product_page/512gb.png';
+import bgOval from '../../assets/img/bg.svg';
+
 interface Product {
     id: string;
     name: string;
@@ -44,16 +51,16 @@ const HARDCODED_PRODUCT: Product = {
     description:
         '100-мегапіксельна основна камера Hasselblad, великі CMOS-телекамери, нескінченний кардинний шарнір з можливістю обертання на 360°, всеспрямоване зондування перешкод 0,1-Lux Nightscape, передача відео O4+.',
     price: 29900,
-    oldPrice: 29900,
-    imageUrl: '',
+    oldPrice: 30900,
+    imageUrl: dronImg,
     category: { name: 'Дрони' },
 };
 
 const SIMILAR_PRODUCTS = [
-    { id: '1', name: 'DJI Mini 4K', price: 29900, oldPrice: 29900, imageUrl: '' },
-    { id: '2', name: 'DJI Mini 4K', price: 29900, imageUrl: '' },
-    { id: '3', name: 'DJI Mini 4 Pro', price: 29900, imageUrl: '' },
-    { id: '4', name: 'DJI Flip', price: 29900, imageUrl: '' },
+    { id: '1', name: 'DJI Mini 4K',  price: 29900, oldPrice: 30900, imageUrl: dronImg },
+    { id: '2', name: 'DJI Mini 4K',  price: 29900,                  imageUrl: dronImg },
+    { id: '3', name: 'DJI Mini 4 Pro', price: 29900,                imageUrl: dronImg },
+    { id: '4', name: 'DJI Flip',     price: 29900,                  imageUrl: dronImg },
 ];
 
 export const ProductDetailsPage = () => {
@@ -75,6 +82,9 @@ export const ProductDetailsPage = () => {
         <div className={styles.pageWrapper}>
 
             <section className={styles.hero}>
+                <img src={bgOval} className={styles.heroOval} alt="" />
+                <div className={styles.heroSemicircle} />
+
                 <div className={styles.heroInner}>
                     <div className={styles.heroText}>
                         <h1 className={styles.heroTitle}>{product.name}</h1>
@@ -82,7 +92,7 @@ export const ProductDetailsPage = () => {
                     </div>
                     <div className={styles.heroDroneWrap}>
                         <img
-                            src={product.imageUrl}
+                            src={dronImg}
                             alt={product.name}
                             className={styles.heroDroneImg}
                         />
@@ -91,7 +101,7 @@ export const ProductDetailsPage = () => {
 
                 <div className={styles.floatingCard}>
                     <div className={styles.floatingCardTop}>
-                        <img src={product.imageUrl} alt={product.name} className={styles.floatingThumb} />
+                        <img src={dronImg} alt={product.name} className={styles.floatingThumb} />
                         <div>
                             <div className={styles.floatingName}>{product.name}</div>
                             <div className={styles.floatingPrices}>
@@ -132,6 +142,7 @@ export const ProductDetailsPage = () => {
 
             <section className={styles.videoSection}>
                 <div className={styles.videoWrap}>
+                    <img src={forVideoImg} alt="Відео прев'ю" className={styles.videoBg} />
                     <div className={styles.videoOverlay}>
                         <button className={styles.playBtn} aria-label="Відео">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -153,19 +164,13 @@ export const ProductDetailsPage = () => {
                     </p>
                 </div>
                 <div className={styles.splitImage}>
-                    <div className={styles.darkImgBlock}>
-                        <div className={styles.darkImgFallback} />
-                    </div>
+                    <img src={cameraImg} alt="Камера Hasselblad" className={styles.splitImgDark} />
                 </div>
             </section>
 
             <section className={styles.splitSectionReverse}>
                 <div className={styles.splitImage}>
-                    <img
-                        src={product.imageUrl}
-                        alt="Дрон2"
-                        className={styles.splitImgFull}
-                    />
+                    <img src={inAirImg} alt="Дрон у польоті" className={styles.splitImgFull} />
                 </div>
                 <div className={styles.splitText}>
                     <h2 className={styles.splitTitle}>51-ХВ ЧАС ПОЛЬОТУ</h2>
@@ -199,19 +204,18 @@ export const ProductDetailsPage = () => {
                         </div>
                     </div>
                     <div className={styles.memoryImgWrap}>
-                        <div className={styles.memoryImgDark} />
+                        <img src={storage512Img} alt="512GB Storage" className={styles.memoryImg} />
                     </div>
                 </div>
             </section>
+
             <section className={styles.similarSection}>
                 <h2 className={styles.similarTitle}>СХОЖІ ТОВАРИ</h2>
                 <div className={styles.similarGrid}>
                     {SIMILAR_PRODUCTS.map(item => (
                         <div key={item.id} className={styles.similarCard}>
                             <div className={styles.similarImgWrap}>
-                                {item.imageUrl && (
-                                    <img src={item.imageUrl} alt={item.name} className={styles.similarImg} />
-                                )}
+                                <img src={item.imageUrl} alt={item.name} className={styles.similarImg} />
                             </div>
                             <div className={styles.similarInfo}>
                                 <p className={styles.similarName}>{item.name}</p>

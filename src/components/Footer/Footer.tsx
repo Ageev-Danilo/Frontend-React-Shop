@@ -29,7 +29,7 @@ export function Footer() {
                     <Link to="about">Про нас</Link>
                     <Link to="contacts">Контакти</Link>
                     <Link to="cart">Кошик</Link>
-                    <Link to="cabinet">Кабінет</Link>
+                    <Link to="profile/contacts">Кабінет</Link>
                 </div>
                 <div className={base.column + ' ' + styles.copyright}>
                     <hr />
