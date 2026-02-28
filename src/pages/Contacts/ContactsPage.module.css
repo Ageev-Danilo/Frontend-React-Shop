@@ -1,0 +1,224 @@
+@import url('../../assets/fonts/font.css');
+
+.pageWrapper {
+    width: 100%;
+    background-color: #fff;
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 40px 0;
+}
+
+.bigTitle {
+    font-family: 'GT Walsheim Pro', sans-serif;
+    font-size: clamp(52px, 8vw, 100px);
+    font-weight: 700;
+    color: #c8cdd6;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-align: center;
+    margin: 0 0 60px;
+    line-height: 1;
+    user-select: none;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: flex-start;
+}
+
+.sectionTitle {
+    font-family: 'GT Walsheim Pro', sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #0c122a;
+    margin: 0 0 32px;
+    line-height: 1.2;
+}
+
+.contactList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.contactItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-family: 'GT Walsheim Pro', sans-serif;
+    font-size: 15px;
+    color: #0c122a;
+    line-height: 1.5;
+}
+
+.contactIcon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0c122a;
+    margin-top: 1px;
+}
+
+.socialBlock {
+    margin-top: 40px;
+}
+
+.socialTitle {
+    font-family: 'GT Walsheim Pro', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0c122a;
+    margin: 0 0 16px;
+}
+
+.socialLinks {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.socialLink {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #e4e4e7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0c122a;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.socialLink:hover {
+    background: #0c122a;
+    border-color: #0c122a;
+    color: #fff;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.label {
+    font-family: 'GT Walsheim Pro', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #0c122a;
+}
+
+.input {
+    width: 100%;
+    height: 50px;
+    border: 1px solid #e4e4e7;
+    border-radius: 4px;
+    padding: 0 16px;
+    font-family: 'GT Walsheim Pro', sans-serif;
+    font-size: 15px;
+    color: #0c122a;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.input:focus {
+    border-color: #0c122a;
+}
+
+.input::placeholder {
+    color: #a1a1aa;
+    font-size: 14px;
+}
+
+.textarea {
+    width: 100%;
+    border: 1px solid #e4e4e7;
+    border-radius: 4px;
+    padding: 14px 16px;
+    font-family: 'GT Walsheim Pro', sans-serif;
+    font-size: 15px;
+    color: #0c122a;
+    background: #fff;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    min-height: 120px;
+}
+
+.textarea:focus {
+    border-color: #0c122a;
+}
+
+.textarea::placeholder {
+    color: #a1a1aa;
+    font-size: 14px;
+}
+
+.submitBtn {
+    width: fit-content;
+    height: 50px;
+    padding: 0 48px;
+    background: #0c122a;
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    font-family: 'GT Walsheim Pro', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 8px;
+}
+
+.submitBtn:hover {
+    background: #1e2540;
+}
+
+.successMsg {
+    font-family: 'GT Walsheim Pro', sans-serif;
+    color: #10b981;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 40px 20px 0;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .bigTitle {
+        font-size: 48px;
+        margin-bottom: 40px;
+    }
+}

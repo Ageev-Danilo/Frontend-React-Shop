@@ -9,6 +9,7 @@ import { ProfileContactsPage } from '../pages/ProfileContacts/ProfileContactsPag
 import { ProfileAddressPage } from '../pages/ProfileAddress/ProfileAddressPage';
 import { ProfileOrdersPage } from '../pages/ProfileOrders/ProfileOrdersPage';
 import { ProductDetailsPage } from '../pages/ProductDetailsPage/ProductDetailsPage';
+import { ContactsPage } from '../pages/Contacts/ContactsPage'
 
 export function AppRoutes() {
     return (
@@ -18,6 +19,7 @@ export function AppRoutes() {
                     <Route index element={<Home />} />
                     <Route path="about" element={<About />} />
                     <Route path="catalog" element={<Catalog />} />
+                    <Route path="contacts" element={<ContactsPage />} />
                     
                     <Route path="login" element={<LoginPage />} />
                     <Route path="register" element={<RegisterPage />} />
