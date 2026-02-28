@@ -7,14 +7,14 @@ import base from '../../shared/base/styles.module.css';
 
 export function Footer() {
     return (
-        <footer className={styles.footer}>
-            <div className={`${styles.upper}`}>
-                <div className={styles.column}>
-                    <h2>1к+</h2>
+        <footer className={`${styles.footer}`}>
+            <div className={`${styles.upper} ${base.row}`}>
+                <div className={styles.column}> 
+                    <h2>1K+</h2>
                     <p>Успішних відправок</p>
                 </div>
                 <div className={styles.column}>
-                    <h2>1.5к+</h2>
+                    <h2>1.5K+</h2>
                     <p>Задоволених клієнтів</p>
                 </div>
                 <div className={styles.column}>
@@ -22,17 +22,16 @@ export function Footer() {
                     <p>Підтримка клієнтів</p>
                 </div>
             </div>
-            
-            <div className={styles.bottomFooter}>
-                <img src={deco} className={styles.decoImg} alt="decoration" />
-                <div className={styles.footerLinks}>
+            <div className={base.column + ' ' + styles.bottomFooter}>
+                <img src={deco}/>
+                <div className={base.row + ' ' + base.centr + ' ' + styles.footerLinks}>
                     <Link to="catalog">Каталог</Link>
                     <Link to="about">Про нас</Link>
                     <Link to="contacts">Контакти</Link>
                     <Link to="cart">Кошик</Link>
-                    <Link to="profile/contacts">Кабінет</Link>
+                    <Link to="cabinet">Кабінет</Link>
                 </div>
-                <div className={styles.copyright}>
+                <div className={base.column + ' ' + styles.copyright}>
                     <hr />
                     <p>© 2025 Drones Всі права захищені.</p>
                 </div>

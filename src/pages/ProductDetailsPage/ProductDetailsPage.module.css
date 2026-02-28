@@ -33,7 +33,6 @@
     display: flex;
     align-items: flex-end;
     overflow: hidden;
-    padding-bottom: 0;
 }
 
 .heroInner {
@@ -57,7 +56,7 @@
 .heroTitle {
     font-size: 52px;
     font-weight: 900;
-    color: #0c122a;
+    color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 2px;
     line-height: 1.05;
@@ -77,7 +76,6 @@
     max-width: 680px;
     display: flex;
     justify-content: center;
-    position: relative;
 }
 
 .heroDroneImg {
@@ -203,10 +201,10 @@
 
 .featureTitle {
     font-size: 34px;
-    font-weight: 900;
+    font-weight: 400;
     color: #0c122a;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     margin: 0 0 36px;
     line-height: 1.1;
 }
@@ -239,7 +237,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
     overflow: hidden;
 }
 
@@ -272,8 +269,7 @@
     transform: scale(1.05);
 }
 
-.splitSection,
-.splitSectionReverse {
+.splitSection {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 60px;
@@ -284,20 +280,22 @@
 }
 
 .splitSectionReverse {
-    direction: rtl;
-}
-
-.splitSectionReverse > * {
-    direction: ltr;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 40px;
 }
 
 .splitTitle {
     font-size: 28px;
-    font-weight: 900;
+    font-weight: 400;
     color: #0c122a;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    line-height: 1.15;
+    letter-spacing: 2px;
+    line-height: 1.2;
     margin: 0 0 24px;
 }
 
@@ -387,7 +385,7 @@
 
 .specStatValue {
     font-size: 36px;
-    font-weight: 900;
+    font-weight: 400;
     color: #0c122a;
     line-height: 1;
     letter-spacing: -0.5px;
@@ -398,13 +396,13 @@
     font-weight: 500;
     vertical-align: super;
     margin-left: 2px;
-    color: #4b5563;
+    color: #0c122a; 
 }
 
 .specStatLabel {
     font-size: 12px;
     color: #a1a1aa;
-    text-transform: uppercase;
+    text-transform: none;
     letter-spacing: 0.5px;
 }
 
@@ -429,11 +427,11 @@
 }
 
 .similarTitle {
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 22px;
+    font-weight: 600;
     color: #c8cdd6;
     text-transform: uppercase;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     text-align: center;
     margin: 0 0 48px;
 }
@@ -525,58 +523,8 @@
     background: #1e2540;
 }
 
-.statsSection {
-    background: linear-gradient(180deg, #fff 0%, #dde1e8 40%, #c8cdd6 100%);
-    padding: 60px 40px 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.statsGrid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    max-width: 800px;
-    margin: 0 auto 60px;
-    text-align: center;
-}
-
-.statItem {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.statValue {
-    font-size: 44px;
-    font-weight: 900;
-    color: #0c122a;
-    letter-spacing: -1px;
-    line-height: 1;
-}
-
-.statLabel {
-    font-size: 12px;
-    color: #6b7280;
-    letter-spacing: 0.5px;
-}
-
-.bigLogo {
-    text-align: center;
-    font-size: clamp(80px, 14vw, 180px);
-    font-weight: 900;
-    color: rgba(180, 185, 195, 0.35);
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    line-height: 0.85;
-    padding-bottom: 20px;
-    user-select: none;
-}
-
 @media (max-width: 900px) {
-    .heroTitle {
-        font-size: 36px;
-    }
+    .heroTitle { font-size: 36px; }
 
     .floatingCard {
         position: static;
@@ -584,23 +532,12 @@
         width: auto;
     }
 
-    .hero {
-        flex-direction: column;
-    }
-
-    .featureTextCols {
-        grid-template-columns: 1fr;
-    }
+    .featureTextCols { grid-template-columns: 1fr; }
 
     .splitSection,
-    .splitSectionReverse {
-        grid-template-columns: 1fr;
-        direction: ltr;
-    }
+    .splitSectionReverse { grid-template-columns: 1fr; }
 
-    .specStats {
-        grid-template-columns: 1fr;
-    }
+    .specStats { grid-template-columns: 1fr; }
 
     .specStat {
         border-left: none;
@@ -614,13 +551,7 @@
         padding-top: 0;
     }
 
-    .similarGrid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .statsGrid {
-        grid-template-columns: 1fr;
-    }
+    .similarGrid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 600px) {
@@ -629,23 +560,13 @@
     .splitSection,
     .splitSectionReverse,
     .memorySection,
-    .similarSection,
-    .statsSection {
+    .similarSection {
         padding-left: 20px;
         padding-right: 20px;
     }
 
-    .featureTitle {
-        font-size: 24px;
-    }
-
-    .splitTitle {
-        font-size: 22px;
-    }
-
-    .similarGrid {
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-    }
+    .featureTitle { font-size: 24px; }
+    .splitTitle { font-size: 22px; }
+    .similarGrid { grid-template-columns: 1fr 1fr; gap: 16px; }
 }
 /* пупупу */

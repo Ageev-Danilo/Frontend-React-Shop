@@ -18,7 +18,7 @@ const useGetProductById = (id: string | undefined) => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!id) return;
+        if (!id) { setIsLoading(false); return; }
         const fetchProduct = async () => {
             try {
                 setIsLoading(true);
@@ -45,22 +45,21 @@ const HARDCODED_PRODUCT: Product = {
         '100-мегапіксельна основна камера Hasselblad, великі CMOS-телекамери, нескінченний кардинний шарнір з можливістю обертання на 360°, всеспрямоване зондування перешкод 0,1-Lux Nightscape, передача відео O4+.',
     price: 29900,
     oldPrice: 29900,
-    imageUrl: 'https://store.dji.com/media/catalog/product/m/i/mini4pro-fly-more-combo-plus-dji-rc-2-1-1259x945.jpg',
+    imageUrl: '',
     category: { name: 'Дрони' },
 };
 
 const SIMILAR_PRODUCTS = [
-    { id: '1', name: 'DJI Mini 4K', price: 29900, oldPrice: 29900, imageUrl: 'https://store.dji.com/media/catalog/product/m/i/mini-4k-main.jpg' },
-    { id: '2', name: 'DJI Mini 4K', price: 29900, imageUrl: 'https://store.dji.com/media/catalog/product/m/i/mini-4k-main.jpg' },
-    { id: '3', name: 'DJI Mini 4 Pro', price: 29900, imageUrl: 'https://store.dji.com/media/catalog/product/m/i/mini4pro-fly-more-combo-plus-dji-rc-2-1-1259x945.jpg' },
-    { id: '4', name: 'DJI Flip', price: 29900, imageUrl: 'https://store.dji.com/media/catalog/product/d/j/dji-flip-main.jpg' },
+    { id: '1', name: 'DJI Mini 4K', price: 29900, oldPrice: 29900, imageUrl: '' },
+    { id: '2', name: 'DJI Mini 4K', price: 29900, imageUrl: '' },
+    { id: '3', name: 'DJI Mini 4 Pro', price: 29900, imageUrl: '' },
+    { id: '4', name: 'DJI Flip', price: 29900, imageUrl: '' },
 ];
 
 export const ProductDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
-    const { product: apiProduct, isLoading, error } = useGetProductById(id);
+    const { product: apiProduct, isLoading } = useGetProductById(id);
     const [cartAdded, setCartAdded] = useState(false);
-    const [wishlisted, setWishlisted] = useState(false);
 
     const product = apiProduct ?? (!isLoading ? HARDCODED_PRODUCT : null);
 
@@ -104,18 +103,14 @@ export const ProductDetailsPage = () => {
                         </div>
                     </div>
                     <div className={styles.floatingActions}>
-                        <button
-                            className={styles.cartIconBtn}
-                            onClick={() => setWishlisted(w => !w)}
-                            aria-label="Кошик"
-                        >
+                        <button className={styles.cartIconBtn} aria-label="Кошик">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                                 <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                             </svg>
                         </button>
                         <button className={styles.orderBtn} onClick={handleBuy}>
-                            {cartAdded ? 'ДОДАНО ✓' : 'ЗАМОВИТИ'} →
+                            {cartAdded ? 'ДОДАНО ✓' : 'ЗАМОВИТИ →'}
                         </button>
                     </div>
                 </div>
@@ -138,7 +133,7 @@ export const ProductDetailsPage = () => {
             <section className={styles.videoSection}>
                 <div className={styles.videoWrap}>
                     <div className={styles.videoOverlay}>
-                        <button className={styles.playBtn} aria-label="Відтворити відео">
+                        <button className={styles.playBtn} aria-label="Відео">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M8 5v14l11-7z"/>
                             </svg>
@@ -159,12 +154,6 @@ export const ProductDetailsPage = () => {
                 </div>
                 <div className={styles.splitImage}>
                     <div className={styles.darkImgBlock}>
-                        <img
-                            src="https://store.dji.com/media/catalog/product/h/a/hasselblad-camera.jpg" 
-                            alt="Hasselblad камера"
-                            className={styles.darkImg}
-                            onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
-                        />
                         <div className={styles.darkImgFallback} />
                     </div>
                 </div>
@@ -173,12 +162,9 @@ export const ProductDetailsPage = () => {
             <section className={styles.splitSectionReverse}>
                 <div className={styles.splitImage}>
                     <img
-                        src="https://store.dji.com/media/catalog/product/m/a/mavic4pro-fly-action.jpg"
-                        alt="Дрон у польоті"
+                        src={product.imageUrl}
+                        alt="Дрон2"
                         className={styles.splitImgFull}
-                        onError={(e) => {
-                            (e.target as HTMLImageElement).src = product.imageUrl;
-                        }}
                     />
                 </div>
                 <div className={styles.splitText}>
@@ -217,19 +203,15 @@ export const ProductDetailsPage = () => {
                     </div>
                 </div>
             </section>
-
             <section className={styles.similarSection}>
                 <h2 className={styles.similarTitle}>СХОЖІ ТОВАРИ</h2>
                 <div className={styles.similarGrid}>
                     {SIMILAR_PRODUCTS.map(item => (
                         <div key={item.id} className={styles.similarCard}>
                             <div className={styles.similarImgWrap}>
-                                <img
-                                    src={item.imageUrl}
-                                    alt={item.name}
-                                    className={styles.similarImg}
-                                    onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0.3'; }}
-                                />
+                                {item.imageUrl && (
+                                    <img src={item.imageUrl} alt={item.name} className={styles.similarImg} />
+                                )}
                             </div>
                             <div className={styles.similarInfo}>
                                 <p className={styles.similarName}>{item.name}</p>
@@ -246,24 +228,6 @@ export const ProductDetailsPage = () => {
                 <div className={styles.similarBtnWrap}>
                     <button className={styles.viewAllBtn}>ДИВИТИСЬ ВСІ →</button>
                 </div>
-            </section>
-
-            <section className={styles.statsSection}>
-                <div className={styles.statsGrid}>
-                    <div className={styles.statItem}>
-                        <span className={styles.statValue}>1К+</span>
-                        <span className={styles.statLabel}>Успішних відправок</span>
-                    </div>
-                    <div className={styles.statItem}>
-                        <span className={styles.statValue}>1.5К+</span>
-                        <span className={styles.statLabel}>Задоволених клієнтів</span>
-                    </div>
-                    <div className={styles.statItem}>
-                        <span className={styles.statValue}>24/7</span>
-                        <span className={styles.statLabel}>Підтримка клієнтів</span>
-                    </div>
-                </div>
-                <div className={styles.bigLogo}>DRONES</div>
             </section>
 
         </div>
