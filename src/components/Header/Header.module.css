@@ -1,9 +1,16 @@
+
+.stickyWrapper {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
 header {
     position: relative;
-    padding: 0; 
-    background: transparent; 
+    padding: 0;
+    background: transparent;
     width: 100%;
-    
 }
 
 header h1 {
@@ -31,15 +38,14 @@ header h1 {
     border: 1px solid #E4E4E7;
     backdrop-filter: blur(32px);
     border-radius: 62px;
-    margin: 20px auto 0; 
+    margin: 20px auto 0;
     transition: all 0.3s;
 }
-
 
 .scrolled {
     position: sticky;
     top: 20px;
-    z-index: 1000; 
+    z-index: 1000;
     margin-top: 0;
 }
 
@@ -68,16 +74,15 @@ header h1 {
     display: flex;
     align-items: center;
     gap: 27px;
-    width:22vw;
+    width: 22vw;
 }
 
-.buttonsDiv{
+.buttonsDiv {
     display: flex;
     justify-content: end;
     align-items: center;
     gap: 27px;
-    width:22vw;
-
+    width: 22vw;
 }
 
 .header button {

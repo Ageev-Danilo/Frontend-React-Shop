@@ -50,8 +50,8 @@ export const ContactsPage = () => {
                             <li className={styles.contactItem}>
                                 <span className={styles.contactIcon}>
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                        <circle cx="12" cy="7" r="4"/>
+                                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                                        <circle cx="12" cy="9" r="2.5"/>
                                     </svg>
                                 </span>
                                 <span>вул. Університетська, 22, м. Дніпро, 49000, Україна</span>
