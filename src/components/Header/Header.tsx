@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 
 export function Header (props: HeaderProps)  {
-    //artemiy
     const [ isScrolled, setScrolled ] = useState(false)
 
     useEffect(() => {
@@ -50,7 +49,7 @@ export function Header (props: HeaderProps)  {
             </div>
         </div>
     )
-
+    
     return (
         <>
             {!isScrolled && (

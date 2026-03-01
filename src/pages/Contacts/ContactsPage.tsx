@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import styles from './ContactsPage.module.css';
 
+import facebookImg from '../../assets/social/facebook.png';
+import telegramImg from '../../assets/social/telegram.png';
+import instagramImg from '../../assets/social/instagram.png';
+
 export const ContactsPage = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -73,21 +77,13 @@ export const ContactsPage = () => {
                             <p className={styles.socialTitle}>Ми в соцмережах:</p>
                             <div className={styles.socialLinks}>
                                 <a href="#" className={styles.socialLink} aria-label="Facebook">
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-                                    </svg>
+                                    <img src={facebookImg} alt="Facebook" />
                                 </a>
                                 <a href="#" className={styles.socialLink} aria-label="Telegram">
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-16.5 6.75a2.25 2.25 0 0 0 .126 4.238l3.264 1.068 1.543 4.872a1.5 1.5 0 0 0 2.489.615l2.078-2.086 3.788 2.898a2.25 2.25 0 0 0 3.52-1.388l2.25-15a2.25 2.25 0 0 0-1.536-2.182zM9.847 15.26l-.99 3.12-.888-2.804 7.196-7.205-5.318 6.889z"/>
-                                    </svg>
+                                    <img src={telegramImg} alt="Telegram" />
                                 </a>
                                 <a href="#" className={styles.socialLink} aria-label="Instagram">
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                                        <circle cx="12" cy="12" r="4"/>
-                                        <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
-                                    </svg>
+                                    <img src={instagramImg} alt="Instagram" />
                                 </a>
                             </div>
                         </div>
