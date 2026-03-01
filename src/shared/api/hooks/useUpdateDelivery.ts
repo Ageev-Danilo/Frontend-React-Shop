@@ -13,7 +13,7 @@ export const useUpdateDelivery = () => {
         try {
             setIsLoading(true);
             setError(null);
-            const res = await fetch(`${API_URL}/user/delivery`, {
+            const res = await fetch(`${API_URL}/delivery/:id`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',

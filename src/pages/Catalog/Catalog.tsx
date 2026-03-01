@@ -40,6 +40,7 @@ export function Catalog() {
 
                 if (selectedCategory !== null) {
                     url = new URL(`${API_URL}/products/same-category/${selectedCategory}`);
+                    console.log(selectedCategory)
                 } else {
                     url = new URL(`${API_URL}/products`);
                 }

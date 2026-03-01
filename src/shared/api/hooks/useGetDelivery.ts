@@ -19,7 +19,7 @@ export const useGetDelivery = () => {
         const fetchDelivery = async () => {
             try {
                 setIsLoading(true);
-                const res = await fetch(`${API_URL}/user/delivery`, {
+                const res = await fetch(`${API_URL}/delivery/:id`, {
                     credentials: 'include',
                 });
                 if (!res.ok) throw new Error('Помилка завантаження');

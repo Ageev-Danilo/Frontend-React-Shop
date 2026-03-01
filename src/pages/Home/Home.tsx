@@ -48,7 +48,8 @@ export function Home() {
                 <div className={`${base.row} ${styles.new}`}>
                     {!isNewLoading && !newError && newProducts.map((product) => (
                         <div key={product.id} className={styles.dronePrev + ' ' + base.column}>
-                            <img src={product.media ? product.media : minik} alt={product.name} style={{maxHeight: '200px', objectFit: 'contain'}} />
+                            <img src={product.media } alt={product.name} style={{maxHeight: '200px', objectFit: 'contain'}} />
+                            {/* ? product.media : minik */}
                             <div>
                                 <h3>{product.name}</h3>
                                 <p>{product.description}</p>
