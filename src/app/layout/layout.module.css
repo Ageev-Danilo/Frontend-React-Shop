@@ -42,6 +42,9 @@
     position: absolute;
     left: 50%;
     bottom: 0;
-    transform: translateX(-55%) scale(1.2, -1.8);
+    transform: translateX(-55%) scale(1.6, -1.8);
     z-index: -1;
+}
+header{
+    background-color: white;
 }

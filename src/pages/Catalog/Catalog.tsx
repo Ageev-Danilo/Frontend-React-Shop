@@ -1,156 +1,186 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Catalog.module.css';
 
-import mini from '../../assets/static/mini.png'; 
-import minik from '../../assets/static/minik.png'; 
-import dj from '../../assets/static/dj.png'; 
-import flip from '../../assets/static/flip.png'; 
-import thermal350pro from '../../assets/static/thermal/thermal350pro.png'; 
-import thermal650d from '../../assets/static/thermal/thermal650d.png'; 
-import thermalir510 from '../../assets/static/thermal/thermalir510.png'; 
-import thermalpardleopard from '../../assets/static/thermal/thermalpardleopard.png'; 
-import thermalq14 from '../../assets/static/thermal/thermalq14.png'; 
-import thermalxlt160 from '../../assets/static/thermal/thermalxlt160.png'; 
-import thermalxq35 from '../../assets/static/thermal/thermalxq35.png'; 
-import thermalxq35pro from '../../assets/static/thermal/thermalxq35pro.png'; 
+import mini from '../../assets/static/mini.png';
+import minik from '../../assets/static/minik.png';
+import dj from '../../assets/static/dj.png';
+import flip from '../../assets/static/flip.png';
+import thermalxlt160 from '../../assets/static/thermal/thermalxlt160.png';
 
-
-interface ICatalogProduct {
+interface IProduct {
     id: number;
     name: string;
+    description?: string;
     price: number;
     oldPrice?: number;
-    img: string;
-    isDiscount?: boolean;
+    media: string;
+    categoryId: number;
 }
 
-const mockProducts: ICatalogProduct[] = [
-    { 
-        id: 1, 
-        name: 'Тепловізор Pulsar Telos LRF XQ35', 
-        price: 29900, 
-        oldPrice: 34000, 
-        isDiscount: true,
-        img: thermalxq35 
-    },
-    { 
-        id: 2, 
-        name: 'DJI Mini 4K', 
-        price: 29900, 
-        img: minik 
-    },
-    { 
-        id: 3, 
-        name: 'DJI Mini 4 Pro', 
-        price: 29900, 
-        img: dj 
-    },
-    { 
-        id: 4, 
-        name: 'DJI Flip', 
-        price: 29900, 
-        img: flip 
-    },
-    { 
-        id: 5, 
-        name: 'DJI Mini 4K', 
-        price: 29900, 
-        img: minik 
-    },
-    { 
-        id: 6, 
-        name: 'Тепловізор Pulsar Axion 2 LRF XQ35 Pro', 
-        price: 29900, 
-        img: thermalxq35pro
-    },
-    { 
-        id: 7, 
-        name: 'DJI Mini 4 Pro', 
-        price: 29900, 
-        img: dj 
-    },
-    { 
-        id: 8, 
-        name: 'Тепловізор Guide IR510 Nano N2 WiFi', 
-        price: 29900, 
-        img: thermalir510
-    },
-    { 
-        id: 9, 
-        name: 'DJI Mini 4K', 
-        price: 29900, 
-        oldPrice: 35000, 
-        isDiscount: true, 
-        img: minik 
-    },
-    { 
-        id: 10, 
-        name: 'Тепловізор ARMASIGHT Q14', 
-        price: 29900, 
-        img: thermalq14
-    },
-    { 
-        id: 11, 
-        name: 'DJI Mini 4 Pro', 
-        price: 29900, 
-        img: dj 
-    },
-    { 
-        id: 12, 
-        name: 'Тепловізор ATN OTS-XLT 160 2.5-10X', 
-        price: 29900, 
-        img: thermalxlt160
-    },
-];
+const CATEGORY_IDS = {
+    DRONES: 1,
+    THERMAL: 2,
+};
+
+const API_URL = 'http://localhost:8000';
+const LIMIT = 12;
 
 export function Catalog() {
+    const [products, setProducts] = useState<IProduct[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setIsLoading(true);
+            try {
+                let url: URL;
+
+                if (selectedCategory !== null) {
+                    url = new URL(`${API_URL}/products/same-category/${selectedCategory}`);
+                    console.log(selectedCategory)
+                } else {
+                    url = new URL(`${API_URL}/products`);
+                }
+
+                url.searchParams.append('page', currentPage.toString());
+                url.searchParams.append('limit', LIMIT.toString());
+
+                const response = await fetch(url.toString());
+                if (!response.ok) throw new Error('Failed to fetch');
+
+                const data = await response.json();
+                console.log('Відповідь:', data);
+
+                if (data.items) {
+                    setProducts(data.items);
+                    setTotalPages(Math.ceil((data.total || 0) / LIMIT));
+                } else if (data.data) {
+                    setProducts(data.data);
+                    const total = data.meta?.total || data.total || 0;
+                    setTotalPages(Math.ceil(total / LIMIT));
+                } else if (Array.isArray(data)) {
+                    setProducts(data);
+                    setTotalPages(1);
+                }
+
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, [currentPage, selectedCategory]);
+
+    const handleCategoryChange = (catId: number | null) => {
+        if (selectedCategory !== catId) {
+            setSelectedCategory(catId);
+            setCurrentPage(1);
+        }
+    };
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
     return (
         <div className={styles.wrapper}>
             <h1 className={styles.title}>Каталог</h1>
 
             <div className={styles.filters}>
-                <button className={`${styles.filterBtn} ${styles.active}`}>Всі</button>
-                
-                <button className={styles.filterBtn}>
+                <button
+                    className={`${styles.filterBtn} ${selectedCategory === null ? styles.active : ''}`}
+                    onClick={() => handleCategoryChange(null)}
+                >
+                    Всі
+                </button>
+                <button
+                    className={`${styles.filterBtn} ${selectedCategory === CATEGORY_IDS.DRONES ? styles.active : ''}`}
+                    onClick={() => handleCategoryChange(CATEGORY_IDS.DRONES)}
+                >
                     <img src={dj} alt="Дрони" className={styles.filterImg} />
                 </button>
-                
-                <button className={styles.filterBtn}>
+                <button
+                    className={`${styles.filterBtn} ${selectedCategory === CATEGORY_IDS.THERMAL ? styles.active : ''}`}
+                    onClick={() => handleCategoryChange(CATEGORY_IDS.THERMAL)}
+                >
                     <img src={thermalxlt160} alt="Тепловізори" className={styles.filterImg} />
                 </button>
             </div>
 
-            <div className={styles.grid}>
-                {mockProducts.map((product) => (
-                    <div key={product.id} className={styles.card}>
-                        <div className={styles.imageWrapper}>
-                            <img src={product.img} alt={product.name} />
-                        </div>
-                        <h3 className={styles.cardTitle}>{product.name}</h3>
-                        
-                        <div className={styles.priceRow}>
-                            {product.oldPrice && (
-                                <span className={styles.oldPrice}>
-                                    {product.oldPrice.toLocaleString()} ₴
-                                </span>
-                            )}
-                            
-                            <span className={`${styles.price} ${product.isDiscount ? styles.priceRed : ''}`}>
-                                {product.price.toLocaleString()} ₴
-                            </span>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            {isLoading ? (
+                <div style={{ textAlign: 'center', padding: '50px' }}>Завантаження...</div>
+            ) : (
+                <div className={styles.grid}>
+                    {products.length > 0 ? (
+                        products.map((product) => {
+                            const isDiscount = product.oldPrice && product.oldPrice > product.price;
 
-            <div className={styles.pagination}>
-                 <button className={styles.pageBtn}>&lt;</button>
-                 <button className={`${styles.pageBtn} ${styles.activePage}`}>1</button>
-                 <button className={styles.pageBtn}>2</button>
-                 <button className={styles.pageBtn}>3</button>
-                 <button className={styles.pageBtn}>...</button>
-                 <button className={styles.pageBtn}>&gt;</button>
-            </div>
+                            return (
+                                <div key={product.id} className={styles.card}>
+                                    <div className={styles.imageWrapper}>
+                                        <img alt={product.name} />
+                                    </div>
+                                    <h3 className={styles.cardTitle}>{product.name}</h3>
+                                    <div className={styles.priceRow}>
+                                        {isDiscount && (
+                                            <span className={styles.oldPrice}>
+                                                {product.oldPrice?.toLocaleString()} ₴
+                                            </span>
+                                        )}
+                                        <span className={`${styles.price} ${isDiscount ? styles.priceRed : ''}`}>
+                                            {product.price.toLocaleString()} ₴
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <div style={{ gridColumn: '1 / -1', textAlign: 'center' }}>
+                            Товарів не знайдено
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {totalPages > 1 && (
+                <div className={styles.pagination}>
+                    <button
+                        className={styles.pageBtn}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        style={{ opacity: currentPage === 1 ? 0.5 : 1 }}
+                    >
+                        &lt;
+                    </button>
+
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <button
+                            key={page}
+                            className={`${styles.pageBtn} ${currentPage === page ? styles.activePage : ''}`}
+                            onClick={() => handlePageChange(page)}
+                        >
+                            {page}
+                        </button>
+                    ))}
+
+                    <button
+                        className={styles.pageBtn}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        style={{ opacity: currentPage === totalPages ? 0.5 : 1 }}
+                    >
+                        &gt;
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

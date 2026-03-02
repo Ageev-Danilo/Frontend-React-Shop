@@ -1,0 +1,615 @@
+@import url('../../assets/fonts/font.css');
+
+* {
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.pageWrapper {
+    width: 100%;
+    background-color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    
+}
+
+.loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    font-size: 16px;
+    color: #a1a1aa;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    font-size: 16px;
+    color: #ef4444;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.hero {
+    position: relative;
+    width: 100%;
+    background-color: #c8cdd6;
+    min-height: 600px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+}
+
+.heroOval {
+    position: absolute;
+    bottom: -5%;
+    left: 50%;
+    transform: translateX(-50%) scaleY(-1);
+    width: 115%;
+    min-width: 1000px;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+}
+
+.heroSemicircle {
+    display: none;
+}
+
+.heroInner {
+    position: relative;
+    z-index: 2;          
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 70px 40px 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heroText {
+    text-align: center;
+    max-width: 560px;
+    margin-bottom: 20px;
+}
+
+.heroTitle {
+    font-size: 52px;
+    font-weight: 900;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 1.05;
+    margin: 0 0 20px;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.heroDesc {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.7;
+    max-width: 460px;
+    margin: 0 auto;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.heroDroneWrap {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.heroDroneImg {
+    width: 100%;
+    max-width: 600px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
+}
+
+.floatingCard {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    width: 280px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px 18px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.12);
+    z-index: 100;
+}
+
+.floatingCardTop {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.floatingThumb {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    border-radius: 4px;
+    background: #f4f4f5;
+    flex-shrink: 0;
+    padding: 4px;
+}
+
+.floatingName {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #0c122a;
+    margin-bottom: 4px;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.floatingPrices {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.floatingOldPrice {
+    font-size: 12px;
+    color: #a1a1aa;
+    text-decoration: line-through;
+}
+
+.floatingPrice {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ef4444;
+}
+
+.floatingActions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.cartIconBtn {
+    width: 42px;
+    height: 42px;
+    border: 1.5px solid #e4e4e7;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0c122a;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.cartIconBtn:hover {
+    border-color: #0c122a;
+    background: #f4f4f5;
+}
+
+.orderBtn {
+    flex: 1;
+    height: 42px;
+    background: #0c122a;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.orderBtn:hover {
+    background: #1e2540;
+}
+
+.featureSection {
+    padding: 80px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.featureCenter {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.featureTitle {
+    font-size: 34px;
+    font-weight: 400;
+    color: #0c122a;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0 0 36px;
+    line-height: 1.1;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.featureTextCols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    text-align: left;
+}
+
+.featureTextCols p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #4b5563;
+    margin: 0;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.videoSection {
+    padding: 0 40px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.videoWrap {
+    width: 100%;
+    aspect-ratio: 16 / 7;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;  
+}
+
+.videoBg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.videoOverlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+.playBtn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+    transition: all 0.25s;
+    z-index: 3;
+}
+
+.playBtn:hover {
+    background: rgba(255, 255, 255, 0.35);
+    border-color: #fff;
+    transform: scale(1.08);
+}
+
+.splitSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 40px;
+}
+
+.splitSectionReverse {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 40px;
+}
+
+.splitTitle {
+    font-size: 28px;
+    font-weight: 400;
+    color: #0c122a;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    line-height: 1.2;
+    margin: 0 0 24px;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.splitDesc {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #4b5563;
+    margin: 0 0 16px;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.splitDesc:last-child { margin-bottom: 0; }
+
+.splitImage {
+    width: 100%;
+}
+
+.splitImgDark {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+}
+
+.splitImgFull {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+}
+
+.memorySection {
+    background: #fff;
+    padding: 60px 40px;
+}
+
+.memorySectionInner {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.memoryDesc {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #4b5563;
+    max-width: 580px;
+    margin: 0 auto 48px;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.specStats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 48px;
+    border-top: 1px solid #e4e4e7;
+    padding-top: 36px;
+}
+
+.specStat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    text-align: left;
+    padding-left: 20px;
+    border-left: 1px solid #e4e4e7;
+}
+
+.specStat:first-child {
+    border-left: none;
+    padding-left: 0;
+}
+
+.specStatValue {
+    font-size: 36px;
+    font-weight: 400;
+    color: #0c122a;
+    line-height: 1;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.specStatValue sup {
+    font-size: 14px;
+    font-weight: 400;
+    vertical-align: super;
+    margin-left: 4px;
+    color: #0c122a;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.specStatLabel {
+    font-size: 12px;
+    color: #a1a1aa;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    font-weight: 400;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.memoryImgWrap {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.memoryImg {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    object-fit: cover;
+    max-height: 340px;
+}
+
+.similarSection {
+    padding: 80px 40px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.similarTitle {
+    font-size: 22px;
+    font-weight: 600;
+    color: #c8cdd6;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-align: center;
+    margin: 0 0 48px;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.similarGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-bottom: 48px;
+}
+
+.similarCard {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.similarCard:hover { transform: translateY(-4px); }
+
+.similarImgWrap {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    background: #f4f4f5;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.similarImg {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.similarInfo { padding: 0 4px; }
+
+.similarName {
+    font-size: 14px;
+    font-weight: 500;
+    color: #0c122a;
+    margin: 0 0 6px;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.similarPrices {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.similarOldPrice {
+    font-size: 13px;
+    color: #a1a1aa;
+    text-decoration: line-through;
+}
+
+.similarPrice {
+    font-size: 13px;
+    font-weight: 600;
+    color: #ef4444;
+}
+
+.similarBtnWrap {
+    display: flex;
+    justify-content: center;
+}
+
+.viewAllBtn {
+    height: 50px;
+    padding: 0 48px;
+    background: #0c122a;
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.viewAllBtn:hover { background: #1e2540; }
+
+@media (max-width: 900px) {
+    .heroTitle { font-size: 36px; }
+
+    .floatingCard {
+        position: static;
+        margin: 24px 20px;
+        width: auto;
+    }
+
+    .featureTextCols { grid-template-columns: 1fr; }
+
+    .splitSection,
+    .splitSectionReverse { grid-template-columns: 1fr; }
+
+    .specStats { grid-template-columns: 1fr; }
+
+    .specStat {
+        border-left: none;
+        padding-left: 0;
+        border-top: 1px solid #e4e4e7;
+        padding-top: 24px;
+    }
+
+    .specStat:first-child {
+        border-top: none;
+        padding-top: 0;
+    }
+
+    .similarGrid { grid-template-columns: repeat(2, 1fr); }
+
+    .heroSemicircle {
+        width: 180%;
+        padding-bottom: 90%;
+        bottom: -35%;
+    }
+}
+
+@media (max-width: 600px) {
+    .featureSection,
+    .videoSection,
+    .splitSection,
+    .splitSectionReverse,
+    .memorySection,
+    .similarSection {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .featureTitle { font-size: 24px; }
+    .splitTitle { font-size: 20px; }
+    .heroTitle { font-size: 28px; }
+    .similarGrid { grid-template-columns: 1fr 1fr; gap: 16px; }
+}
+/* пупупу */

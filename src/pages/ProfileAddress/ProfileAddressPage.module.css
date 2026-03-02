@@ -1,0 +1,326 @@
+.pageWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px 0;
+    background-color: #fff;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    gap: 100px;
+    align-items: flex-start;
+}
+
+.sidebar {
+    width: 280px;
+    flex-shrink: 0;
+}
+
+.sidebarMainTitle {
+    font-size: 26px;
+    font-weight: 500;
+    color: #0c122a;
+    margin-top: 0;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1;
+    padding-top: 0;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.navLink,
+.navLinkActive {
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+.navLink {
+    color: #a1a1aa;
+}
+
+.navLinkActive {
+    color: #0c122a;
+}
+
+.navLink:hover {
+    color: #0c122a;
+}
+
+.divider {
+    height: 1px;
+    background: #e4e4e7;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.exitBtn {
+    background: none;
+    border: none;
+    color: #a1a1aa;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-align: left;
+    cursor: pointer;
+    padding: 0;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease-in-out;
+}
+
+.exitBtn:hover {
+    color: #0c122a;
+}
+
+.content {
+    display: block;
+    flex-grow: 1;
+    width: 100%;
+    max-width: 820px;
+    padding-top: 0;
+}
+
+.pageTitle {
+    font-size: 28px;
+    font-weight: 400;
+    margin-top: 0;
+    margin-bottom: 32px;
+    color: #0c122a;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: 0.5px;
+}
+
+.addressList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.addressCard {
+    border: 1px solid #e4e4e7;
+    border-radius: 4px;
+    padding: 16px 20px;
+    transition: border-color 0.2s;
+}
+
+.addressCardActive {
+    border-color: #0c122a;
+}
+
+.addressCardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.radioLabel {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.radioCustom {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid #d4d4d8;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s;
+}
+
+.radioCustomSelected {
+    border-color: #0c122a;
+}
+
+.radioDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #0c122a;
+    display: block;
+}
+
+.addressText {
+    font-size: 15px;
+    color: #0c122a;
+}
+
+.editIconBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #a1a1aa;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+    flex-shrink: 0;
+}
+
+.editIconBtn:hover {
+    color: #0c122a;
+}
+
+.formWrapper {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e4e4e7;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.fieldLabel {
+    font-size: 14px;
+    font-weight: 400;
+    color: #0c122a;
+}
+
+.input {
+    width: 100%;
+    height: 48px;
+    border: 1px solid #d4d4d8;
+    padding: 0 14px;
+    font-size: 15px;
+    color: #0c122a;
+    border-radius: 4px;
+    background: #fff;
+    transition: border-color 0.2s;
+    outline: none;
+}
+
+.input:focus {
+    border-color: #0c122a;
+}
+
+.input::placeholder {
+    color: #a1a1aa;
+    font-size: 14px;
+}
+
+.cityChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.cityChip {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    color: #a1a1aa;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s;
+}
+
+.cityChip:hover,
+.cityChipActive {
+    color: #0c122a;
+}
+
+.submitBtn {
+    width: fit-content;
+    padding: 0 32px;
+    height: 44px;
+    background: transparent;
+    color: #a1a1aa;
+    border: 1.5px solid #a1a1aa;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 4px;
+}
+
+.submitBtn:hover:not(:disabled) {
+    background: #0c122a;
+    color: #fff;
+    border-color: #0c122a;
+}
+
+.submitBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.addAddressBtn {
+    width: fit-content;
+    padding: 0 32px;
+    height: 44px;
+    background: transparent;
+    color: #a1a1aa;
+    border: 1.5px solid #a1a1aa;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.addAddressBtn:hover {
+    background: #0c122a;
+    color: #fff;
+    border-color: #0c122a;
+}
+
+.successMsg {
+    color: #10b981;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.errorMsg {
+    color: #ef4444;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.loader {
+    text-align: center;
+    padding: 100px;
+    font-size: 16px;
+    color: #a1a1aa;
+}

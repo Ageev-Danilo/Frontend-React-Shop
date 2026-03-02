@@ -9,15 +9,15 @@ export function Footer() {
     return (
         <footer className={`${styles.footer}`}>
             <div className={`${styles.upper} ${base.row}`}>
-                <div className="column">
-                    <h2>1к+</h2>
+                <div className={styles.column}> 
+                    <h2>1K+</h2>
                     <p>Успішних відправок</p>
                 </div>
-                <div className="column">
-                    <h2>1.5к+</h2>
+                <div className={styles.column}>
+                    <h2>1.5K+</h2>
                     <p>Задоволених клієнтів</p>
                 </div>
-                <div className="column">
+                <div className={styles.column}>
                     <h2>24/7</h2>
                     <p>Підтримка клієнтів</p>
                 </div>
@@ -29,7 +29,7 @@ export function Footer() {
                     <Link to="about">Про нас</Link>
                     <Link to="contacts">Контакти</Link>
                     <Link to="cart">Кошик</Link>
-                    <Link to="cabinet">Кабінет</Link>
+                    <Link to="profile/contacts">Кабінет</Link>
                 </div>
                 <div className={base.column + ' ' + styles.copyright}>
                     <hr />

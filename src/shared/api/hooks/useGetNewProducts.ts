@@ -17,7 +17,8 @@ export function useGetNewProducts(): UseGetNewProducts {
         async function getNewProducts() {
             try {
                 setIsLoading(true);
-                const response = await fetch(`${API_URL}/products/suggestions?newProducts=true&limitPerPage=4`, {
+                const response = await fetch(`${API_URL}/products/suggestions?isNew=true&popular=false&limit=3&offset=0`, {
+                    
                     method: "GET",
                     body: "product",
                     headers:  {"Content-Type": "application/json"}
