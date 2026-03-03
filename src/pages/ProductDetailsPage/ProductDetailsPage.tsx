@@ -21,10 +21,35 @@ const useGetSimilarProducts = (id: string | undefined) => {
         const fetchSimilar = async () => {
             try {
                 setIsLoading(true);
-                const res = await fetch(`http://localhost:8000/products/same/${id}`);
-                if (!res.ok) throw new Error();
-                const data = await res.json();
-                setSimilar(Array.isArray(data) ? data : data.items ?? data.data ?? []);
+                
+                const [priceRes, categoryRes] = await Promise.all([
+                    fetch(`http://localhost:8000/products/same-price/${id}`),
+                    fetch(`http://localhost:8000/products/same-category/${id}`)
+                ]);
+
+                let priceProducts: any[] = [];
+                let categoryProducts: any[] = [];
+
+                if (priceRes.ok) {
+                    const priceData = await priceRes.json();
+                    priceProducts = Array.isArray(priceData) 
+                        ? priceData 
+                        : priceData.items ?? priceData.data ?? [];
+                }
+
+                if (categoryRes.ok) {
+                    const categoryData = await categoryRes.json();
+                    categoryProducts = Array.isArray(categoryData) 
+                        ? categoryData 
+                        : categoryData.items ?? categoryData.data ?? [];
+                }
+
+                const combined = [...priceProducts, ...categoryProducts];
+                const uniqueProducts = Array.from(
+                    new Map(combined.map(item => [item.id, item])).values()
+                );
+
+                setSimilar(uniqueProducts);
             } catch {
                 setSimilar([]);
             } finally {
