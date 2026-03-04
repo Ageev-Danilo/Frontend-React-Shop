@@ -7,6 +7,7 @@ interface ForgotPasswordData {
 
 interface ForgotPasswordResponse {
     message?: string;
+    resetLink?: string; 
 }
 
 export const useForgotPassword = () => {
@@ -38,7 +39,6 @@ export const useForgotPassword = () => {
             setData(result);
             return result;
         } catch (err: any) {
-            console.log(err.message)
             setError(err.message || 'Щось пішло не так');
             return null;
         } finally {

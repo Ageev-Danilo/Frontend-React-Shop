@@ -33,8 +33,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
     const [view, setView] = useState<AuthView>(initialMode);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-
     const token = searchParams.get('token');
+    const [devResetLink, setDevResetLink] = useState<string | null>(null);
 
     const { execute: registerExecute, isLoading: registerLoading, error: registerError } = useRegister();
     const { execute: loginExecute, isLoading: loginLoading, error: loginError } = useLogin();
@@ -51,7 +51,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
     const registerForm = useForm({ mode: 'onBlur' });
     const forgotForm = useForm({ mode: 'onBlur' });
     const newPasswordForm = useForm({ mode: 'onBlur' });
- 
+
     useEffect(() => {
         if (view === 'newPassword' && !token) {
             navigate('/forgot-password');
@@ -71,22 +71,18 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
     };
 
     const onForgotSubmit = async (data: any) => {
+        setDevResetLink(null);
         const result = await forgotExecute(data);
         if (result) {
-            alert('Лист з посиланням для відновлення пароля відправлено на вашу пошту');
+            if (result.resetLink) {
+                setDevResetLink(result.resetLink);
+            }
         }
     };
 
     const onNewPasswordSubmit = async (data: any) => {
-        if (!token) {
-            return;
-        }
-
-        const dataWithToken = {
-            ...data,
-            token
-        };
-
+        if (!token) return;
+        const dataWithToken = { ...data, token };
         const result = await resetExecute(dataWithToken);
         if (result) setView('resetSuccess');
     };
@@ -168,11 +164,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
                             )}
                         </div>
 
-                        <button
-                            type="button"
-                            className={styles.forgotLink}
-                            onClick={() => navigate('/forgot-password')}
-                        >
+                        <button type="button" className={styles.forgotLink} onClick={() => navigate('/forgot-password')}>
                             Забули пароль?
                         </button>
 
@@ -293,6 +285,20 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
 
                         {forgotError && <p className={styles.apiError}>{forgotError}</p>}
 
+                        {devResetLink && (
+                            <div className={styles.devLinkBox}>
+                                <p className={styles.devLinkLabel}>🔗 Посилання для тесту:</p>
+                                <a
+                                    href={devResetLink}
+                                    className={styles.devLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {devResetLink}
+                                </a>
+                            </div>
+                        )}
+
                         <div className={styles.btnRow}>
                             <button type="button" className={styles.cancelBtn} onClick={handleClose}>СКАСУВАТИ</button>
                             <button type="submit" className={styles.submitBtn} disabled={forgotLoading}>
@@ -304,7 +310,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({ initialMode = 'login' }) => 
 
                 {view === 'newPassword' && (
                     <form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className={styles.form}>
-                        
                         {!token && (
                             <p className={styles.apiError}>
                                 Токен відсутній. Будь ласка, скористайтесь посиланням з email.

@@ -264,3 +264,33 @@
     color: #ef4444;
     text-decoration: underline;
 }
+
+.devLinkBox {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.devLinkLabel {
+    font-size: 12px;
+    font-weight: 600;
+    color: #16a34a;
+    margin: 0;
+}
+
+.devLink {
+    font-size: 11px;
+    color: #15803d;
+    word-break: break-all;
+    text-decoration: underline;
+    cursor: pointer;
+    line-height: 1.4;
+}
+
+.devLink:hover {
+    color: #166534;
+}
