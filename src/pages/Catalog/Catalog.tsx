@@ -40,7 +40,6 @@ export function Catalog() {
 
                 if (selectedCategory !== null) {
                     url = new URL(`${API_URL}/products/same-category/${selectedCategory}`);
-                    console.log(selectedCategory)
                 } else {
                     url = new URL(`${API_URL}/products`);
                 }
@@ -126,7 +125,11 @@ export function Catalog() {
                             return (
                                 <div key={product.id} className={styles.card}>
                                     <div className={styles.imageWrapper}>
-                                        <img alt={product.name} />
+                                        <img
+                                            src={product.media || minik}
+                                            alt={product.name}
+                                            onError={(e) => { (e.target as HTMLImageElement).src = minik; }}
+                                        />
                                     </div>
                                     <h3 className={styles.cardTitle}>{product.name}</h3>
                                     <div className={styles.priceRow}>

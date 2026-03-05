@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useGetDelivery } from '../../shared/api/hooks/useGetDelivery';
 import { useUpdateDelivery } from '../../shared/api/hooks/useUpdateDelivery';
@@ -24,6 +25,8 @@ export const ProfileAddressPage = () => {
 
     const { register, handleSubmit, reset, setValue, watch } = useForm<AddressFormData>();
     const cityValue = watch('city');
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (delivery) {
@@ -108,7 +111,7 @@ export const ProfileAddressPage = () => {
                         <a href="/profile/address" className={styles.navLinkActive}>АДРЕСА ДОСТАВКИ</a>
                         <a href="/profile/orders" className={styles.navLink}>МОЇ ЗАМОВЛЕННЯ</a>
                         <div className={styles.divider}></div>
-                        <button className={styles.exitBtn}>ВИЙТИ</button>
+                        <button className={styles.exitBtn} onClick={() => navigate('/')}>ВИЙТИ</button>
                     </nav>
                 </aside>
 

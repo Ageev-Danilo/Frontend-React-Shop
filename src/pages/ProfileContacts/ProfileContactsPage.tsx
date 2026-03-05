@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { useGetProfile, UserProfile } from '../../shared/api/hooks/useGetProfile';
 import { useUpdateProfile } from '../../shared/api/hooks/useUpdateProfile';
 import styles from './ProfileContactsPage.module.css';
@@ -11,6 +12,8 @@ export const ProfileContactsPage = () => {
     const { execute, isLoading: updating, error, data: updateSuccess } = useUpdateProfile();
     
     const { register, handleSubmit, reset } = useForm<ContactsFormData>();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (profile) {
@@ -37,7 +40,7 @@ export const ProfileContactsPage = () => {
                         <a href="/profile/address" className={styles.navLink}>АДРЕСА ДОСТАВКИ</a>
                         <a href="/profile/orders" className={styles.navLink}>МОЇ ЗАМОВЛЕННЯ</a>
                         <div className={styles.divider}></div>
-                        <button className={styles.exitBtn}>ВИЙТИ</button>
+                        <button className={styles.exitBtn} onClick={() => navigate('/')}>ВИЙТИ</button>
                     </nav>
                 </aside>
 

@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './ProfileOrdersPage.module.css';
 
 export const ProfileOrdersPage = () => {
+    const navigate = useNavigate();
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.container}>
@@ -12,7 +14,7 @@ export const ProfileOrdersPage = () => {
                         <a href="/profile/address" className={styles.navLink}>АДРЕСА ДОСТАВКИ</a>
                         <a href="/profile/orders" className={styles.navLinkActive}>МОЇ ЗАМОВЛЕННЯ</a>
                         <div className={styles.divider}></div>
-                        <button className={styles.exitBtn}>ВИЙТИ</button>
+                        <button className={styles.exitBtn} onClick={() => navigate('/')}>ВИЙТИ</button>
                     </nav>
                 </aside>
 
