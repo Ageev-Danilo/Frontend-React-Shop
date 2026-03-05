@@ -1,5 +1,5 @@
 import { Header, Footer, Main } from '../../components';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import droneImg from '../../assets/img/drone.png';
 import deco from '../../assets/img/bg.svg';
@@ -9,6 +9,7 @@ import styles from './layout.module.css';
 
 export function Layout(){
     const location = useLocation();
+    const navigate = useNavigate();
     const isHome = location.pathname === '/';
 
     return (
@@ -24,7 +25,9 @@ export function Layout(){
                                     <div className={styles.textsP}>
                                         <p>Передові технології в одному місці.<br/>Обирай найкраще для найважливішого.</p>
                                     </div>
-                                    <Button>До каталогу</Button>
+                                    <Button onClick={() => navigate('/catalog')}>
+                                        До каталогу
+                                    </Button>
                                 </div>
                             </div>
                             <div className={styles.bottomBackground}></div>

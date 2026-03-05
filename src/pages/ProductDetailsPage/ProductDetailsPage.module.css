@@ -65,7 +65,7 @@
     z-index: 2;          
     max-width: 1200px;
     margin: 0 auto;
-    padding: 70px 40px 0;
+    padding: 100px 40px 0;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -605,6 +605,8 @@
     .similarSection {
         padding-left: 20px;
         padding-right: 20px;
+        padding-top: 40px;
+        padding-bottom: 40px;
     }
 
     .featureTitle { font-size: 24px; }

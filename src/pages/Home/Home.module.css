@@ -4,20 +4,25 @@
     align-items: center;
     width: 100%;
     overflow-x: hidden;
+    padding-top: 50px;
 }
 
 .sectionTitle {
-    font-size: 42px;
-    font-weight: 700;
-    color: #0C122A;
+    font-family: 'GT Walsheim Pro', sans-serif; 
+    font-size: 44px;
+    font-weight: 900;
+    color: #CDD5DD;
     margin-bottom: 40px;
     text-transform: uppercase;
     text-align: center;
+    letter-spacing: 0.03em;
+    line-height: 100%;
+    margin-top: 0;
+    margin-bottom: 40px;
 }
 
-/* --- Про нас --- */
 .aboutSection {
-    padding: 120px 20px;
+    padding: 80px 20px;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -36,7 +41,7 @@
     font-size: 18px;
     line-height: 1.6;
     color: #0C122A;
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .moreBtn {
@@ -46,18 +51,18 @@
     text-transform: uppercase;
 }
 
-/* --- Нове на сайті --- */
 .newSection {
-    padding: 100px 20px;
+    padding: 60px 20px;
     width: 100%;
     max-width: 1300px;
+    position: relative;
 }
 
 .newGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 40px;
-    margin-top: 100px; /* Місце для вильоту дрона */
+    margin-top: 120px; 
 }
 
 .droneCard {
@@ -68,16 +73,16 @@
     flex-direction: column;
     justify-content: flex-end;
     padding: 30px;
-    overflow: visible; /* Щоб дрон "вилітав" за межі */
 }
 
 .imageContainer {
     position: absolute;
-    top: -80px; /* Піднімаємо дрон */
+    top: -90px; 
     left: 50%;
     transform: translateX(-50%);
     width: 110%;
-    pointer-events: none;
+    pointer-events: auto;
+    z-index: 5;
 }
 
 .droneImg {
@@ -85,6 +90,11 @@
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 20px 40px rgba(0,0,0,0.2));
+    transition: transform 0.3s ease;
+}
+
+.droneImg:hover {
+    transform: scale(1.05);
 }
 
 .cardInfo {
@@ -95,7 +105,7 @@
 
 .cardInfo h3 {
     font-size: 32px;
-    font-weight: 600;
+    font-weight: 900;
     margin-bottom: 20px;
 }
 
@@ -117,14 +127,12 @@
     background: transparent !important;
 }
 
-/* Фон для карток */
-.first { background: linear-gradient(180deg, #1A2C1D 0%, #16271A 100%); background-image: url('../../assets/static/bg/1.png'); background-size: cover; }
-.second { background: linear-gradient(180deg, #2C1A1A 0%, #271616 100%); background-image: url('../../assets/static/bg/2.png'); background-size: cover; }
-.third { background: linear-gradient(180deg, #1A1F2C 0%, #161A27 100%); background-image: url('../../assets/static/bg/3.png'); background-size: cover; }
+.first { background: linear-gradient(180deg, #1A2C1D 0%, #16271A 100%); }
+.second { background: linear-gradient(180deg, #2C1A1A 0%, #271616 100%); }
+.third { background: linear-gradient(180deg, #1A1F2C 0%, #161A27 100%); }
 
-/* --- Каталог --- */
 .catalogSection {
-    padding: 100px 20px;
+    padding: 80px 20px;
     width: 100%;
     max-width: 1200px;
 }
@@ -139,6 +147,11 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    transition: transform 0.2s ease;
+}
+
+.catalogItem:hover {
+    transform: translateY(-5px);
 }
 
 .itemImageBg {
@@ -159,7 +172,7 @@
 
 .itemName {
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 900;
     color: #0C122A;
     margin: 0;
 }
@@ -178,7 +191,7 @@
 
 .currentPrice {
     color: #EF4444;
-    font-weight: 700;
+    font-weight: 900;
     font-size: 18px;
 }
 
@@ -198,4 +211,9 @@
 .statusMsg, .errorMsg {
     text-align: center;
     padding: 20px;
+}
+
+@media (max-width: 1024px) {
+    .newGrid { grid-template-columns: repeat(2, 1fr); gap: 100px 40px; }
+    .catalogGrid { grid-template-columns: repeat(2, 1fr); }
 }

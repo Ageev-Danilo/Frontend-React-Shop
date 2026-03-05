@@ -11,7 +11,7 @@
 .container {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 60px 80px 80px;
+    padding: 120px 80px 80px;
 }
 
 .bigTitle {
@@ -226,7 +226,7 @@
 }
 
 @media (max-width: 768px) {
-    .container { padding: 40px 20px 60px; }
+    .container { padding: 100px 20px 60px; }
     .grid { grid-template-columns: 1fr; gap: 48px; }
     .bigTitle { font-size: 36px; letter-spacing: 4px; margin-bottom: 40px; }
 }
