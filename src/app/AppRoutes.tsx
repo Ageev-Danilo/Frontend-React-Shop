@@ -10,6 +10,7 @@ import { ProfileAddressPage } from '../pages/ProfileAddress/ProfileAddressPage';
 import { ProfileOrdersPage } from '../pages/ProfileOrders/ProfileOrdersPage';
 import { ProductDetailsPage } from '../pages/ProductDetailsPage/ProductDetailsPage';
 import { ContactsPage } from '../pages/Contacts/ContactsPage'
+import { CheckoutPage } from '../pages/Checkout/CheckoutPage'
 
 export function AppRoutes() {
     return (
@@ -31,6 +32,7 @@ export function AppRoutes() {
                     <Route path="profile/orders" element={<ProfileOrdersPage />} />
 
                     <Route path="/product/:id" element={<ProductDetailsPage />} />
+                    <Route path="/checkout" element={<CheckoutPage />} />
                     
                     <Route path="*" element={<NotFound />} />
                 </Route>

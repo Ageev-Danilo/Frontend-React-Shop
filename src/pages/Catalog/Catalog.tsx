@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './Catalog.module.css';
 
 import mini from '../../assets/static/mini.png';
@@ -26,6 +27,7 @@ const API_URL = 'http://localhost:8000';
 const LIMIT = 12;
 
 export function Catalog() {
+    const navigate = useNavigate();
     const [products, setProducts] = useState<IProduct[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
@@ -89,6 +91,10 @@ export function Catalog() {
         }
     };
 
+    const handleProductClick = (productId: number) => {
+        navigate(`/product/${productId}`);
+    };
+
     return (
         <div className={styles.wrapper}>
             <h1 className={styles.title}>Каталог</h1>
@@ -124,7 +130,10 @@ export function Catalog() {
 
                             return (
                                 <div key={product.id} className={styles.card}>
-                                    <div className={styles.imageWrapper}>
+                                    <div 
+                                        className={styles.imageWrapper}
+                                        onClick={() => handleProductClick(product.id)}
+                                    >
                                         <img
                                             src={product.media || minik}
                                             alt={product.name}

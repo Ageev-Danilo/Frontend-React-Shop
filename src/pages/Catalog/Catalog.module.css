@@ -83,7 +83,14 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 10px;
-    background-color: transparent; 
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+}
+
+.imageWrapper:hover {
+    background-color: #F4F4F5;
 }
 
 .imageWrapper img {
@@ -146,10 +153,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s ease;
 }
 
 .pageBtn:hover {
     color: #0C122A;
+}
+
+.pageBtn:disabled {
+    cursor: not-allowed;
 }
 
 .activePage {
@@ -173,4 +185,3 @@
         font-size: 40px;
     }
 }
-

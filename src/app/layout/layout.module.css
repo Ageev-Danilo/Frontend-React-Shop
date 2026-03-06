@@ -10,8 +10,6 @@
     flex-direction: column;
 }
 
-
-
 .footerWrapper {
     flex: 0 0 auto;
     border-top: 1px solid #E4E4E7;
@@ -29,7 +27,6 @@
     display: flex;
     flex-direction: column;
     align-items: end;
-    font-weight: 600;
     margin-top: -280px;
 }
 
@@ -45,9 +42,6 @@
     position: absolute;
     left: 50%;
     bottom: 0;
-    transform: translateX(-50%) scale(1.6) rotate(180deg);
+    transform: translateX(-55%) scale(1.2, -1.8);
     z-index: -1;
-}
-header{
-    background-color: transparent;
 }

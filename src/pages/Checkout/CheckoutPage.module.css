@@ -1,0 +1,367 @@
+.wrapper {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 120px 60px 100px;
+    box-sizing: border-box;
+}
+
+.title {
+    font-family: 'GT Walsheim Pro', sans-serif; 
+    font-weight: 900;
+    font-size: 60px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #E4E4E7; 
+    margin-top: 0;
+    margin-bottom: 40px;
+}
+
+.emptyCart {
+    text-align: center;
+    padding: 80px 0;
+    border: 1px solid #e4e4e7;
+    border-radius: 4px;
+    background-color: #fafafa;
+}
+
+.emptyCart p {
+    font-size: 16px;
+    color: #a1a1aa;
+    margin-bottom: 30px;
+}
+
+.backLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 40px;
+    height: 44px;
+    background-color: transparent;
+    color: #a1a1aa;
+    border: 1.5px solid #a1a1aa;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 100px;
+    transition: all 0.3s ease;
+}
+
+.backLink:hover {
+    background-color: #0c122a;
+    color: white;
+    border-color: #0c122a;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    width: 100%;
+}
+
+.formSection {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.sectionTitle {
+    font-size: 20px;
+    font-weight: 500;
+    color: #0c122a;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #0c122a;
+    text-transform: none;
+}
+
+.input, .textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d4d4d8;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #0c122a;
+    font-family: 'GT Walsheim Pro', sans-serif;
+    background: #fff;
+    transition: border-color 0.2s;
+    outline: none;
+}
+
+.input:focus, .textarea:focus {
+    border-color: #0c122a;
+}
+
+.input::placeholder, .textarea::placeholder {
+    color: #a1a1aa;
+}
+
+.inputError {
+    border-color: #ef4444;
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.errorMsg {
+    font-size: 12px;
+    color: #ef4444;
+    margin-top: -4px;
+}
+
+.successMsg {
+    font-size: 14px;
+    color: #10b981;
+    font-weight: 600;
+    margin: 12px 0 0;
+}
+
+.summarySection {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.summaryCard {
+    border: 1px solid #e4e4e7;
+    border-radius: 4px;
+    padding: 24px;
+    background: #fff;
+}
+
+.summaryHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.summaryTitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0c122a;
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.editBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+    color: #a1a1aa;
+    transition: color 0.2s;
+}
+
+.editBtn:hover {
+    color: #0c122a;
+}
+
+.cartItems {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e4e4e7;
+}
+
+.cartItem {
+    display: grid;
+    grid-template-columns: 50px 1fr auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.itemImage {
+    width: 50px;
+    height: 50px;
+    background: #f4f4f5;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.itemImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 4px;
+}
+
+.itemDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.itemName {
+    font-size: 14px;
+    font-weight: 500;
+    color: #0c122a;
+}
+
+.itemPricing {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 13px;
+}
+
+.itemPrice {
+    color: #0c122a;
+    font-weight: 600;
+}
+
+.itemDiscount {
+    color: #a1a1aa;
+    text-decoration: line-through;
+}
+
+.itemQty {
+    font-size: 14px;
+    font-weight: 500;
+    color: #0c122a;
+    min-width: 30px;
+    text-align: right;
+}
+
+.orderSummary {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #0c122a;
+}
+
+.discount {
+    color: #a1a1aa;
+}
+
+.summaryTotal {
+    font-weight: 700;
+    font-size: 15px;
+    padding-top: 12px;
+    border-top: 1px solid #e4e4e7;
+    color: #0c122a;
+}
+
+.submitBtn {
+    width: 100%;
+    height: 48px;
+    background: #0c122a;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-family: 'GT Walsheim Pro', sans-serif;
+}
+
+.submitBtn:hover:not(:disabled) {
+    background: #1e2540;
+}
+
+.submitBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 1024px) {
+    .container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .summaryCard {
+        position: sticky;
+        top: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wrapper {
+        padding: 80px 20px 60px;
+    }
+
+    .title {
+        font-size: 40px;
+        margin-bottom: 30px;
+    }
+
+    .container {
+        gap: 30px;
+    }
+
+    .summaryCard {
+        position: static;
+    }
+}
+
+@media (max-width: 600px) {
+    .wrapper {
+        padding: 60px 16px 40px;
+    }
+
+    .title {
+        font-size: 28px;
+    }
+
+    .sectionTitle {
+        font-size: 16px;
+    }
+
+    .cartItem {
+        grid-template-columns: 40px 1fr auto;
+    }
+
+    .itemImage {
+        width: 40px;
+        height: 40px;
+    }
+
+    .summaryCard {
+        padding: 16px;
+    }
+
+    .submitBtn {
+        height: 44px;
+        font-size: 12px;
+    }
+}
