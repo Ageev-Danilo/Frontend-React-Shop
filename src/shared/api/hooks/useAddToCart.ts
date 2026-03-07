@@ -1,17 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { API_URL } from '../api-url';
 
-interface CartItem {
-    id: number;
-    name: string;
-    price: number;
+interface AddToCartPayload {
+    productId: number;
     quantity: number;
-    media?: string;
 }
 
-interface Cart {
-    items: CartItem[];
-    total: number;
+interface AddToCartResult {
+    success: boolean;
+    message?: string;
 }
 
 function getUserId(): number | null {
@@ -21,17 +18,15 @@ function getUserId(): number | null {
     return isNaN(id) ? null : id;
 }
 
-export const useGetCart = () => {
-    const [cart, setCart] = useState<Cart>({ items: [], total: 0 });
+export const useAddToCart = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchCart = async () => {
+    const execute = async (payload: AddToCartPayload): Promise<AddToCartResult | null> => {
         const userId = getUserId();
         if (!userId) {
             setError('Будь ласка, увійдіть в акаунт');
-            setCart({ items: [], total: 0 });
-            return;
+            return null;
         }
 
         setIsLoading(true);
@@ -39,25 +34,23 @@ export const useGetCart = () => {
 
         try {
             const res = await fetch(`${API_URL}/products-in-order/${userId}`, {
-                method: 'GET',
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
             });
 
             if (!res.ok) throw new Error(`Помилка ${res.status}`);
 
-            const data: Cart = await res.json();
-            setCart(data);
+            const data: AddToCartResult = await res.json();
+            return data;
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Невідома помилка');
-            setCart({ items: [], total: 0 });
+            const msg = err instanceof Error ? err.message : 'Невідома помилка';
+            setError(msg);
+            return null;
         } finally {
             setIsLoading(false);
         }
     };
 
-    useEffect(() => {
-        fetchCart();
-    }, []);
-
-    return { cart, isLoading, error, refetch: fetchCart };
+    return { execute, isLoading, error };
 };

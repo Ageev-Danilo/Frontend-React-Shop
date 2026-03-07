@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useGetCart } from '../../shared/api/hooks/useGetCart';
 import { useCreateOrder, CreateOrderData } from '../../shared/api/hooks/useCreateOrder';
+import { EditCartModal } from '../../components/EditCartModal/EditCartModal';
 import styles from './CheckoutPage.module.css';
 
 interface NovaPoshtaCity {
@@ -10,20 +11,15 @@ interface NovaPoshtaCity {
     Description: string;
     AreaDescription: string;
 }
-
 interface NovaPoshtaWarehouse {
     Ref: string;
     Description: string;
-    ShortAddress: string;
-    Number: string;
 }
 
 const WAREHOUSE_TYPE = '841339c7-591a-42e2-8233-7a0a00f7a000';
 const POSTOMАТ_TYPE  = 'f9316480-5f2d-425d-bc2c-ac7cd29decf0';
-
 const NP_API_KEY = process.env.REACT_APP_NOVA_POSHTA_API_KEY ?? '';
 const NP_API_URL = 'https://api.novaposhta.ua/v2.0/json/';
-
 const QUICK_CITIES = ['Вінниця', 'Одеса', 'Харків', 'Дніпро', 'Київ', 'Львів'];
 
 async function fetchCities(query: string): Promise<NovaPoshtaCity[]> {
@@ -67,25 +63,22 @@ export const CheckoutPage = () => {
     const navigate = useNavigate();
     const { cart, isLoading: cartLoading } = useGetCart();
     const { execute: createOrder, isLoading: orderLoading, error: orderError } = useCreateOrder();
-    const [orderSuccess, setOrderSuccess] = useState(false);
+    const [orderSuccess, setOrderSuccess]             = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen]       = useState(false);
 
-    const [cityInput, setCityInput]           = useState('');
-    const [cityOptions, setCityOptions]       = useState<NovaPoshtaCity[]>([]);
-    const [selectedCity, setSelectedCity]     = useState<NovaPoshtaCity | null>(null);
-    const [showCityList, setShowCityList]     = useState(false);
-    const [warehouseInput, setWarehouseInput] = useState('');
-    const [warehouseOptions, setWarehouseOptions] = useState<NovaPoshtaWarehouse[]>([]);
+    const [cityInput, setCityInput]                   = useState('');
+    const [cityOptions, setCityOptions]               = useState<NovaPoshtaCity[]>([]);
+    const [selectedCity, setSelectedCity]             = useState<NovaPoshtaCity | null>(null);
+    const [showCityList, setShowCityList]             = useState(false);
+    const [warehouseInput, setWarehouseInput]         = useState('');
+    const [warehouseOptions, setWarehouseOptions]     = useState<NovaPoshtaWarehouse[]>([]);
     const [filteredWarehouses, setFilteredWarehouses] = useState<NovaPoshtaWarehouse[]>([]);
     const [showWarehouseList, setShowWarehouseList]   = useState(false);
-    const [selectedWarehouse, setSelectedWarehouse]   = useState<NovaPoshtaWarehouse | null>(null);
-    const [npLoading, setNpLoading] = useState(false);
+    const [npLoading, setNpLoading]                   = useState(false);
     const cityDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<CheckoutFormData>({
-        defaultValues: {
-            deliveryType: 'warehouse',
-            paymentMethod: 'online',
-        },
+    const { register, handleSubmit, watch, formState: { errors } } = useForm<CheckoutFormData>({
+        defaultValues: { deliveryType: 'warehouse', paymentMethod: 'online' },
     });
 
     const deliveryType  = watch('deliveryType');
@@ -110,7 +103,6 @@ export const CheckoutPage = () => {
             setFilteredWarehouses(list);
             setNpLoading(false);
         });
-        setSelectedWarehouse(null);
         setWarehouseInput('');
     }, [selectedCity, deliveryType]);
 
@@ -125,16 +117,11 @@ export const CheckoutPage = () => {
         setCityInput(city.Description);
         setShowCityList(false);
     };
-
     const handleQuickCity = (name: string) => {
         setCityInput(name);
-        fetchCities(name).then(list => {
-            if (list.length > 0) handleCitySelect(list[0]);
-        });
+        fetchCities(name).then(list => { if (list.length > 0) handleCitySelect(list[0]); });
     };
-
     const handleWarehouseSelect = (wh: NovaPoshtaWarehouse) => {
-        setSelectedWarehouse(wh);
         setWarehouseInput(wh.Description);
         setShowWarehouseList(false);
     };
@@ -155,41 +142,26 @@ export const CheckoutPage = () => {
         }
     };
 
-    if (cartLoading) return (
-        <div className={styles.wrapper}>
-            <div style={{ textAlign: 'center', padding: '100px' }}>Завантаження...</div>
-        </div>
-    );
-
-    if (!cart.items || cart.items.length === 0) return (
-        <div className={styles.wrapper}>
-            <h1 className={styles.title}>Оформлення замовлення</h1>
-            <div className={styles.emptyCart}>
-                <p>Ваш кошик порожній</p>
-                <a href="/catalog" className={styles.backLink}>ПЕРЕЙТИ ДО КАТАЛОГУ</a>
-            </div>
-        </div>
-    );
-
     const needsLocationPicker = deliveryType === 'warehouse' || deliveryType === 'postomат';
+    const hasItems = !!(cart.items && cart.items.length > 0);
 
     return (
         <div className={styles.wrapper}>
-            <h1 className={styles.title}>Оформити замовлення</h1>
+            <h1 className={styles.title}>Оформлення замовлення</h1>
 
             <div className={styles.container}>
+
                 <div className={styles.formSection}>
                     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
 
                         <div className={styles.formBlock}>
                             <h2 className={styles.blockTitle}>Ваші контактні дані</h2>
-
                             {[
-                                { name: 'lastName',   label: 'Прізвище',  placeholder: 'Ваше Прізвище' },
-                                { name: 'firstName',  label: "Ім'я",      placeholder: "Ваше Ім'я" },
+                                { name: 'lastName',   label: 'Прізвище',    placeholder: 'Ваше Прізвище' },
+                                { name: 'firstName',  label: "Ім'я",        placeholder: "Ваше Ім'я" },
                                 { name: 'patronymic', label: 'По батькові', placeholder: 'По батькові' },
-                                { name: 'phone',      label: 'Телефон',   placeholder: '+ 38 0' },
-                                { name: 'email',      label: 'E-mail',    placeholder: 'Ваш E-mail' },
+                                { name: 'phone',      label: 'Телефон',     placeholder: '+ 38 0' },
+                                { name: 'email',      label: 'E-mail',      placeholder: 'Ваш E-mail' },
                             ].map(f => (
                                 <div className={styles.field} key={f.name}>
                                     <label className={styles.label}>{f.label}</label>
@@ -201,17 +173,14 @@ export const CheckoutPage = () => {
                                         className={`${styles.input} ${errors[f.name as keyof CheckoutFormData] ? styles.inputError : ''}`}
                                         placeholder={f.placeholder}
                                     />
+                                    {errors[f.name as keyof CheckoutFormData] && (
+                                        <span className={styles.fieldError}>{errors[f.name as keyof CheckoutFormData]?.message}</span>
+                                    )}
                                 </div>
                             ))}
-
                             <div className={styles.field}>
                                 <label className={styles.label}>Коментар до замовлення</label>
-                                <textarea
-                                    {...register('comment')}
-                                    className={styles.textarea}
-                                    placeholder="Що б ви хотіли уточнити"
-                                    rows={4}
-                                />
+                                <textarea {...register('comment')} className={styles.textarea} placeholder="Що б ви хотіли уточнити" rows={4} />
                             </div>
                         </div>
 
@@ -247,26 +216,20 @@ export const CheckoutPage = () => {
                                             <ul className={styles.dropdown}>
                                                 {cityOptions.map(c => (
                                                     <li key={c.Ref} onMouseDown={() => handleCitySelect(c)}>
-                                                        {c.Description} <span className={styles.dropdownSub}>{c.AreaDescription} обл.</span>
+                                                        {c.Description}<span className={styles.dropdownSub}> {c.AreaDescription} обл.</span>
                                                     </li>
                                                 ))}
                                             </ul>
                                         )}
                                     </div>
-
                                     <div className={styles.quickCities}>
                                         {QUICK_CITIES.map(name => (
-                                            <button key={name} type="button" className={styles.quickCity} onClick={() => handleQuickCity(name)}>
-                                                {name}
-                                            </button>
+                                            <button key={name} type="button" className={styles.quickCity} onClick={() => handleQuickCity(name)}>{name}</button>
                                         ))}
                                     </div>
-
                                     {selectedCity && (
                                         <div className={styles.field} style={{ position: 'relative' }}>
-                                            <label className={styles.label}>
-                                                {deliveryType === 'postomат' ? 'Поштомат' : 'Відділення'}
-                                            </label>
+                                            <label className={styles.label}>{deliveryType === 'postomат' ? 'Поштомат' : 'Відділення'}</label>
                                             <input
                                                 className={styles.input}
                                                 value={warehouseInput}
@@ -280,9 +243,7 @@ export const CheckoutPage = () => {
                                             {showWarehouseList && filteredWarehouses.length > 0 && (
                                                 <ul className={styles.dropdown}>
                                                     {filteredWarehouses.slice(0, 20).map(wh => (
-                                                        <li key={wh.Ref} onMouseDown={() => handleWarehouseSelect(wh)}>
-                                                            {wh.Description}
-                                                        </li>
+                                                        <li key={wh.Ref} onMouseDown={() => handleWarehouseSelect(wh)}>{wh.Description}</li>
                                                     ))}
                                                 </ul>
                                             )}
@@ -306,43 +267,27 @@ export const CheckoutPage = () => {
                         <div className={styles.formBlock}>
                             <h2 className={styles.blockTitle}>Оплата</h2>
 
-                            <label className={`${styles.radioRow} ${paymentMethod === 'cash' ? styles.radioRowActive : ''}`}>
-                                <input type="radio" {...register('paymentMethod')} value="cash" />
-                                <span>Оплата при отриманні</span>
-                            </label>
-
-                            <label className={`${styles.radioRow} ${paymentMethod === 'online' ? styles.radioRowActive : ''}`}>
-                                <input type="radio" {...register('paymentMethod')} value="online" />
-                                <span>Оплатити зараз</span>
-                                {paymentMethod === 'online' && (
-                                    <div className={styles.payIcons}>
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa" />
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/200px-Google_Pay_Logo.svg.png" alt="Google Pay" />
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Apple_Pay_logo.svg/200px-Apple_Pay_logo.svg.png" alt="Apple Pay" />
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" />
-                                    </div>
-                                )}
-                            </label>
-
-                            <label className={`${styles.radioRow} ${paymentMethod === 'card' ? styles.radioRowActive : ''}`}>
-                                <input type="radio" {...register('paymentMethod')} value="card" />
-                                <span>Карткою онлайн</span>
-                            </label>
-
-                            <label className={`${styles.radioRow} ${paymentMethod === 'privat' ? styles.radioRowActive : ''}`}>
-                                <input type="radio" {...register('paymentMethod')} value="privat" />
-                                <span>Privat Pay</span>
-                            </label>
-
-                            <label className={`${styles.radioRow} ${paymentMethod === 'apple' ? styles.radioRowActive : ''}`}>
-                                <input type="radio" {...register('paymentMethod')} value="apple" />
-                                <span>Apple Pay</span>
-                            </label>
-
-                            <label className={`${styles.radioRow} ${paymentMethod === 'google' ? styles.radioRowActive : ''}`}>
-                                <input type="radio" {...register('paymentMethod')} value="google" />
-                                <span>Google Pay</span>
-                            </label>
+                            {(['cash', 'online', 'card', 'privat', 'apple', 'google'] as const).map(val => (
+                                <label key={val} className={`${styles.radioRow} ${paymentMethod === val ? styles.radioRowActive : ''}`}>
+                                    <input type="radio" {...register('paymentMethod')} value={val} />
+                                    <span>
+                                        {val === 'cash'   && 'Оплата при отриманні'}
+                                        {val === 'online' && 'Оплатити зараз'}
+                                        {val === 'card'   && 'Карткою онлайн'}
+                                        {val === 'privat' && 'Privat Pay'}
+                                        {val === 'apple'  && 'Apple Pay'}
+                                        {val === 'google' && 'Google Pay'}
+                                    </span>
+                                    {val === 'online' && paymentMethod === 'online' && (
+                                        <div className={styles.payIcons}>
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa" />
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/200px-Google_Pay_Logo.svg.png" alt="G Pay" />
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Apple_Pay_logo.svg/200px-Apple_Pay_logo.svg.png" alt="A Pay" />
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="MC" />
+                                        </div>
+                                    )}
+                                </label>
+                            ))}
                         </div>
 
                         <button type="button" className={styles.submitBtn} onClick={() => navigate(-1)}>
@@ -355,47 +300,58 @@ export const CheckoutPage = () => {
                     <div className={styles.summaryCard}>
                         <div className={styles.summaryHeader}>
                             <h3 className={styles.summaryTitle}>Замовлення</h3>
-                            <button type="button" className={styles.editBtn} onClick={() => navigate('/catalog')}>✏️</button>
+                            <button
+                                type="button"
+                                className={styles.editBtn}
+                                onClick={() => setIsEditModalOpen(true)}
+                                title="Редагувати"
+                            >
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                </svg>
+                            </button>
                         </div>
 
-                        <div className={styles.cartItems}>
-                            {cart.items.map((item) => (
-                                <div key={item.id} className={styles.cartItem}>
-                                    <div className={styles.itemImage}>
-                                        {item.media && <img src={item.media} alt={item.name} />}
-                                    </div>
-                                    <div className={styles.itemDetails}>
-                                        <div className={styles.itemName}>{item.name}</div>
-                                        <div className={styles.itemPricing}>
-                                            {item.quantity > 1 && (
-                                                <span className={styles.itemDiscount}>{(item.price * 1.1).toLocaleString()} ₴</span>
-                                            )}
-                                            <span className={styles.itemPrice}>{item.price.toLocaleString()} ₴</span>
+                        {cartLoading ? (
+                            <div className={styles.summaryLoading}>Завантаження...</div>
+                        ) : !hasItems ? (
+                            <div className={styles.summaryEmpty}>
+                                <p>Кошик порожній</p>
+                                <a href="/catalog" className={styles.catalogLink}>Перейти до каталогу</a>
+                            </div>
+                        ) : (
+                            <>
+                                <div className={styles.cartItems}>
+                                    {cart.items!.map(item => (
+                                        <div key={item.id} className={styles.cartItem}>
+                                            <div className={styles.itemImage}>
+                                                {item.media && <img src={item.media} alt={item.name} />}
+                                            </div>
+                                            <div className={styles.itemDetails}>
+                                                <div className={styles.itemName}>{item.name}</div>
+                                                <div className={styles.itemPricing}>
+                                                    {item.quantity > 1 && (
+                                                        <span className={styles.itemDiscount}>{(item.price * 1.1).toLocaleString()} ₴</span>
+                                                    )}
+                                                    <span className={styles.itemPrice}>{item.price.toLocaleString()} ₴</span>
+                                                </div>
+                                            </div>
+                                            <div className={styles.itemQty}>{item.quantity}</div>
                                         </div>
-                                    </div>
-                                    <div className={styles.itemQty}>{item.quantity}</div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-
-                        <div className={styles.orderSummary}>
-                            <div className={styles.summaryRow}>
-                                <span>Загальна сума</span>
-                                <span>{cart.total.toLocaleString()} ₴</span>
-                            </div>
-                            <div className={styles.summaryRow}>
-                                <span>Заощаджено</span>
-                                <span className={styles.discount}>- 1 005 ₴</span>
-                            </div>
-                            <div className={styles.summaryRow}>
-                                <span>Доставка</span>
-                                <span>За тарифом перевізника</span>
-                            </div>
-                            <div className={`${styles.summaryRow} ${styles.summaryTotal}`}>
-                                <span>Зі знижкою</span>
-                                <span className={styles.totalHighlight}>{cart.total.toLocaleString()} ₴</span>
-                            </div>
-                        </div>
+                                <div className={styles.orderSummary}>
+                                    <div className={styles.summaryRow}><span>Загальна сума</span><span>{cart.total.toLocaleString()} ₴</span></div>
+                                    <div className={styles.summaryRow}><span>Заощаджено</span><span className={styles.discount}>- 1 005 ₴</span></div>
+                                    <div className={styles.summaryRow}><span>Доставка</span><span>За тарифом перевізника</span></div>
+                                    <div className={`${styles.summaryRow} ${styles.summaryTotal}`}>
+                                        <span>Зі знижкою</span>
+                                        <span className={styles.totalHighlight}>{cart.total.toLocaleString()} ₴</span>
+                                    </div>
+                                </div>
+                            </>
+                        )}
 
                         {orderError   && <p className={styles.errorMsg}>{orderError}</p>}
                         {orderSuccess && <p className={styles.successMsg}>Замовлення успішно створено!</p>}
@@ -403,14 +359,20 @@ export const CheckoutPage = () => {
                         <button
                             className={styles.checkoutBtn}
                             onClick={handleSubmit(onSubmit)}
-                            disabled={orderLoading}
+                            disabled={orderLoading || !hasItems}
                         >
                             {orderLoading ? 'ОБРОБКА...' : 'ПІДТВЕРДИТИ ЗАМОВЛЕННЯ'}
                         </button>
                     </div>
                 </div>
-
             </div>
+
+            <EditCartModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                items={cart.items ?? []}
+                total={cart.total}
+            />
         </div>
     );
 };
