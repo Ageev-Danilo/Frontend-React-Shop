@@ -2,10 +2,11 @@ import { Link } from "react-router-dom"
 import styles from "./Header.module.css"
 import { HeaderProps } from "./header.types";
 import { useEffect, useState } from "react";
-
+import { CartModal } from "../CartModal/CartModal";
 
 export function Header (props: HeaderProps)  {
     const [ isScrolled, setScrolled ] = useState(false)
+    const [ isCartOpen, setIsCartOpen ] = useState(false)
 
     useEffect(() => {
         const handleScroll = () => {
@@ -34,6 +35,10 @@ export function Header (props: HeaderProps)  {
         }
     }
 
+    const handleCartClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        setIsCartOpen(true)
+    }
 
     const HeaderContent = (
         <div className={styles.header + (isScrolled ? ' ' + styles.scrolled : '')}>
@@ -44,7 +49,11 @@ export function Header (props: HeaderProps)  {
             </div>
             <Link to={"/"} className={styles.logo} onClick={handleLogoClick}></Link>
             <div className={styles.buttonsDiv}>
-                <button className={styles.cartBtn}></button>
+                <button 
+                    className={styles.cartBtn}
+                    onClick={handleCartClick}
+                    aria-label="Кошик"
+                ></button>
                 <Link to = {"register"}><button className={styles.profileBtn }></button></Link>
             </div>
         </div>
@@ -52,6 +61,8 @@ export function Header (props: HeaderProps)  {
     
     return (
         <>
+            <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+            
             {!isScrolled && (
                 <header>
                     <div className="bottom">
