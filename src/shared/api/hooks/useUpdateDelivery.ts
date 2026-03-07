@@ -4,19 +4,31 @@ import { DeliveryAddress } from './useGetDelivery';
 
 type DeliveryUpdate = Omit<DeliveryAddress, 'id'>;
 
+function getUserId(): number | null {
+    const raw = localStorage.getItem('userId');
+    if (!raw) return null;
+    const id = Number(raw);
+    return isNaN(id) ? null : id;
+}
+
 export const useUpdateDelivery = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [data, setData] = useState<DeliveryAddress | null>(null);
 
     const execute = async (payload: DeliveryUpdate) => {
+        const userId = getUserId();
+        if (!userId) {
+            setError('Будь ласка, увійдіть в акаунт');
+            return null;
+        }
+
         try {
             setIsLoading(true);
             setError(null);
-            const res = await fetch(`${API_URL}/delivery/:id`, {
+            const res = await fetch(`${API_URL}/delivery/${userId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
                 body: JSON.stringify(payload),
             });
             if (!res.ok) throw new Error('Помилка збереження');
@@ -25,6 +37,7 @@ export const useUpdateDelivery = () => {
             return result;
         } catch (err: any) {
             setError(err.message || 'Помилка збереження');
+            return null;
         } finally {
             setIsLoading(false);
         }

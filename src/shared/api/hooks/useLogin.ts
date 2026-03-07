@@ -9,6 +9,8 @@ interface AuthData {
 
 interface AuthResponse {
     token?: string;
+    userId?: number;
+    id?: number;
     message?: string;
 }
 
@@ -33,18 +35,25 @@ export const useLogin = () => {
             });
 
             const result: AuthResponse = await response.json();
-            console.log(result)
+            console.log('Login response:', result);
 
             if (!response.ok) {
                 throw new Error(result.message || 'Помилка запиту');
-                
+            }
+
+            if (result.token) {
+                localStorage.setItem('token', result.token);
+                localStorage.setItem('authToken', result.token);
+            }
+            const userId = result.userId ?? result.id;
+            if (userId) {
+                localStorage.setItem('userId', String(userId));
             }
 
             setData(result);
             return result;
         } catch (err: any) {
             setError(err.message || 'Щось пішло не так');
-            console.log(err.message)
             return null;
         } finally {
             setIsLoading(false);

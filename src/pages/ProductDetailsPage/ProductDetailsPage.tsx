@@ -10,81 +10,81 @@ import storage512Img from '../../assets/static/product_page/512gb.png';
 import bgOval        from '../../assets/img/bg.svg';
 
 import { useGetProductById } from '../../shared/api/hooks/useGetProductById';
-import { useAddToCart } from '../../shared/api/hooks/useAddToCart';
-
+import { useAddToCart }      from '../../shared/api/hooks/useAddToCart';
 
 const useGetSimilarProducts = (id: string | undefined) => {
-    const [similar, setSimilar] = useState<any[]>([]);
+    const [similar, setSimilar]     = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         if (!id) { setIsLoading(false); return; }
+
         const fetchSimilar = async () => {
             try {
                 setIsLoading(true);
-                
                 const [priceRes, categoryRes] = await Promise.all([
                     fetch(`http://localhost:8000/products/same-price/${id}`),
-                    fetch(`http://localhost:8000/products/same-category/${id}`)
+                    fetch(`http://localhost:8000/products/same-category/${id}`),
                 ]);
 
-                let priceProducts: any[] = [];
+                let priceProducts:    any[] = [];
                 let categoryProducts: any[] = [];
 
                 if (priceRes.ok) {
-                    const priceData = await priceRes.json();
-                    priceProducts = Array.isArray(priceData) 
-                        ? priceData 
-                        : priceData.items ?? priceData.data ?? [];
+                    const d = await priceRes.json();
+                    priceProducts = Array.isArray(d) ? d : d.items ?? d.data ?? [];
                 }
-
                 if (categoryRes.ok) {
-                    const categoryData = await categoryRes.json();
-                    categoryProducts = Array.isArray(categoryData) 
-                        ? categoryData 
-                        : categoryData.items ?? categoryData.data ?? [];
+                    const d = await categoryRes.json();
+                    categoryProducts = Array.isArray(d) ? d : d.items ?? d.data ?? [];
                 }
 
                 const combined = [...priceProducts, ...categoryProducts];
-                const uniqueProducts = Array.from(
-                    new Map(combined.map(item => [item.id, item])).values()
-                );
-
-                setSimilar(uniqueProducts);
+                const unique   = Array.from(new Map(combined.map(i => [i.id, i])).values());
+                setSimilar(unique);
             } catch {
                 setSimilar([]);
             } finally {
                 setIsLoading(false);
             }
         };
+
         fetchSimilar();
     }, [id]);
 
     return { similar, isLoading };
 };
 
-
 export const ProductDetailsPage = () => {
-    const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
+    const { id }       = useParams<{ id: string }>();
+    const navigate     = useNavigate();
+
     const { product, isLoading, error } = useGetProductById(id);
-    const { similar } = useGetSimilarProducts(id);
-    const [cartAdded, setCartAdded] = useState(false);
+    const { similar }                   = useGetSimilarProducts(id);
+    const { execute: addToCart, isLoading: addingToCart, error: cartError } = useAddToCart();
+    const [cartAdded,   setCartAdded]   = useState(false);
+    const [cartMessage, setCartMessage] = useState<string | null>(null);
 
     if (isLoading) return <div className={styles.loader}><span>Завантаження...</span></div>;
     if (error || !product) return <div className={styles.error}>Продукт не знайдено</div>;
 
-    const handleBuy = () => {
-       
-        setCartAdded(true);
-        setTimeout(() => setCartAdded(false), 2000);
+    const handleBuy = async () => {
+        if (!product?.id) return;
+        const result = await addToCart({ productId: product.id, quantity: 1 });
+        if (result) {
+            setCartAdded(true);
+            setCartMessage(null);
+            setTimeout(() => setCartAdded(false), 2000);
+        } else {
+            setCartMessage(cartError || 'Помилка додавання');
+            setTimeout(() => setCartMessage(null), 3000);
+        }
     };
 
     const productImg = product.media || product.imageUrl || dronImg;
 
     return (
         <div className={styles.pageWrapper}>
-
 
             <section className={styles.hero}>
                 <img src={bgOval} className={styles.heroOval} alt="" />
@@ -100,7 +100,7 @@ export const ProductDetailsPage = () => {
                             src={productImg}
                             alt={product.name}
                             className={styles.heroDroneImg}
-                            onError={(e) => { (e.target as HTMLImageElement).src = dronImg; }}
+                            onError={e => { (e.target as HTMLImageElement).src = dronImg; }}
                         />
                     </div>
                 </div>
@@ -111,7 +111,7 @@ export const ProductDetailsPage = () => {
                             src={productImg}
                             alt={product.name}
                             className={styles.floatingThumb}
-                            onError={(e) => { (e.target as HTMLImageElement).src = dronImg; }}
+                            onError={e => { (e.target as HTMLImageElement).src = dronImg; }}
                         />
                         <div>
                             <div className={styles.floatingName}>{product.name}</div>
@@ -128,8 +128,8 @@ export const ProductDetailsPage = () => {
                         </div>
                     </div>
                     <div className={styles.floatingActions}>
-                        <button 
-                            className={styles.cartIconBtn} 
+                        <button
+                            className={styles.cartIconBtn}
                             aria-label="Кошик"
                             onClick={() => navigate('/profile/orders')}
                         >
@@ -138,28 +138,37 @@ export const ProductDetailsPage = () => {
                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                             </svg>
                         </button>
-                        <button className={styles.orderBtn} onClick={handleBuy}>
-                            {cartAdded ? 'ДОДАНО ✓' : 'ЗАМОВИТИ →'}
+                        <button
+                            className={styles.orderBtn}
+                            onClick={handleBuy}
+                            disabled={addingToCart}
+                        >
+                            {addingToCart ? 'ДОДАЄТЬСЯ...' : cartAdded ? 'ДОДАНО ✓' : 'ЗАМОВИТИ →'}
                         </button>
                     </div>
+                    {cartMessage && (
+                        <p style={{ color: '#ef4444', fontSize: 12, marginTop: 8 }}>{cartMessage}</p>
+                    )}
                 </div>
             </section>
-
 
             <section className={styles.featureSection}>
                 <div className={styles.featureCenter}>
                     <h2 className={styles.featureTitle}>ВОЛОДІЙТЕ КОЖНИМ КУТОМ</h2>
                     <div className={styles.featureTextCols}>
                         <p>
-                            Представляємо вдосконалену систему з трьома камерами, де кожен об'єктив має свої переваги, створюючи унікальні зображення — від широких ширококутних пейзажів до детальних телефото-знімків крупним планом. Усі три камери оснащені функцією Dual Native ISO Fusion.
+                            Представляємо вдосконалену систему з трьома камерами, де кожен об'єктив має свої переваги,
+                            створюючи унікальні зображення — від широких ширококутних пейзажів до детальних телефото-знімків
+                            крупним планом. Усі три камери оснащені функцією Dual Native ISO Fusion.
                         </p>
                         <p>
-                            Крім того, ви можете розкрити свій творчий потенціал завдяки можливості створення знімків у форматі RAW з високою роздільною здатністю (до 5 кадрів), а також таким функціям, як «Вільні панорами» та «Фокусування на об'єкті».
+                            Крім того, ви можете розкрити свій творчий потенціал завдяки можливості створення знімків у
+                            форматі RAW з високою роздільною здатністю (до 5 кадрів), а також таким функціям, як «Вільні
+                            панорами» та «Фокусування на об'єкті».
                         </p>
                     </div>
                 </div>
             </section>
-
 
             <section className={styles.videoSection}>
                 <div className={styles.videoWrap}>
@@ -174,15 +183,16 @@ export const ProductDetailsPage = () => {
                 </div>
             </section>
 
-
             <section className={styles.splitSection}>
                 <div className={styles.splitText}>
                     <h2 className={styles.splitTitle}>ОСНОВНА КАМЕРА 4/3 CMOS<br />HASSELBLAD</h2>
                     <p className={styles.splitDesc}>
-                        У ретельно розробленій 4/3 CMOS-камері Hasselblad використовується абсолютно новий 100-мегапіксельний сенсор і відома технологія Hasselblad Natural Color Solution (HNCS).
+                        У ретельно розробленій 4/3 CMOS-камері Hasselblad використовується абсолютно новий
+                        100-мегапіксельний сенсор і відома технологія Hasselblad Natural Color Solution (HNCS).
                     </p>
                     <p className={styles.splitDesc}>
-                        Вона створює захоплюючі 100-мегапіксельні зображення з високою деталізацією та чіткістю, пропонуючи безпрецедентну гнучкість у пост-обробці.
+                        Вона створює захоплюючі 100-мегапіксельні зображення з високою деталізацією та чіткістю,
+                        пропонуючи безпрецедентну гнучкість у пост-обробці.
                     </p>
                 </div>
                 <div className={styles.splitImage}>
@@ -197,10 +207,12 @@ export const ProductDetailsPage = () => {
                 <div className={styles.splitText}>
                     <h2 className={styles.splitTitle}>51-ХВ ЧАС ПОЛЬОТУ</h2>
                     <p className={styles.splitDesc}>
-                        Аеродинамічний дизайн Mavic 4 Pro, ефективна силова установка та акумуляторна батарея ємністю 95 Вт·год забезпечують тривалість польоту до 51 хвилини.
+                        Аеродинамічний дизайн Mavic 4 Pro, ефективна силова установка та акумуляторна батарея
+                        ємністю 95 Вт·год забезпечують тривалість польоту до 51 хвилини.
                     </p>
                     <p className={styles.splitDesc}>
-                        Незалежно від того, чи ви розвідуєте місцевість або відпрацьовуєте маневри, достатня тривалість польоту дозволяє вам діяти легко і впевнено.
+                        Незалежно від того, чи ви розвідуєте місцевість або відпрацьовуєте маневри, достатня
+                        тривалість польоту дозволяє вам діяти легко і впевнено.
                     </p>
                 </div>
             </section>
@@ -209,7 +221,8 @@ export const ProductDetailsPage = () => {
                 <div className={styles.memorySectionInner}>
                     <h2 className={styles.featureTitle}>ДО 512 ГБ ВБУДОВАНОЇ ПАМ'ЯТІ</h2>
                     <p className={styles.memoryDesc}>
-                        Стандартна версія DJI Mavic 4 Pro поставляється з 64 ГБ вбудованої пам'яті, тому ви можете відразу ж почати зйомку без зовнішньої карти пам'яті.
+                        Стандартна версія DJI Mavic 4 Pro поставляється з 64 ГБ вбудованої пам'яті, тому ви можете
+                        відразу ж почати зйомку без зовнішньої карти пам'яті.
                     </p>
                     <div className={styles.specStats}>
                         <div className={styles.specStat}>
@@ -245,7 +258,7 @@ export const ProductDetailsPage = () => {
                                     src={item.media || item.imageUrl || dronImg}
                                     alt={item.name}
                                     className={styles.similarImg}
-                                    onError={(e) => { (e.target as HTMLImageElement).src = dronImg; }}
+                                    onError={e => { (e.target as HTMLImageElement).src = dronImg; }}
                                 />
                             </div>
                             <div className={styles.similarInfo}>
