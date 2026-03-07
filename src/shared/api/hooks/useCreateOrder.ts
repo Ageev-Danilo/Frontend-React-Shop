@@ -26,7 +26,7 @@ export const useCreateOrder = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${API_URL}/api/orders`, {
+            const response = await fetch(`${API_URL}/orders/2`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -27,7 +27,7 @@ export const useGetCart = () => {
 
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch(`${API_URL}/api/cart`, {
+                const response = await fetch(`${API_URL}/products-in-order/2`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
