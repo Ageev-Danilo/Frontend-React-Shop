@@ -10,6 +10,13 @@ export interface DeliveryAddress {
     entrance: string;
 }
 
+function getUserId(): number | null {
+    const raw = localStorage.getItem('userId');
+    if (!raw) return null;
+    const id = Number(raw);
+    return isNaN(id) ? null : id;
+}
+
 export const useGetDelivery = () => {
     const [delivery, setDelivery] = useState<DeliveryAddress | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -17,10 +24,18 @@ export const useGetDelivery = () => {
 
     useEffect(() => {
         const fetchDelivery = async () => {
+            const userId = getUserId();
+            if (!userId) {
+                setError('Будь ласка, увійдіть в акаунт');
+                setIsLoading(false);
+                return;
+            }
+
             try {
                 setIsLoading(true);
-                const res = await fetch(`${API_URL}/delivery/:id`, {
-                    credentials: 'include',
+                setError(null);
+                const res = await fetch(`${API_URL}/delivery/${userId}`, {
+                    headers: { 'Content-Type': 'application/json' },
                 });
                 if (!res.ok) throw new Error('Помилка завантаження');
                 const data = await res.json();
