@@ -7,6 +7,7 @@
     max-width: 1200px;
     margin: 0 auto;
     gap: 60px;
+    min-height: calc(100vh - 200px);
 }
 
 .watermark {
@@ -68,4 +69,27 @@
     font-size: 13px;
     letter-spacing: 0.1em;
     transition: background 0.2s;
+}
+
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+        padding: 80px 24px;
+        gap: 40px;
+        text-align: center;
+        align-items: center;
+    }
+
+    .watermark {
+        font-size: 200px; 
+    }
+
+    .rightSide {
+        padding-top: 0;
+        align-items: center;
+    }
+
+    .btn {
+        align-self: center;
+    }
 }

@@ -1,18 +1,15 @@
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../../shared/button';
-
 import mini from '../../assets/static/mini.png';
 import minik from '../../assets/static/minik.png';
-import flip from '../../assets/static/flip.png';
-
 import styles from './Home.module.css';
-import base from '../../shared/base/styles.module.css';
 import '../../assets/fonts/font.css';
 
 import { useGetNewProducts } from '../../shared/api/hooks/useGetNewProducts';
 import { useGetPopularProducts } from '../../shared/api/hooks/useGetPopularProducts';
 
 export function Home() {
-
+    const navigate = useNavigate();
     const { 
         products: newProducts, 
         isLoading: isNewLoading, 
@@ -25,67 +22,103 @@ export function Home() {
         error: popularError 
     } = useGetPopularProducts();
 
+    const bgClasses = [styles.first, styles.second, styles.third];
+    
     return (
         <div className={styles.wrapper}>
-            <div className={styles.about + ' ' + base.column}>
-                <h2 className={base.title}>Про нас</h2>
-                <p>
-                    Ми — команда, що об'єднує технології та надійність. Пропонуємо дрони й тепловізори, перевірені у найскладніших умовах. Обираємо тільки те, чому довіряємо самі.
-                </p>
-                <Button className="view-btn" type='outline' 
-                    icon='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="#0C122A" style="fill:#0C122A;fill:color(display-p3 0.0471 0.0706 0.1647);fill-opacity:1;"/></svg>' 
-                    pos='right'>
-                    Читати більше
-                </Button>
-            </div>
+            
+            <section className={styles.aboutSection}>
+                <div className={styles.aboutContent}>
+                    <h2 className={styles.sectionTitle}>Про нас</h2>
+                    <p className={styles.aboutText}>
+                        Ми — команда, що об'єднує технології та надійність. Пропонуємо дрони й тепловізори, перевірені у найскладніших умовах. Обираємо тільки те, чому довіряємо самі.
+                    </p>
+                    <Button 
+                        className={styles.moreBtn} 
+                        type='outline' 
+                        onClick={() => navigate('/about')}
+                        icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="currentColor"/></svg>' 
+                        pos='right'
+                    >
+                        Читати більше
+                    </Button>
+                </div>
+            </section>
 
-            <div>
-                <h2 className={base.title}>Нове на сайті</h2>
+            <section className={styles.newSection}>
+                <h2 className={styles.sectionTitle}>Нове на сайті</h2>
                 
-                {isNewLoading && <p style={{textAlign: 'center'}}>Завантаження новинок...</p>}
-                {newError && <p style={{textAlign: 'center', color: 'red'}}>Помилка: {newError}</p>}
+                {isNewLoading && <p className={styles.statusMsg}>Завантаження новинок...</p>}
+                {newError && <p className={styles.errorMsg}>Помилка: {newError}</p>}
 
-                <div className={`${base.row} ${styles.new}`}>
-                    {!isNewLoading && !newError && newProducts.map((product) => (
-                        <div key={product.id} className={styles.dronePrev + ' ' + base.column}>
-                            <img src={product.media ? product.media : minik} alt={product.name} style={{maxHeight: '200px', objectFit: 'contain'}} />
-                            <div>
+                <div className={styles.newGrid}>
+                    {!isNewLoading && !newError && newProducts.slice(0, 3).map((product, index) => (
+                        <div key={product.id} className={`${styles.droneCard} ${bgClasses[index % 3]}`}>
+                            <div className={styles.imageContainer}>
+                                <img 
+                                    src={product.media ? product.media : minik} 
+                                    alt={product.name} 
+                                    className={styles.droneImg} 
+                                    onClick={() => navigate(`/product/${product.id}`)}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                            </div>
+                            <div className={styles.cardInfo}>
                                 <h3>{product.name}</h3>
-                                <p>{product.description}</p>
-                                <p>Price: ${product.price}</p>
-                                <Button className="buy-btn" type='outline'>Купити</Button>
+                                <div className={styles.cardBottom}>
+                                    <span className={styles.cardPrice}>{product.price} ₴</span>
+                                    <Button 
+                                        className={styles.buyBtn} 
+                                        type='outline'
+                                        onClick={() => navigate(`/product/${product.id}`)}
+                                    >
+                                        Купити
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     ))}
-                    
-                    {!isNewLoading && !newError && newProducts.length === 0 && (
-                        <p>Товарів поки немає</p>
-                    )}
                 </div>
-            </div>
+            </section>
 
-            <div className={styles.catalog + ' ' + base.column}>
-                <h2 className={base.title}>Каталог</h2>
-                {isPopularLoading && <p>Завантаження каталогу...</p>}
-                {popularError && <p style={{color: 'red'}}>Error: {popularError}</p>}
-
-                <div className={base.row} style={{flexWrap: 'wrap', justifyContent: 'center', gap: '20px'}}>
+            <section className={styles.catalogSection}>
+                <h2 className={styles.sectionTitle}>Каталог</h2>
+                
+                {isPopularLoading && <p className={styles.statusMsg}>Завантаження каталогу...</p>}
+                
+                <div className={styles.catalogGrid}>
                     {!isPopularLoading && !popularError && popularProducts.map((product) => (
-                        <div key={product.id} className="drone" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                            <img src={product.media ? product.media : mini} alt={product.name} style={{width: '150px'}} />
-                            <p>{product.name}</p>
-                            <s>{Math.round(product.price * 1.1)} ₴</s>
-                            <p className="discount">{product.price} ₴ </p>
+                        <div 
+                            key={product.id} 
+                            className={styles.catalogItem}
+                            onClick={() => navigate(`/product/${product.id}`)}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <div className={styles.itemImageBg}>
+                                <img src={product.media ? product.media : mini} alt={product.name} />
+                            </div>
+                            <div className={styles.itemDetails}>
+                                <p className={styles.itemName}>{product.name}</p>
+                                <div className={styles.itemPrices}>
+                                    <span className={styles.oldPrice}>{Math.round(product.price * 1.1)} ₴</span>
+                                    <span className={styles.currentPrice}>{product.price} ₴</span>
+                                </div>
+                            </div>
                         </div>
                     ))}
                 </div>
 
-                <Button className="view-more-btn" 
-                    icon='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="white" style="fill:white;fill-opacity:1;"/></svg>'
-                    pos='right'>
-                    Дивитись всі
-                </Button>
-            </div>
+                <div className={styles.viewMoreContainer}>
+                    <Button 
+                        className={styles.allBtn} 
+                        onClick={() => navigate('/catalog')}
+                        icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="white"/></svg>'
+                        pos='right'
+                    >
+                        Дивитись всі
+                    </Button>
+                </div>
+            </section>
         </div>
     );
-};
+}
