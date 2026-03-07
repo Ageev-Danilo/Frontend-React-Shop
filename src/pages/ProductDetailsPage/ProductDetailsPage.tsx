@@ -10,6 +10,7 @@ import storage512Img from '../../assets/static/product_page/512gb.png';
 import bgOval        from '../../assets/img/bg.svg';
 
 import { useGetProductById } from '../../shared/api/hooks/useGetProductById';
+import { useAddToCart } from '../../shared/api/hooks/useAddToCart';
 
 
 const useGetSimilarProducts = (id: string | undefined) => {
@@ -74,6 +75,7 @@ export const ProductDetailsPage = () => {
     if (error || !product) return <div className={styles.error}>Продукт не знайдено</div>;
 
     const handleBuy = () => {
+       
         setCartAdded(true);
         setTimeout(() => setCartAdded(false), 2000);
     };
