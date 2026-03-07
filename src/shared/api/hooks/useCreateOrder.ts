@@ -10,6 +10,13 @@ export interface CreateOrderData {
     comment?: string;
 }
 
+function getUserId(): number | null {
+    const raw = localStorage.getItem('userId');
+    if (!raw) return null;
+    const id = Number(raw);
+    return isNaN(id) ? null : id;
+}
+
 export interface CreateOrderResponse {
     orderId: number;
     orderNumber: string;
@@ -23,10 +30,16 @@ export const useCreateOrder = () => {
     const execute = async (data: CreateOrderData): Promise<CreateOrderResponse | null> => {
         setIsLoading(true);
         setError(null);
+          const userId = getUserId();
+        if (!userId) {
+            setError('Будь ласка, увійдіть в акаунт');
+            return null;
+        }
+
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${API_URL}/orders/2`, {
+            const response = await fetch(`${API_URL}/orders/${userId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
