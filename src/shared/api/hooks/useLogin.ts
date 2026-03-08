@@ -48,6 +48,7 @@ export const useLogin = () => {
             const userId = result.userId ?? result.id;
             if (userId) {
                 localStorage.setItem('userId', String(userId));
+                window.dispatchEvent(new Event('storage'));
             }
 
             setData(result);

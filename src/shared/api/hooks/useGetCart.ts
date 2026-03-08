@@ -33,18 +33,14 @@ export const useGetCart = () => {
             setCart({ items: [], total: 0 });
             return;
         }
-
         setIsLoading(true);
         setError(null);
-
         try {
             const res = await fetch(`${API_URL}/products-in-order/${userId}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });
-
             if (!res.ok) throw new Error(`Помилка ${res.status}`);
-
             const data: Cart = await res.json();
             setCart(data);
         } catch (err) {
@@ -57,6 +53,10 @@ export const useGetCart = () => {
 
     useEffect(() => {
         fetchCart();
+
+        const handleStorage = () => fetchCart();
+        window.addEventListener('storage', handleStorage);
+        return () => window.removeEventListener('storage', handleStorage);
     }, []);
 
     return { cart, isLoading, error, refetch: fetchCart };

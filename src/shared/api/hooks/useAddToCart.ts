@@ -24,10 +24,10 @@ export const useAddToCart = () => {
 
     const execute = async (payload: AddToCartPayload): Promise<AddToCartResult | null> => {
         const userId = getUserId();
-        if (!userId) {
-            setError('Будь ласка, увійдіть в акаунт');
-            return null;
-        }
+            if (!userId) {
+                setError('Будь ласка, увійдіть в акаунт');
+                return null;
+            }
 
         setIsLoading(true);
         setError(null);

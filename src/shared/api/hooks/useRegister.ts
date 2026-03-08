@@ -9,6 +9,7 @@ interface AuthData {
 
 interface AuthResponse {
     token?: string;
+    userId?: number;
     message?: string;
 }
 
@@ -40,6 +41,14 @@ export const useRegister = () => {
             }
 
             setData(result);
+            if (result.token) {
+                localStorage.setItem('token', result.token);
+                localStorage.setItem('authToken', result.token);
+            }
+            if (result.userId) {
+                localStorage.setItem('userId', String(result.userId));
+                window.dispatchEvent(new Event('storage'));
+            }
             return result;
         } catch (err: any) {
             setError(err.message || 'Щось пішло не так');
