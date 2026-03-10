@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { API_URL } from '../api-url';
+import { jwtDecode } from "jwt-decode";
 
 interface AuthData {
     name?: string;
@@ -36,7 +37,12 @@ export const useLogin = () => {
 
             const result: AuthResponse = await response.json();
             console.log('Login response:', result);
+           
 
+            const token = result;
+            const decoded = jwtDecode(JSON.stringify(token));
+            var user_id = decoded.id
+            console.log(user_id)
             if (!response.ok) {
                 throw new Error(result.message || 'Помилка запиту');
             }
