@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { API_URL } from '../api-url';
+import { getUserId } from './auth.utils';
 
 interface CartItem {
     id: number;
@@ -14,13 +15,6 @@ interface Cart {
     total: number;
 }
 
-function getUserId(): number | null {
-    const raw = localStorage.getItem('userId');
-    if (!raw) return null;
-    const id = Number(raw);
-    return isNaN(id) ? null : id;
-}
-
 export const useGetCart = () => {
     const [cart, setCart] = useState<Cart>({ items: [], total: 0 });
     const [isLoading, setIsLoading] = useState(false);
@@ -33,8 +27,10 @@ export const useGetCart = () => {
             setCart({ items: [], total: 0 });
             return;
         }
+
         setIsLoading(true);
         setError(null);
+
         try {
             const res = await fetch(`${API_URL}/products-in-order/${userId}`, {
                 method: 'GET',
@@ -53,7 +49,6 @@ export const useGetCart = () => {
 
     useEffect(() => {
         fetchCart();
-
         const handleStorage = () => fetchCart();
         window.addEventListener('storage', handleStorage);
         return () => window.removeEventListener('storage', handleStorage);

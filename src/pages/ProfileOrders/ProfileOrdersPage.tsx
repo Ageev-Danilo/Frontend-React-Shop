@@ -48,13 +48,7 @@ export const ProfileOrdersPage = () => {
                         <a href="/profile/address" className={styles.navLink}>АДРЕСА ДОСТАВКИ</a>
                         <a href="/profile/orders" className={styles.navLinkActive}>МОЇ ЗАМОВЛЕННЯ</a>
                         <div className={styles.divider}></div>
-                        <button className={styles.exitBtn} onClick={() => {//очищення localStorage
-                            localStorage.removeItem('userId');
-                            localStorage.removeItem('token');
-                            localStorage.removeItem('authToken');
-                            window.dispatchEvent(new Event('storage'));
-                            navigate('/');
-                        }}>ВИЙТИ</button>
+                        <button className={styles.exitBtn} onClick={() => navigate('/')}>ВИЙТИ</button>
                     </nav>
                 </aside>
 

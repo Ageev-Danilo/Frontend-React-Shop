@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { API_URL } from '../api-url';
+import { jwtDecode } from 'jwt-decode';
 
 interface AuthData {
     name?: string;
@@ -9,8 +10,13 @@ interface AuthData {
 
 interface AuthResponse {
     token?: string;
-    userId?: number;
     message?: string;
+}
+
+interface JwtPayload {
+    id: number;
+    iat?: number;
+    exp?: number;
 }
 
 export const useRegister = () => {
@@ -37,22 +43,23 @@ export const useRegister = () => {
 
             if (!response.ok) {
                 throw new Error(result.message || 'Помилка запиту');
-                
             }
 
-            setData(result);
             if (result.token) {
                 localStorage.setItem('token', result.token);
                 localStorage.setItem('authToken', result.token);
+
+                const decoded = jwtDecode<JwtPayload>(result.token);
+                if (decoded.id) {
+                    localStorage.setItem('user_id', String(decoded.id));
+                    window.dispatchEvent(new Event('storage'));
+                }
             }
-            if (result.userId) {
-                localStorage.setItem('userId', String(result.userId));
-                window.dispatchEvent(new Event('storage'));
-            }
+
+            setData(result);
             return result;
         } catch (err: any) {
             setError(err.message || 'Щось пішло не так');
-            console.log(err.message)
             return null;
         } finally {
             setIsLoading(false);

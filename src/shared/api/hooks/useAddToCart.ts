@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { API_URL } from '../api-url';
-
-
+import { getUserId } from './auth.utils';
 
 interface AddToCartPayload {
     productId: number;
@@ -13,25 +12,16 @@ interface AddToCartResult {
     message?: string;
 }
 
-function getUserId(): number | null {
-    const raw = localStorage.getItem('user_id');
-    if (!raw) return null;
-    const id = Number(raw);
-    return isNaN(id) ? null : id;
-}
-
 export const useAddToCart = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const execute = async (payload: AddToCartPayload): Promise<AddToCartResult | null> => {
         const userId = getUserId();
-        console.log(userId)
-            if (!userId) {
-                console.log(error)
-                setError('Будь ласка, увійдіть в акаунт');
-                
-            }
+        if (!userId) {
+            setError('Будь ласка, увійдіть в акаунт');
+            return null;
+        }
 
         setIsLoading(true);
         setError(null);
@@ -42,9 +32,7 @@ export const useAddToCart = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             });
-
             if (!res.ok) throw new Error(`Помилка ${res.status}`);
-
             const data: AddToCartResult = await res.json();
             return data;
         } catch (err) {

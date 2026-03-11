@@ -10,9 +10,13 @@ interface AuthData {
 
 interface AuthResponse {
     token?: string;
-    userId?: number;
-    id?: number;
     message?: string;
+}
+
+interface JwtPayload {
+    id: number;
+    iat?: number;
+    exp?: number;
 }
 
 export const useLogin = () => {
@@ -36,13 +40,7 @@ export const useLogin = () => {
             });
 
             const result: AuthResponse = await response.json();
-            console.log('Login response:', result);
-           
 
-            const token = result;
-            const decoded = jwtDecode(JSON.stringify(token));
-            var user_id = decoded.id
-            console.log(user_id)
             if (!response.ok) {
                 throw new Error(result.message || 'Помилка запиту');
             }
@@ -50,11 +48,14 @@ export const useLogin = () => {
             if (result.token) {
                 localStorage.setItem('token', result.token);
                 localStorage.setItem('authToken', result.token);
-            }
-            const userId = result.userId ?? result.id;
-            if (userId) {
-                localStorage.setItem('userId', String(userId));
-                window.dispatchEvent(new Event('storage'));
+
+                const decoded = jwtDecode<JwtPayload>(result.token);
+                console.log('Decoded JWT:', decoded);
+
+                if (decoded.id) {
+                    localStorage.setItem('user_id', String(decoded.id));
+                    window.dispatchEvent(new Event('storage'));
+                }
             }
 
             setData(result);

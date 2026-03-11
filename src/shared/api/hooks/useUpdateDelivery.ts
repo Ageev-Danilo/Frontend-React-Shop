@@ -1,15 +1,9 @@
 import { useState } from 'react';
 import { API_URL } from '../api-url';
+import { getUserId } from './auth.utils';
 import { DeliveryAddress } from './useGetDelivery';
 
 type DeliveryUpdate = Omit<DeliveryAddress, 'id'>;
-
-function getUserId(): number | null {
-    const raw = localStorage.getItem('userId');
-    if (!raw) return null;
-    const id = Number(raw);
-    return isNaN(id) ? null : id;
-}
 
 export const useUpdateDelivery = () => {
     const [isLoading, setIsLoading] = useState(false);

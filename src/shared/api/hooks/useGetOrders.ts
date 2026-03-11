@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { API_URL } from '../api-url';
+import { getUserId } from './auth.utils';
 
 export interface OrderItem {
     id: number;
@@ -27,13 +28,6 @@ export interface Order {
     items: OrderItem[];
 }
 
-function getUserId(): number | null {
-    const raw = localStorage.getItem('userId');
-    if (!raw) return null;
-    const id = Number(raw);
-    return isNaN(id) ? null : id;
-}
-
 export const useGetOrders = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -55,9 +49,7 @@ export const useGetOrders = () => {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });
-
             if (!res.ok) throw new Error(`Помилка ${res.status}`);
-
             const data: Order[] = await res.json();
             setOrders(data);
         } catch (err) {

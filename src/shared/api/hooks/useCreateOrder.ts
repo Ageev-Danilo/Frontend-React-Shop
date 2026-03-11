@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { API_URL } from '../api-url';
+import { getUserId, getToken } from './auth.utils';
 
 export interface CreateOrderData {
     firstName: string;
@@ -8,13 +9,6 @@ export interface CreateOrderData {
     phone: string;
     email: string;
     comment?: string;
-}
-
-function getUserId(): number | null {
-    const raw = localStorage.getItem('userId');
-    if (!raw) return null;
-    const id = Number(raw);
-    return isNaN(id) ? null : id;
 }
 
 export interface CreateOrderResponse {
@@ -28,17 +22,17 @@ export const useCreateOrder = () => {
     const [error, setError] = useState<string | null>(null);
 
     const execute = async (data: CreateOrderData): Promise<CreateOrderResponse | null> => {
-        setIsLoading(true);
-        setError(null);
-          const userId = getUserId();
+        const userId = getUserId();
         if (!userId) {
             setError('Будь ласка, увійдіть в акаунт');
             return null;
         }
 
+        setIsLoading(true);
+        setError(null);
 
         try {
-            const token = localStorage.getItem('token');
+            const token = getToken();
             const response = await fetch(`${API_URL}/orders/${userId}`, {
                 method: 'POST',
                 headers: {
@@ -50,16 +44,12 @@ export const useCreateOrder = () => {
             });
 
             const result: CreateOrderResponse = await response.json();
-
             if (!response.ok) {
                 throw new Error(result.message || 'Помилка при створенні замовлення');
             }
-
             return result;
         } catch (err: any) {
-            const errorMsg = err.message || 'Щось пішло не так';
-            setError(errorMsg);
-            console.error('Error creating order:', err);
+            setError(err.message || 'Щось пішло не так');
             return null;
         } finally {
             setIsLoading(false);

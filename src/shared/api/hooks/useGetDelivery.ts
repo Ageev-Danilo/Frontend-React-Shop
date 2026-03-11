@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { API_URL } from '../api-url';
+import { getUserId } from './auth.utils';
 
 export interface DeliveryAddress {
     id: number;
@@ -8,13 +9,6 @@ export interface DeliveryAddress {
     building: string;
     apartment: string;
     entrance: string;
-}
-
-function getUserId(): number | null {
-    const raw = localStorage.getItem('userId');
-    if (!raw) return null;
-    const id = Number(raw);
-    return isNaN(id) ? null : id;
 }
 
 export const useGetDelivery = () => {
