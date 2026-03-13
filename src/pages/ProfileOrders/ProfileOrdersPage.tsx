@@ -49,19 +49,14 @@ export const ProfileOrdersPage = () => {
         navigate('/login');
     };
 
-
     const formatDeliveryAddress = (order: Order): string => {
         const parts: string[] = [];
-
-        if (order.deliveryType) {
-            parts.push(DELIVERY_LABELS[order.deliveryType] ?? order.deliveryType);
-        }
-        if (order.city)       parts.push(order.city);
-        if (order.warehouse)  parts.push(order.warehouse);
-        if (order.street)     parts.push(`вул. ${order.street}`);
-        if (order.building)   parts.push(`буд. ${order.building}`);
-        if (order.apartment)  parts.push(`кв. ${order.apartment}`);
-
+        if (order.deliveryType) parts.push(DELIVERY_LABELS[order.deliveryType] ?? order.deliveryType);
+        if (order.city)         parts.push(order.city);
+        if (order.warehouse)    parts.push(order.warehouse);
+        if (order.street)       parts.push(`вул. ${order.street}`);
+        if (order.building)     parts.push(`буд. ${order.building}`);
+        if (order.apartment)    parts.push(`кв. ${order.apartment}`);
         return parts.length > 0 ? parts.join(', ') : 'Не вказано';
     };
 
@@ -78,14 +73,47 @@ export const ProfileOrdersPage = () => {
         }, 0);
     };
 
+    const sidebar = (
+        <aside className={styles.sidebar}>
+            <h2 className={styles.sidebarMainTitle}>ОСОБИСТИЙ КАБІНЕТ</h2>
+            <nav className={styles.nav}>
+                <a href="/profile/contacts" className={styles.navLink}>КОНТАКТНІ ДАНІ</a>
+                <a href="/profile/address"  className={styles.navLink}>АДРЕСА ДОСТАВКИ</a>
+                <a href="/profile/orders"   className={styles.navLinkActive}>МОЇ ЗАМОВЛЕННЯ</a>
+                <div className={styles.divider} />
+                <button className={styles.exitBtn} onClick={handleLogout}>ВИЙТИ</button>
+            </nav>
+        </aside>
+    );
 
     if (isLoading) {
         return (
             <div className={styles.pageWrapper}>
                 <div className={styles.container}>
-                    <div style={{ textAlign: 'center', padding: '100px', width: '100%' }}>
-                        Завантаження...
-                    </div>
+                    {sidebar}
+                    <main className={styles.content}>
+                        <h1 className={styles.pageTitle}>МОЇ ЗАМОВЛЕННЯ</h1>
+                        <div style={{ textAlign: 'center', padding: '100px' }}>Завантаження...</div>
+                    </main>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className={styles.pageWrapper}>
+                <div className={styles.container}>
+                    {sidebar}
+                    <main className={styles.content}>
+                        <h1 className={styles.pageTitle}>МОЇ ЗАМОВЛЕННЯ</h1>
+                        <div className={styles.emptyState}>
+                            <p className={styles.errorMsg}>{error}</p>
+                            <button onClick={() => navigate('/login')} className={styles.catalogLink}>
+                                УВІЙТИ В АКАУНТ
+                            </button>
+                        </div>
+                    </main>
                 </div>
             </div>
         );
@@ -94,21 +122,10 @@ export const ProfileOrdersPage = () => {
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.container}>
-                <aside className={styles.sidebar}>
-                    <h2 className={styles.sidebarMainTitle}>ОСОБИСТИЙ КАБІНЕТ</h2>
-                    <nav className={styles.nav}>
-                        <a href="/profile/contacts" className={styles.navLink}>КОНТАКТНІ ДАНІ</a>
-                        <a href="/profile/address"  className={styles.navLink}>АДРЕСА ДОСТАВКИ</a>
-                        <a href="/profile/orders"   className={styles.navLinkActive}>МОЇ ЗАМОВЛЕННЯ</a>
-                        <div className={styles.divider} />
-                        <button className={styles.exitBtn} onClick={handleLogout}>ВИЙТИ</button>
-                    </nav>
-                </aside>
+                {sidebar}
 
                 <main className={styles.content}>
                     <h1 className={styles.pageTitle}>МОЇ ЗАМОВЛЕННЯ</h1>
-
-                    {error && <p className={styles.errorMsg}>{error}</p>}
 
                     {orders.length === 0 ? (
                         <div className={styles.emptyState}>
@@ -177,7 +194,6 @@ export const ProfileOrdersPage = () => {
 
                                         {expandedOrderId === order.id && (
                                             <div className={styles.orderDetails}>
-
                                                 <div className={styles.statusProgress}>
                                                     {STATUS_STEPS.map((step, idx) => (
                                                         <React.Fragment key={step}>
@@ -201,9 +217,7 @@ export const ProfileOrdersPage = () => {
                                                     <div className={styles.detailsGrid}>
                                                         <div className={styles.detailRow}>
                                                             <span className={styles.detailLabel}>Адреса доставки</span>
-                                                            <span className={styles.detailValue}>
-                                                                {formatDeliveryAddress(order)}
-                                                            </span>
+                                                            <span className={styles.detailValue}>{formatDeliveryAddress(order)}</span>
                                                         </div>
                                                         <div className={styles.detailRow}>
                                                             <span className={styles.detailLabel}>Отримувач</span>
@@ -222,7 +236,6 @@ export const ProfileOrdersPage = () => {
                                                     </div>
                                                 </div>
 
-                                                {/* Товари */}
                                                 <div className={styles.itemsSection}>
                                                     <table className={styles.itemsTable}>
                                                         <thead>
@@ -243,9 +256,7 @@ export const ProfileOrdersPage = () => {
                                                                     <td className={styles.itemName}>{item.name}</td>
                                                                     <td className={styles.itemPrice}>{item.price.toLocaleString()} ₴</td>
                                                                     <td className={styles.itemQty}>{item.quantity}</td>
-                                                                    <td className={styles.itemSum}>
-                                                                        {(item.price * item.quantity).toLocaleString()} ₴
-                                                                    </td>
+                                                                    <td className={styles.itemSum}>{(item.price * item.quantity).toLocaleString()} ₴</td>
                                                                 </tr>
                                                             ))}
                                                         </tbody>
@@ -272,9 +283,7 @@ export const ProfileOrdersPage = () => {
                                                         )}
                                                         <div className={`${styles.summaryRow} ${styles.summaryTotalRow}`}>
                                                             <span>Разом</span>
-                                                            <span className={styles.summaryTotal}>
-                                                                {total.toLocaleString()} ₴
-                                                            </span>
+                                                            <span className={styles.summaryTotal}>{total.toLocaleString()} ₴</span>
                                                         </div>
                                                     </div>
 
