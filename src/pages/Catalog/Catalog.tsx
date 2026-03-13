@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Catalog.module.css';
+import { useAddToCart } from '../../shared/api/hooks/useAddToCart';
 
-import mini from '../../assets/static/mini.png';
-import minik from '../../assets/static/minik.png';
-import dj from '../../assets/static/dj.png';
-import flip from '../../assets/static/flip.png';
-import thermalxlt160 from '../../assets/static/thermal/thermalxlt160.png';
+import minik          from '../../assets/static/minik.png';
+import dj             from '../../assets/static/dj.png';
+import thermalxlt160  from '../../assets/static/thermal/thermalxlt160.png';
+import { API_URL }    from '../../shared/api/api-url';
 
 interface IProduct {
     id: number;
@@ -18,34 +18,32 @@ interface IProduct {
     categoryId: number;
 }
 
-const CATEGORY_IDS = {
-    DRONES: 1,
-    THERMAL: 2,
-};
-
-const API_URL = 'http://localhost:8000';
+const CATEGORY_IDS = { DRONES: 1, THERMAL: 2 };
 const LIMIT = 12;
 
 export function Catalog() {
     const navigate = useNavigate();
-    const [products, setProducts] = useState<IProduct[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const { execute: addToCart, error: cartError } = useAddToCart();
+
+    const [products, setProducts]           = useState<IProduct[]>([]);
+    const [isLoading, setIsLoading]         = useState(true);
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const [currentPage, setCurrentPage]     = useState(1);
+    const [totalPages, setTotalPages]       = useState(1);
+
+    const [cardStates, setCardStates] = useState<Record<number, 'idle' | 'loading' | 'added' | 'error'>>({});
+    const [cardErrors, setCardErrors] = useState<Record<number, string>>({});
 
     useEffect(() => {
         const fetchProducts = async () => {
             setIsLoading(true);
             try {
                 let url: URL;
-
                 if (selectedCategory !== null) {
                     url = new URL(`${API_URL}/products/same-category/${selectedCategory}`);
                 } else {
                     url = new URL(`${API_URL}/products`);
                 }
-
                 url.searchParams.append('page', currentPage.toString());
                 url.searchParams.append('limit', LIMIT.toString());
 
@@ -53,27 +51,22 @@ export function Catalog() {
                 if (!response.ok) throw new Error('Failed to fetch');
 
                 const data = await response.json();
-                console.log('Відповідь:', data);
-
                 if (data.items) {
                     setProducts(data.items);
                     setTotalPages(Math.ceil((data.total || 0) / LIMIT));
                 } else if (data.data) {
                     setProducts(data.data);
-                    const total = data.meta?.total || data.total || 0;
-                    setTotalPages(Math.ceil(total / LIMIT));
+                    setTotalPages(Math.ceil((data.meta?.total || data.total || 0) / LIMIT));
                 } else if (Array.isArray(data)) {
                     setProducts(data);
                     setTotalPages(1);
                 }
-
             } catch (error) {
                 console.error('Error fetching products:', error);
             } finally {
                 setIsLoading(false);
             }
         };
-
         fetchProducts();
     }, [currentPage, selectedCategory]);
 
@@ -91,8 +84,24 @@ export function Catalog() {
         }
     };
 
-    const handleProductClick = (productId: number) => {
-        navigate(`/product/${productId}`);
+    const handleAddToCart = async (e: React.MouseEvent, productId: number) => {
+        setCardStates(prev => ({ ...prev, [productId]: 'loading' }));
+        setCardErrors(prev => ({ ...prev, [productId]: '' }));
+
+        const result = await addToCart({ productId, quantity: 1 });
+
+        if (result) {
+            setCardStates(prev => ({ ...prev, [productId]: 'added' }));
+            setTimeout(() => setCardStates(prev => ({ ...prev, [productId]: 'idle' })), 2000);
+        } else {
+            const msg = cartError || 'Помилка';
+            setCardErrors(prev => ({ ...prev, [productId]: msg }));
+            setCardStates(prev => ({ ...prev, [productId]: 'error' }));
+            setTimeout(() => {
+                setCardStates(prev => ({ ...prev, [productId]: 'idle' }));
+                setCardErrors(prev => ({ ...prev, [productId]: '' }));
+            }, 3000);
+        }
     };
 
     return (
@@ -124,37 +133,60 @@ export function Catalog() {
                 <div style={{ textAlign: 'center', padding: '50px' }}>Завантаження...</div>
             ) : (
                 <div className={styles.grid}>
-                    {products.length > 0 ? (
-                        products.map((product) => {
-                            const isDiscount = product.oldPrice && product.oldPrice > product.price;
+                    {products.length > 0 ? products.map((product) => {
+                        const isDiscount = product.oldPrice && product.oldPrice > product.price;
+                        const cardState  = cardStates[product.id] || 'idle';
+                        const cardError  = cardErrors[product.id] || '';
 
-                            return (
-                                <div key={product.id} className={styles.card}>
-                                    <div 
-                                        className={styles.imageWrapper}
-                                        onClick={() => handleProductClick(product.id)}
-                                    >
-                                        <img
-                                            src={product.media || minik}
-                                            alt={product.name}
-                                            onError={(e) => { (e.target as HTMLImageElement).src = minik; }}
-                                        />
-                                    </div>
-                                    <h3 className={styles.cardTitle}>{product.name}</h3>
-                                    <div className={styles.priceRow}>
-                                        {isDiscount && (
-                                            <span className={styles.oldPrice}>
-                                                {product.oldPrice?.toLocaleString()} ₴
-                                            </span>
-                                        )}
-                                        <span className={`${styles.price} ${isDiscount ? styles.priceRed : ''}`}>
-                                            {product.price.toLocaleString()} ₴
-                                        </span>
-                                    </div>
+                        return (
+                            <div key={product.id} className={styles.card}>
+                                <div
+                                    className={styles.imageWrapper}
+                                    onClick={() => navigate(`/product/${product.id}`)}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    <img
+                                        src={product.media || minik}
+                                        alt={product.name}
+                                        onError={(e) => { (e.target as HTMLImageElement).src = minik; }}
+                                    />
                                 </div>
-                            );
-                        })
-                    ) : (
+
+                                <h3
+                                    className={styles.cardTitle}
+                                    onClick={() => navigate(`/product/${product.id}`)}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    {product.name}
+                                </h3>
+
+                                <div className={styles.priceRow}>
+                                    {isDiscount && (
+                                        <span className={styles.oldPrice}>
+                                            {product.oldPrice?.toLocaleString()} ₴
+                                        </span>
+                                    )}
+                                    <span className={`${styles.price} ${isDiscount ? styles.priceRed : ''}`}>
+                                        {product.price.toLocaleString()} ₴
+                                    </span>
+                                </div>
+
+                                <button
+                                    className={styles.addToCartBtn}
+                                    onClick={(e) => handleAddToCart(e, product.id)}
+                                    disabled={cardState === 'loading'}
+                                >
+                                    {cardState === 'loading' && 'ДОДАЄТЬСЯ...'}
+                                    {cardState === 'added'   && 'ДОДАНО ✓'}
+                                    {(cardState === 'idle' || cardState === 'error') && 'В КОШИК'}
+                                </button>
+
+                                {cardState === 'error' && cardError && (
+                                    <p className={styles.cardError}>{cardError}</p>
+                                )}
+                            </div>
+                        );
+                    }) : (
                         <div style={{ gridColumn: '1 / -1', textAlign: 'center' }}>
                             Товарів не знайдено
                         </div>
@@ -172,7 +204,6 @@ export function Catalog() {
                     >
                         &lt;
                     </button>
-
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                         <button
                             key={page}
@@ -182,7 +213,6 @@ export function Catalog() {
                             {page}
                         </button>
                     ))}
-
                     <button
                         className={styles.pageBtn}
                         onClick={() => handlePageChange(currentPage + 1)}

@@ -6,6 +6,7 @@ export interface OrderItem {
     id: number;
     name: string;
     price: number;
+    oldPrice?: number;  
     quantity: number;
     media?: string;
 }
@@ -24,14 +25,29 @@ export interface Order {
     date?: string;
     orderNumber?: string;
     trackingNumber?: string | null;
+
     recipient?: Recipient;
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+    email?: string;
+
+    deliveryType?: string;   // 'warehouse' | 'postomат' | 'express' | 'courier'
+    city?: string;
+    warehouse?: string;
+    street?: string;
+    building?: string;
+    apartment?: string;
+
+    paymentMethod?: string;  // 'cash' | 'online' | 'card' | 'privat' | 'apple' | 'google'
+
     items: OrderItem[];
 }
 
 export const useGetOrders = () => {
-    const [orders, setOrders] = useState<Order[]>([]);
+    const [orders, setOrders]   = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError]     = useState<string | null>(null);
 
     const fetchOrders = async () => {
         const userId = getUserId();
