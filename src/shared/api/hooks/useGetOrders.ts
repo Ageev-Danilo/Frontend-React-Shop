@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { API_URL } from '../api-url';
-import { getUserId } from './auth.utils';
+import { AUTH_ERROR_MSG, getUserId, handleAuthError } from './auth.utils';
 
 export interface OrderItem {
     id: number;
@@ -52,7 +52,7 @@ export const useGetOrders = () => {
     const fetchOrders = async () => {
         const userId = getUserId();
         if (!userId) {
-            setError('Будь ласка, увійдіть в акаунт');
+            setError(AUTH_ERROR_MSG);
             setOrders([]);
             return;
         }
@@ -65,6 +65,14 @@ export const useGetOrders = () => {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });
+
+            if (res.status === 401 || res.status === 403) {
+                handleAuthError(res.status);
+                setError(AUTH_ERROR_MSG);
+                setOrders([]);
+                return;
+            }
+
             if (!res.ok) throw new Error(`Помилка ${res.status}`);
             const data: Order[] = await res.json();
             setOrders(data);

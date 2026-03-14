@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { API_URL } from '../api-url';
-import { getUserId } from './auth.utils';
+import { AUTH_ERROR_MSG, getUserId, handleAuthError } from './auth.utils';
 
 interface CartItem {
     id: number;
@@ -22,8 +22,9 @@ export const useGetCart = () => {
 
     const fetchCart = async () => {
         const userId = getUserId();
+
         if (!userId) {
-            setError('Будь ласка, увійдіть в акаунт');
+            setError(AUTH_ERROR_MSG);
             setCart({ items: [], total: 0 });
             return;
         }
@@ -36,7 +37,16 @@ export const useGetCart = () => {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });
+
+            if (res.status === 401 || res.status === 403) {
+                handleAuthError(res.status);
+                setError(AUTH_ERROR_MSG);
+                setCart({ items: [], total: 0 });
+                return;
+            }
+
             if (!res.ok) throw new Error(`Помилка ${res.status}`);
+            
             const data: Cart = await res.json();
             setCart(data);
         } catch (err) {

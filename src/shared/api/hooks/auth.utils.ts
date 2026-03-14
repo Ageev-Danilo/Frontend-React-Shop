@@ -14,3 +14,12 @@ export function clearAuth(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('authToken');
 }
+
+export function handleAuthError(status: number): void {
+    if (status === 401 || status === 403) {
+        clearAuth();
+        window.dispatchEvent(new Event('storage'));
+    }
+}
+ 
+export const AUTH_ERROR_MSG = 'Будь ласка, увійдіть в акаунт';
