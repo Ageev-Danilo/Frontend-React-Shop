@@ -1,53 +1,24 @@
 import { useState, useEffect } from 'react';
 import { API_URL } from '../api-url';
-import { AUTH_ERROR_MSG, getUserId, handleAuthError } from './auth.utils';
-
-export interface OrderItem {
-    id: number;
-    name: string;
-    price: number;
-    oldPrice?: number;  
-    quantity: number;
-    media?: string;
-}
-
-export interface Recipient {
-    name: string;
-    phone: string;
-}
+import { getUserId, handleAuthError, AUTH_ERROR_MSG } from './auth.utils';
 
 export interface Order {
     id: number;
-    status: string;
-    total: number;
-    totalAmount?: number;
-    createdAt: string;
-    date?: string;
+    userId: number;
+    payment?: string | null;      
+    comment?: string | null;
+    totalPrice?: number | null;    
+    deliveryStatus: string;       
+
+    createdAt?: string;
     orderNumber?: string;
     trackingNumber?: string | null;
-
-    recipient?: Recipient;
-    firstName?: string;
-    lastName?: string;
-    phone?: string;
-    email?: string;
-
-    deliveryType?: string;   // 'warehouse' | 'postomат' | 'express' | 'courier'
-    city?: string;
-    warehouse?: string;
-    street?: string;
-    building?: string;
-    apartment?: string;
-
-    paymentMethod?: string;  // 'cash' | 'online' | 'card' | 'privat' | 'apple' | 'google'
-
-    items: OrderItem[];
 }
 
 export const useGetOrders = () => {
-    const [orders, setOrders]   = useState<Order[]>([]);
+    const [orders, setOrders]       = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError]     = useState<string | null>(null);
+    const [error, setError]         = useState<string | null>(null);
 
     const fetchOrders = async () => {
         const userId = getUserId();
@@ -74,6 +45,7 @@ export const useGetOrders = () => {
             }
 
             if (!res.ok) throw new Error(`Помилка ${res.status}`);
+
             const data: Order[] = await res.json();
             setOrders(data);
         } catch (err) {

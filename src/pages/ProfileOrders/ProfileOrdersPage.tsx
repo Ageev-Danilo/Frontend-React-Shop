@@ -21,13 +21,6 @@ const PAYMENT_LABELS: Record<string, string> = {
     google: 'Google Pay',
 };
 
-const DELIVERY_LABELS: Record<string, string> = {
-    warehouse: 'Нова Пошта до відділення',
-    postomат:  'Нова Пошта до поштомату',
-    express:   'Експрес-доставка',
-    courier:   "Нова Пошта кур'єром",
-};
-
 type OrderStatus = 'pending' | 'processing' | 'in_transit' | 'delivered' | 'completed';
 const STATUS_STEPS: OrderStatus[] = ['pending', 'processing', 'in_transit', 'delivered', 'completed'];
 
@@ -39,38 +32,10 @@ export const ProfileOrdersPage = () => {
     const getStatusIndex = (status: string) =>
         STATUS_STEPS.indexOf(status as OrderStatus);
 
-    const toggleOrderExpand = (orderId: number) => {
-        setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
-    };
-
     const handleLogout = () => {
         clearAuth();
         window.dispatchEvent(new Event('storage'));
         navigate('/login');
-    };
-
-    const formatDeliveryAddress = (order: Order): string => {
-        const parts: string[] = [];
-        if (order.deliveryType) parts.push(DELIVERY_LABELS[order.deliveryType] ?? order.deliveryType);
-        if (order.city)         parts.push(order.city);
-        if (order.warehouse)    parts.push(order.warehouse);
-        if (order.street)       parts.push(`вул. ${order.street}`);
-        if (order.building)     parts.push(`буд. ${order.building}`);
-        if (order.apartment)    parts.push(`кв. ${order.apartment}`);
-        return parts.length > 0 ? parts.join(', ') : 'Не вказано';
-    };
-
-    const formatPayment = (order: Order): string => {
-        if (!order.paymentMethod) return 'Не вказано';
-        return PAYMENT_LABELS[order.paymentMethod] ?? order.paymentMethod;
-    };
-
-    const computeSaved = (order: Order): number => {
-        if (!order.items || order.items.length === 0) return 0;
-        return order.items.reduce((sum, item) => {
-            const original = item.oldPrice ?? item.price * 1.1;
-            return sum + (original - item.price) * item.quantity;
-        }, 0);
     };
 
     const sidebar = (
@@ -123,7 +88,6 @@ export const ProfileOrdersPage = () => {
         <div className={styles.pageWrapper}>
             <div className={styles.container}>
                 {sidebar}
-
                 <main className={styles.content}>
                     <h1 className={styles.pageTitle}>МОЇ ЗАМОВЛЕННЯ</h1>
 
@@ -137,34 +101,40 @@ export const ProfileOrdersPage = () => {
                     ) : (
                         <div className={styles.ordersList}>
                             {orders.map((order: Order) => {
-                                const savedAmount = computeSaved(order);
-                                const total       = order.totalAmount ?? order.total ?? 0;
+                                const status      = order.deliveryStatus ?? 'pending';
+                                const total       = order.totalPrice ?? 0;
+                                const payment     = order.payment
+                                    ? (PAYMENT_LABELS[order.payment] ?? order.payment)
+                                    : 'Не вказано';
+                                const isExpanded  = expandedOrderId === order.id;
 
                                 return (
                                     <div
                                         key={order.id}
-                                        className={`${styles.orderCard} ${expandedOrderId === order.id ? styles.orderCardExpanded : ''}`}
+                                        className={`${styles.orderCard} ${isExpanded ? styles.orderCardExpanded : ''}`}
                                     >
                                         <div
                                             className={styles.orderCardHeader}
-                                            onClick={() => toggleOrderExpand(order.id)}
+                                            onClick={() => setExpandedOrderId(isExpanded ? null : order.id)}
                                         >
                                             <div className={styles.orderHeaderLeft}>
                                                 <div
                                                     className={styles.orderStatusDot}
                                                     style={{
                                                         backgroundColor:
-                                                            getStatusIndex(order.status) === 4 ? '#10b981' :
-                                                            getStatusIndex(order.status) >= 2 ? '#3b82f6' : '#a1a1aa',
+                                                            getStatusIndex(status) === 4 ? '#10b981' :
+                                                            getStatusIndex(status) >= 2 ? '#3b82f6' : '#a1a1aa',
                                                     }}
                                                 />
                                                 <div className={styles.orderInfo}>
                                                     <div className={styles.orderNumber}>
-                                                        №{order.orderNumber ?? order.id} від{' '}
-                                                        {new Date(order.date ?? order.createdAt).toLocaleDateString('uk-UA')}
+                                                        №{order.orderNumber ?? order.id}
+                                                        {order.createdAt && (
+                                                            <> від {new Date(order.createdAt).toLocaleDateString('uk-UA')}</>
+                                                        )}
                                                     </div>
                                                     <div className={styles.orderStatus}>
-                                                        {STATUS_LABELS[order.status] ?? order.status}
+                                                        {STATUS_LABELS[status] ?? status}
                                                     </div>
                                                 </div>
                                                 <div className={styles.orderMeta}>
@@ -174,32 +144,26 @@ export const ProfileOrdersPage = () => {
                                                     </div>
                                                     <div className={styles.orderAmount}>
                                                         Сума замовлення<br />
-                                                        {total.toLocaleString()} ₴
+                                                        {total > 0 ? `${total.toLocaleString()} ₴` : 'Не вказано'}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className={styles.orderActions}>
-                                                {order.items?.[0]?.media && (
-                                                    <img
-                                                        src={order.items[0].media}
-                                                        alt="product"
-                                                        className={styles.orderPreviewImg}
-                                                    />
-                                                )}
                                                 <button className={styles.expandBtn}>
-                                                    {expandedOrderId === order.id ? '⋀' : '⋁'}
+                                                    {isExpanded ? '⋀' : '⋁'}
                                                 </button>
                                             </div>
                                         </div>
 
-                                        {expandedOrderId === order.id && (
+                                        {isExpanded && (
                                             <div className={styles.orderDetails}>
+
                                                 <div className={styles.statusProgress}>
                                                     {STATUS_STEPS.map((step, idx) => (
                                                         <React.Fragment key={step}>
-                                                            <div className={`${styles.progressStep} ${getStatusIndex(order.status) >= idx ? styles.progressStepActive : ''}`} />
+                                                            <div className={`${styles.progressStep} ${getStatusIndex(status) >= idx ? styles.progressStepActive : ''}`} />
                                                             {idx < STATUS_STEPS.length - 1 && (
-                                                                <div className={`${styles.progressLine} ${getStatusIndex(order.status) > idx ? styles.progressLineActive : ''}`} />
+                                                                <div className={`${styles.progressLine} ${getStatusIndex(status) > idx ? styles.progressLineActive : ''}`} />
                                                             )}
                                                         </React.Fragment>
                                                     ))}
@@ -216,79 +180,36 @@ export const ProfileOrdersPage = () => {
                                                     <h3 className={styles.sectionTitle}>Інформація про замовлення</h3>
                                                     <div className={styles.detailsGrid}>
                                                         <div className={styles.detailRow}>
-                                                            <span className={styles.detailLabel}>Адреса доставки</span>
-                                                            <span className={styles.detailValue}>{formatDeliveryAddress(order)}</span>
+                                                            <span className={styles.detailLabel}>Оплата</span>
+                                                            <span className={styles.detailValue}>{payment}</span>
                                                         </div>
                                                         <div className={styles.detailRow}>
-                                                            <span className={styles.detailLabel}>Отримувач</span>
-                                                            <div className={styles.recipientInfo}>
-                                                                {order.recipient?.name
-                                                                    ? <div>{order.recipient.name}</div>
-                                                                    : (order.firstName || order.lastName)
-                                                                        ? <div>{[order.firstName, order.lastName].filter(Boolean).join(' ')}</div>
-                                                                        : <div>—</div>
-                                                                }
-                                                                <div className={styles.recipientPhone}>
-                                                                    {order.recipient?.phone ?? order.phone ?? ''}
-                                                                </div>
-                                                            </div>
+                                                            <span className={styles.detailLabel}>Коментар</span>
+                                                            <span className={styles.detailValue}>
+                                                                {order.comment || 'Без коментаря'}
+                                                            </span>
+                                                        </div>
+                                                        <div className={styles.detailRow}>
+                                                            <span className={styles.detailLabel}>Доставка</span>
+                                                            <span className={styles.detailValue}>За тарифами перевізника</span>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div className={styles.itemsSection}>
-                                                    <table className={styles.itemsTable}>
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Фото</th>
-                                                                <th>Назва</th>
-                                                                <th>Ціна</th>
-                                                                <th>Кількість</th>
-                                                                <th>Сума</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {order.items?.map(item => (
-                                                                <tr key={item.id}>
-                                                                    <td className={styles.itemPhoto}>
-                                                                        {item.media && <img src={item.media} alt={item.name} />}
-                                                                    </td>
-                                                                    <td className={styles.itemName}>{item.name}</td>
-                                                                    <td className={styles.itemPrice}>{item.price.toLocaleString()} ₴</td>
-                                                                    <td className={styles.itemQty}>{item.quantity}</td>
-                                                                    <td className={styles.itemSum}>{(item.price * item.quantity).toLocaleString()} ₴</td>
-                                                                </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
-
-                                                    <div className={styles.orderSummary}>
-                                                        <div className={styles.summaryRow}>
-                                                            <span>Оплата</span>
-                                                            <span>{formatPayment(order)}</span>
-                                                        </div>
-                                                        <div className={styles.summaryRow}>
-                                                            <span>Доставка</span>
-                                                            <span>За тарифами перевізника</span>
-                                                        </div>
-                                                        <div className={styles.summaryRow}>
-                                                            <span>Загальна сума</span>
-                                                            <span>{total.toLocaleString()} ₴</span>
-                                                        </div>
-                                                        {savedAmount > 0 && (
-                                                            <div className={styles.summaryRow}>
-                                                                <span>Заощаджено</span>
-                                                                <span>{Math.round(savedAmount).toLocaleString()} ₴</span>
-                                                            </div>
-                                                        )}
-                                                        <div className={`${styles.summaryRow} ${styles.summaryTotalRow}`}>
-                                                            <span>Разом</span>
-                                                            <span className={styles.summaryTotal}>{total.toLocaleString()} ₴</span>
-                                                        </div>
+                                                <div className={styles.orderSummary}>
+                                                    <div className={styles.summaryRow}>
+                                                        <span>Загальна сума</span>
+                                                        <span>{total > 0 ? `${total.toLocaleString()} ₴` : '—'}</span>
                                                     </div>
-
-                                                    <button className={styles.cancelBtn}>СКАСУВАТИ</button>
+                                                    <div className={`${styles.summaryRow} ${styles.summaryTotalRow}`}>
+                                                        <span>Разом</span>
+                                                        <span className={styles.summaryTotal}>
+                                                            {total > 0 ? `${total.toLocaleString()} ₴` : '—'}
+                                                        </span>
+                                                    </div>
                                                 </div>
+
+                                                <button className={styles.cancelBtn}>СКАСУВАТИ</button>
                                             </div>
                                         )}
                                     </div>
