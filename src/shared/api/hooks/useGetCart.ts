@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { API_URL } from '../api-url';
-import { AUTH_ERROR_MSG, getUserId, handleAuthError } from './auth.utils';
+import { getUserId, handleAuthError, AUTH_ERROR_MSG } from './auth.utils';
 
-interface CartItem {
+export interface CartItem {
     id: number;
     name: string;
     price: number;
@@ -15,14 +15,40 @@ interface Cart {
     total: number;
 }
 
+interface RawProductOnOrder {
+    id: number;
+    orderId: number;
+    productId: number;
+    count: number;
+    product: {
+        id: number;
+        name: string;
+        price: number;
+        oldPrice?: number;
+        media?: string;
+        imageUrl?: string;
+    };
+}
+
+function transformCart(raw: RawProductOnOrder[]): Cart {
+    const items: CartItem[] = raw.map(item => ({
+        id: item.product.id,
+        name: item.product.name,
+        price: item.product.price,
+        quantity: item.count,
+        media: item.product.media ?? item.product.imageUrl,
+    }));
+    const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    return { items, total };
+}
+
 export const useGetCart = () => {
-    const [cart, setCart] = useState<Cart>({ items: [], total: 0 });
+    const [cart, setCart]           = useState<Cart>({ items: [], total: 0 });
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError]         = useState<string | null>(null);
 
     const fetchCart = async () => {
         const userId = getUserId();
-
         if (!userId) {
             setError(AUTH_ERROR_MSG);
             setCart({ items: [], total: 0 });
@@ -46,9 +72,9 @@ export const useGetCart = () => {
             }
 
             if (!res.ok) throw new Error(`Помилка ${res.status}`);
-            
-            const data: Cart = await res.json();
-            setCart(data);
+
+            const raw: RawProductOnOrder[] = await res.json();
+            setCart(transformCart(raw));
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Невідома помилка');
             setCart({ items: [], total: 0 });
