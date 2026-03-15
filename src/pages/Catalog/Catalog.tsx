@@ -25,14 +25,13 @@ export function Catalog() {
     const navigate = useNavigate();
     const { execute: addToCart, error: cartError } = useAddToCart();
 
-    const [products, setProducts]           = useState<IProduct[]>([]);
-    const [isLoading, setIsLoading]         = useState(true);
+    const [products, setProducts]                 = useState<IProduct[]>([]);
+    const [isLoading, setIsLoading]               = useState(true);
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-    const [currentPage, setCurrentPage]     = useState(1);
-    const [totalPages, setTotalPages]       = useState(1);
-
-    const [cardStates, setCardStates] = useState<Record<number, 'idle' | 'loading' | 'added' | 'error'>>({});
-    const [cardErrors, setCardErrors] = useState<Record<number, string>>({});
+    const [currentPage, setCurrentPage]           = useState(1);
+    const [totalPages, setTotalPages]             = useState(1);
+    const [cardStates, setCardStates]             = useState<Record<number, 'idle' | 'loading' | 'added' | 'error'>>({});
+    const [cardErrors, setCardErrors]             = useState<Record<number, string>>({});
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -85,10 +84,11 @@ export function Catalog() {
     };
 
     const handleAddToCart = async (e: React.MouseEvent, productId: number) => {
+        e.stopPropagation();
         setCardStates(prev => ({ ...prev, [productId]: 'loading' }));
         setCardErrors(prev => ({ ...prev, [productId]: '' }));
 
-        const result = await addToCart({ productId, quantity: 1 });
+        const result = await addToCart(productId, 1);
 
         if (result) {
             setCardStates(prev => ({ ...prev, [productId]: 'added' }));

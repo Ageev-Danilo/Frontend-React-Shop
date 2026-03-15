@@ -56,11 +56,11 @@ const useGetSimilarProducts = (id: string | undefined) => {
 };
 
 export const ProductDetailsPage = () => {
-    const { id }       = useParams<{ id: string }>();
-    const navigate     = useNavigate();
+    const { id }   = useParams<{ id: string }>();
+    const navigate = useNavigate();
 
-    const { product, isLoading, error } = useGetProductById(id);
-    const { similar }                   = useGetSimilarProducts(id);
+    const { product, isLoading, error }                                     = useGetProductById(id);
+    const { similar }                                                        = useGetSimilarProducts(id);
     const { execute: addToCart, isLoading: addingToCart, error: cartError } = useAddToCart();
     const [cartAdded,   setCartAdded]   = useState(false);
     const [cartMessage, setCartMessage] = useState<string | null>(null);
@@ -70,7 +70,7 @@ export const ProductDetailsPage = () => {
 
     const handleBuy = async () => {
         if (!product?.id) return;
-        const result = await addToCart({ productId: product.id, quantity: 1 });
+        const result = await addToCart(product.id, 1);
         if (result) {
             setCartAdded(true);
             setCartMessage(null);

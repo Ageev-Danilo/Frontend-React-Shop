@@ -54,17 +54,23 @@ async function fetchWarehouses(cityRef: string, typeRef: string): Promise<NovaPo
     return data.success ? (data.data as NovaPoshtaWarehouse[]) : [];
 }
 
-interface CheckoutFormData extends CreateOrderData {
+interface CheckoutFormData {
+    firstName: string;
+    lastName: string;
+    patronymic: string;
+    phone: string;
+    email: string;
     deliveryType: 'postomат' | 'warehouse' | 'express' | 'courier';
     paymentMethod: 'cash' | 'online' | 'card' | 'privat' | 'apple' | 'google';
+    comment?: string;
 }
 
 export const CheckoutPage = () => {
     const navigate = useNavigate();
     const { cart, isLoading: cartLoading } = useGetCart();
     const { execute: createOrder, isLoading: orderLoading, error: orderError } = useCreateOrder();
-    const [orderSuccess, setOrderSuccess]             = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen]       = useState(false);
+    const [orderSuccess, setOrderSuccess]       = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const [cityInput, setCityInput]                   = useState('');
     const [cityOptions, setCityOptions]               = useState<NovaPoshtaCity[]>([]);
@@ -126,15 +132,14 @@ export const CheckoutPage = () => {
         setShowWarehouseList(false);
     };
 
-    const onSubmit = async (data: CheckoutFormData) => {
+    const onSubmit = async (formData: CheckoutFormData) => {
         const orderData: CreateOrderData = {
-            firstName:  data.firstName,
-            lastName:   data.lastName,
-            patronymic: data.patronymic,
-            phone:      data.phone,
-            email:      data.email,
-            comment:    data.comment,
+            payment:        formData.paymentMethod,  
+            comment:        formData.comment,
+            totalPrice:     cart.total,               
+            deliveryStatus: 'pending',              
         };
+
         const result = await createOrder(orderData);
         if (result) {
             setOrderSuccess(true);
@@ -150,7 +155,6 @@ export const CheckoutPage = () => {
             <h1 className={styles.title}>Оформлення замовлення</h1>
 
             <div className={styles.container}>
-
                 <div className={styles.formSection}>
                     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
 
@@ -266,7 +270,6 @@ export const CheckoutPage = () => {
 
                         <div className={styles.formBlock}>
                             <h2 className={styles.blockTitle}>Оплата</h2>
-
                             {(['cash', 'online', 'card', 'privat', 'apple', 'google'] as const).map(val => (
                                 <label key={val} className={`${styles.radioRow} ${paymentMethod === val ? styles.radioRowActive : ''}`}>
                                     <input type="radio" {...register('paymentMethod')} value={val} />
@@ -300,12 +303,7 @@ export const CheckoutPage = () => {
                     <div className={styles.summaryCard}>
                         <div className={styles.summaryHeader}>
                             <h3 className={styles.summaryTitle}>Замовлення</h3>
-                            <button
-                                type="button"
-                                className={styles.editBtn}
-                                onClick={() => setIsEditModalOpen(true)}
-                                title="Редагувати"
-                            >
+                            <button type="button" className={styles.editBtn} onClick={() => setIsEditModalOpen(true)} title="Редагувати">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
@@ -323,7 +321,7 @@ export const CheckoutPage = () => {
                         ) : (
                             <>
                                 <div className={styles.cartItems}>
-                                    {cart.items!.map(item => (
+                                    {cart.items.map(item => (
                                         <div key={item.id} className={styles.cartItem}>
                                             <div className={styles.itemImage}>
                                                 {item.media && <img src={item.media} alt={item.name} />}
@@ -343,10 +341,9 @@ export const CheckoutPage = () => {
                                 </div>
                                 <div className={styles.orderSummary}>
                                     <div className={styles.summaryRow}><span>Загальна сума</span><span>{cart.total.toLocaleString()} ₴</span></div>
-                                    <div className={styles.summaryRow}><span>Заощаджено</span><span className={styles.discount}>- 1 005 ₴</span></div>
                                     <div className={styles.summaryRow}><span>Доставка</span><span>За тарифом перевізника</span></div>
                                     <div className={`${styles.summaryRow} ${styles.summaryTotal}`}>
-                                        <span>Зі знижкою</span>
+                                        <span>До сплати</span>
                                         <span className={styles.totalHighlight}>{cart.total.toLocaleString()} ₴</span>
                                     </div>
                                 </div>

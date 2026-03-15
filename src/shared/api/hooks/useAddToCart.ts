@@ -1,25 +1,24 @@
 import { useState } from 'react';
 import { API_URL } from '../api-url';
-import { getUserId } from './auth.utils';
+import { getUserId, AUTH_ERROR_MSG } from './auth.utils';
 
 interface AddToCartPayload {
     productId: number;
-    quantity: number;
+    count: number; 
 }
 
 interface AddToCartResult {
-    success: boolean;
-    message?: string;
+    message: string;
 }
 
 export const useAddToCart = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const execute = async (payload: AddToCartPayload): Promise<AddToCartResult | null> => {
+    const execute = async (productId: number, count: number = 1): Promise<AddToCartResult | null> => {
         const userId = getUserId();
         if (!userId) {
-            setError('Будь ласка, увійдіть в акаунт');
+            setError(AUTH_ERROR_MSG);
             return null;
         }
 
@@ -30,7 +29,7 @@ export const useAddToCart = () => {
             const res = await fetch(`${API_URL}/products-in-order/${userId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({ productId, count }),
             });
             if (!res.ok) throw new Error(`Помилка ${res.status}`);
             const data: AddToCartResult = await res.json();

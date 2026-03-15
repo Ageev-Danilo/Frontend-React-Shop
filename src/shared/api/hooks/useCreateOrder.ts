@@ -1,20 +1,16 @@
 import { useState } from 'react';
 import { API_URL } from '../api-url';
-import { getUserId, getToken } from './auth.utils';
+import { getUserId, getToken, AUTH_ERROR_MSG } from './auth.utils';
 
 export interface CreateOrderData {
-    firstName: string;
-    lastName: string;
-    patronymic: string;
-    phone: string;
-    email: string;
+    payment: string;        
     comment?: string;
+    totalPrice: number;
+    deliveryStatus: string; 
 }
 
 export interface CreateOrderResponse {
-    orderId: number;
-    orderNumber: string;
-    message?: string;
+    message: string; 
 }
 
 export const useCreateOrder = () => {
@@ -24,7 +20,7 @@ export const useCreateOrder = () => {
     const execute = async (data: CreateOrderData): Promise<CreateOrderResponse | null> => {
         const userId = getUserId();
         if (!userId) {
-            setError('Будь ласка, увійдіть в акаунт');
+            setError(AUTH_ERROR_MSG);
             return null;
         }
 
