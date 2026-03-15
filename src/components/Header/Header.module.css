@@ -1,14 +1,26 @@
+.stickyWrapper {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
 header {
     position: relative;
-    padding: 20px;
+    padding: 0;
+    background: transparent;
+    width: 100%;
 }
 
 header h1 {
-    font-family: 'GT Walsheim Pro';
-    font-size: 61px;
+    font-family: 'GT Walsheim Pro', sans-serif;
+    font-size: 81px;
+    font-weight: 900;
     color: white;
     text-align: center;
     text-transform: uppercase;
+    line-height: 100%;
+    letter-spacing: 3%;
     margin-block-start: 100px;
     margin-block-end: 0;
 }
@@ -20,49 +32,68 @@ header h1 {
     justify-content: space-between;
     align-items: center;
     padding: 10px 40px;
-    padding-right: 20px;
-    gap: 90px;
     width: calc(100% - 40px);
     height: 64px;
     background: rgba(255, 255, 255, 0.5);
-    border: 1px solid #E4E4E7;
-    backdrop-filter: blur(32px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border-radius: 62px;
-    transform: translateX(20px);
-    transition: all 0.3s;
+    margin: 20px auto 0;
+    transition: all 0.3s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 }
 
 .scrolled {
-    position: sticky;
-    top: 20px;
-    z-index: 1;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
 }
 
 .header a {
-    font-family: 'GT Walsheim Pro';
+    font-family: 'GT Walsheim Pro', sans-serif;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 14px;
-    line-height: 16px;
+    line-height: 100%;
     letter-spacing: 0.09em;
     text-transform: uppercase;
-    color: #9EA0AB;
+    color: #1A1A1A;
     text-decoration: none;
     -webkit-user-drag: none;
+    transition: color 0.2s;
+}
+
+.header a:hover {
+    color: #555555;
 }
 
 .header .logo {
     background-image: url(../../assets/img/logo.svg);
-    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
     background-position: center;
     width: 108px;
     height: 21px;
+    flex: 0 0 auto;
 }
 
 .header .gap {
     display: flex;
     align-items: center;
     gap: 27px;
+    flex: 1;
+}
+
+.buttonsDiv {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 27px;
+    flex: 1;
 }
 
 .header button {
@@ -76,10 +107,11 @@ header h1 {
     outline: none;
     border-radius: 20px;
     transition: all 0.3s;
+    cursor: pointer;
 }
 
 .header button:hover {
-    background-color: #9ea0ab91;
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .cartBtn {

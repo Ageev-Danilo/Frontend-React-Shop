@@ -18,7 +18,8 @@ export function useGetPopularProducts(): UseGetPopularProducts {
             try {
                 
                 setIsLoading(true);
-                const response = await fetch(`${API_URL}/products/suggestions?popularProducts=true&limitPerPage=4`, {
+                const response = await fetch(`${API_URL}/products/suggestions?isNew=false&popular=true&limit=3&offset=0`, {
+                    
                     method: "GET",
                     body: "product",
                     headers:  {"Content-Type": "application/json"}

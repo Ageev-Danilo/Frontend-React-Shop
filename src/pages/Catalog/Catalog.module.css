@@ -2,7 +2,7 @@
     width: 100%;
     max-width: 1440px;
     margin: 0 auto;
-    padding: 40px 60px 100px;
+    padding: 120px 60px 100px;
     box-sizing: border-box;
 }
 
@@ -83,7 +83,14 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 10px;
-    background-color: transparent; 
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+}
+
+.imageWrapper:hover {
+    background-color: #F4F4F5;
 }
 
 .imageWrapper img {
@@ -146,10 +153,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s ease;
 }
 
 .pageBtn:hover {
     color: #0C122A;
+}
+
+.pageBtn:disabled {
+    cursor: not-allowed;
 }
 
 .activePage {
@@ -174,3 +186,38 @@
     }
 }
 
+ 
+.addToCartBtn {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px 0;
+    background: transparent;
+    color: #0c122a;
+    border: 1.5px solid #0c122a;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+ 
+.addToCartBtn:hover:not(:disabled) {
+    background: #0c122a;
+    color: #fff;
+}
+ 
+.addToCartBtn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+ 
+.cardError {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #ef4444;
+    text-align: center;
+}
+ 
