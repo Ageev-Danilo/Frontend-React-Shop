@@ -1,27 +1,32 @@
 .wrapper {
     width: 100%;
-    max-width: 1440px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 120px 60px 100px;
+    padding: 80px 40px 100px;
     box-sizing: border-box;
 }
 
 .title {
     font-family: 'GT Walsheim Pro', sans-serif;
-    font-weight: 900;
-    font-size: 60px;
-    text-align: left;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 100%;
+    letter-spacing: 0.03em; 
     text-transform: uppercase;
     color: #0c122a;
-    margin-top: 0;
+    margin: 0 0 24px;
+}
+
+.titleDivider {
+    height: 1px;
+    background: #e4e4e7;
     margin-bottom: 40px;
 }
 
 .container {
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: 1fr 400px;
     gap: 60px;
-    width: 100%;
     align-items: start;
 }
 
@@ -29,38 +34,44 @@
 .form { display: flex; flex-direction: column; }
 
 .formBlock {
-    border: 1px solid #e4e4e7;
-    padding: 20px;
-    margin-bottom: 12px;
+    border: none;
+    padding: 0;
+    margin-bottom: 36px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #e4e4e7;
 }
+.formBlock:last-of-type { border-bottom: none; }
 
 .blockTitle {
-    font-size: 16px;
-    font-weight: 600;
-    color: #0c122a;
-    margin: 0 0 16px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-family: 'GT Walsheim Pro', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 100%;
+    letter-spacing: 0.03em;
+    text-transform: none; 
+    color: #0c122a;        
+    margin: 0 0 24px;
 }
 
 .field {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
 }
 .field:last-child { margin-bottom: 0; }
 
 .label {
     font-size: 13px;
-    font-weight: 500;
-    color: #0c122a;
+    font-weight: 400;
+    color: #0c122a; 
+    letter-spacing: 0.01em;
 }
 
 .input, .textarea {
     width: 100%;
-    padding: 12px 14px;
-    border: 1px solid #d4d4d8;
+    padding: 11px 14px;
+    border: 1px solid #d4d4d8; 
     border-radius: 4px;
     font-size: 14px;
     color: #0c122a;
@@ -73,36 +84,37 @@
 .input:focus, .textarea:focus { border-color: #0c122a; }
 .input::placeholder, .textarea::placeholder { color: #a1a1aa; }
 .input:disabled { background: #f4f4f5; cursor: not-allowed; }
-.inputError { border-color: #ef4444; }
+.inputError { border-color: #ef4444 !important; }
 
 .textarea {
     resize: vertical;
     min-height: 100px;
+    padding-top: 10px;
 }
 
 .fieldError {
     font-size: 11px;
     color: #ef4444;
-    margin-top: 2px;
 }
 
 .radioRow {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px 12px;
+    gap: 12px;
+    padding: 13px 14px;
     border: 1px solid #d4d4d8;
     border-radius: 4px;
     margin-bottom: 8px;
     cursor: pointer;
     font-size: 14px;
     color: #0c122a;
-    font-weight: 500;
+    font-weight: 400;
     transition: border-color 0.2s;
     user-select: none;
+    background: #fff;
 }
 .radioRow:last-of-type { margin-bottom: 0; }
-.radioRowActive { border-color: #0c122a; }
+.radioRowActive { border-color: #0c122a; background: #fafafa; }
 .radioRow input[type='radio'] {
     cursor: pointer;
     width: 16px;
@@ -112,27 +124,29 @@
 }
 
 .npLogo {
-    height: 18px;
-    object-fit: contain;
+    height: 20px;
+    width: auto;
     margin-left: auto;
     flex-shrink: 0;
 }
 
 .npPicker {
     background: #fafafa;
-    border: 1px solid #e4e4e7;
-    border-radius: 4px;
-    padding: 14px;
-    margin: -4px 0 8px;
+    border: 1px solid #d4d4d8;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    padding: 16px;
+    margin-top: -8px;
+    margin-bottom: 8px;
     display: flex;
     flex-direction: column;
+    gap: 12px;
 }
 
 .quickCities {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 12px;
+    gap: 8px;
 }
 
 .quickCity {
@@ -140,7 +154,7 @@
     border: none;
     padding: 0;
     font-size: 12px;
-    color: #a1a1aa;
+    color: #71717a;
     text-decoration: underline;
     cursor: pointer;
     font-family: inherit;
@@ -161,9 +175,9 @@
     margin: 0;
     padding: 0;
     z-index: 100;
-    max-height: 200px;
+    max-height: 220px;
     overflow-y: auto;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
 }
 .dropdown li {
     padding: 10px 14px;
@@ -175,7 +189,7 @@
 }
 .dropdown li:last-child { border-bottom: none; }
 .dropdown li:hover { background: #f4f4f5; }
-.dropdownSub { font-size: 11px; color: #a1a1aa; }
+.dropdownSub { font-size: 11px; color: #a1a1aa; margin-left: 4px; }
 
 .payIcons {
     display: flex;
@@ -184,75 +198,84 @@
     margin-left: auto;
     flex-shrink: 0;
 }
-.payIcons img { height: 18px; object-fit: contain; }
+.payIcons img { height: 20px; object-fit: contain; }
 
 .submitBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 0 32px;
     height: 44px;
     background: transparent;
-    color: #a1a1aa;
-    border: 1.5px solid #a1a1aa;
+    color: #71717a;
+    border: 1.5px solid #d4d4d8;
     border-radius: 100px;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 500;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.25s;
     letter-spacing: 0.5px;
-    font-family: 'GT Walsheim Pro', sans-serif;
-    margin-top: 12px;
-    display: inline-flex;
-    align-items: center;
+    font-family: inherit;
+    margin-top: 20px;
 }
-.submitBtn:hover { background: #0c122a; color: #fff; border-color: #0c122a; }
+.submitBtn:hover { border-color: #0c122a; color: #0c122a; }
 
 .summarySection {
     position: sticky;
-    top: 100px;
+    top: 80px;  
 }
 
 .summaryCard {
     border: 1px solid #e4e4e7;
-    border-radius: 4px;
-    padding: 24px;
+    border-radius: 8px;
+    padding: 0;           
     background: #fff;
+    overflow: hidden;
 }
 
 .summaryHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    padding: 16px 20px;    
+    border-bottom: 1px solid #e4e4e7;
 }
 
 .summaryTitle {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: #0c122a;
     margin: 0;
+    letter-spacing: 0.01em;
 }
 
 .editBtn {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 18px;
-    padding: 0;
+    padding: 2px;
     color: #a1a1aa;
     transition: color 0.2s;
+    display: flex;
+    align-items: center;
 }
 .editBtn:hover { color: #0c122a; }
 
+.summaryContent {
+    padding: 20px;
+}
+
 .summaryLoading {
     text-align: center;
-    padding: 40px 0;
+    padding: 40px 20px;
     color: #a1a1aa;
     font-size: 14px;
 }
 
 .summaryEmpty {
     text-align: center;
-    padding: 40px 0;
+    padding: 40px 20px;
 }
 .summaryEmpty p {
     font-size: 14px;
@@ -268,7 +291,7 @@
 .cartItems {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     margin-bottom: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid #e4e4e7;
@@ -276,24 +299,36 @@
 
 .cartItem {
     display: grid;
-    grid-template-columns: 60px 1fr auto;
-    gap: 12px;
+    grid-template-columns: 72px 1fr auto;
+    gap: 14px;
     align-items: center;
 }
 
 .itemImage {
-    width: 60px;
-    height: 60px;
+    width: 72px;
+    height: 72px;
     background: #f4f4f5;
-    border-radius: 4px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    flex-shrink: 0;
 }
-.itemImage img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+.itemImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 6px;
+    box-sizing: border-box;
+}
 
-.itemDetails { display: flex; flex-direction: column; gap: 4px; }
+.itemDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
 
 .itemName {
     font-size: 13px;
@@ -302,16 +337,29 @@
     line-height: 1.3;
 }
 
-.itemPricing { display: flex; gap: 8px; align-items: center; font-size: 12px; }
-.itemPrice { color: #0c122a; font-weight: 600; }
-.itemDiscount { color: #a1a1aa; text-decoration: line-through; }
+.itemPricing {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.itemPrice {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ef4444;
+}
+.itemDiscount {
+    font-size: 12px;
+    color: #a1a1aa;
+    text-decoration: line-through;
+}
 
 .itemQty {
     font-size: 13px;
     font-weight: 500;
     color: #0c122a;
     min-width: 20px;
-    text-align: center;
+    text-align: right;
+    flex-shrink: 0;
 }
 
 .orderSummary {
@@ -323,9 +371,10 @@
 .summaryRow {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 13px;
     color: #0c122a;
-    padding: 8px 0;
+    padding: 9px 0;
     border-bottom: 1px solid #f4f4f5;
 }
 .summaryRow:last-child { border-bottom: none; }
@@ -333,46 +382,52 @@
 
 .summaryTotal {
     font-weight: 700;
+    font-size: 14px;
     padding-top: 12px;
+    border-top: 1px solid #e4e4e7;
+    border-bottom: none !important;
+    margin-top: 4px;
 }
 
-.totalHighlight { color: #ef4444; font-weight: 700; }
+.totalHighlight {
+    color: #ef4444;
+    font-weight: 700;
+    font-size: 16px;
+}
 
 .checkoutBtn {
     width: 100%;
-    height: 48px;
+    height: 50px;
     background: #0c122a;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
-    transition: background 0.3s;
-    font-family: 'GT Walsheim Pro', sans-serif;
-    margin-top: 4px;
+    transition: background 0.25s;
+    font-family: inherit;
 }
-.checkoutBtn:hover:not(:disabled) { background: #1e2540; }
-.checkoutBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.checkoutBtn:hover:not(:disabled) { background: #1a2340; }
+.checkoutBtn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-.errorMsg { color: #ef4444; font-size: 13px; font-weight: 600; margin-bottom: 12px; }
-.successMsg { color: #10b981; font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+.errorMsg  { color: #ef4444; font-size: 13px; margin-bottom: 12px; }
+.successMsg { color: #10b981; font-size: 13px; margin-bottom: 12px; }
 
 @media (max-width: 1024px) {
     .container { grid-template-columns: 1fr; gap: 40px; }
     .summarySection { position: static; }
 }
 @media (max-width: 768px) {
-    .wrapper { padding: 80px 20px 60px; }
-    .title { font-size: 36px; margin-bottom: 30px; }
+    .wrapper { padding: 60px 20px 60px; }
+    .title { font-size: 24px; }
+    .summaryCard { padding: 0; }
 }
-@media (max-width: 600px) {
-    .wrapper { padding: 60px 16px 40px; }
-    .title { font-size: 26px; }
-    .formBlock { padding: 16px; }
-    .blockTitle { font-size: 14px; }
-    .summaryCard { padding: 16px; }
-    .checkoutBtn { height: 44px; font-size: 12px; }
+@media (max-width: 480px) {
+    .wrapper { padding: 50px 16px 40px; }
+    .title { font-size: 20px; }
+    .cartItem { grid-template-columns: 56px 1fr auto; gap: 10px; }
+    .itemImage { width: 56px; height: 56px; }
 }
