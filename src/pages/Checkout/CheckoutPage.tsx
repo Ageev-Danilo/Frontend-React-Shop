@@ -6,6 +6,12 @@ import { useCreateOrder, CreateOrderData } from '../../shared/api/hooks/useCreat
 import { EditCartModal } from '../../components/EditCartModal/EditCartModal';
 import styles from './CheckoutPage.module.css';
 
+import npIcon        from '../../assets/icons/np.png';
+import visaIcon      from '../../assets/icons/visa.png';
+import googlePayIcon from '../../assets/icons/Google_Pay.png';
+import applePayIcon  from '../../assets/icons/ApplePay.png';
+import mastercardIcon from '../../assets/icons/mastercard.png';
+
 interface NovaPoshtaCity {
     Ref: string;
     Description: string;
@@ -18,16 +24,12 @@ interface NovaPoshtaWarehouse {
 
 const WAREHOUSE_TYPE = '841339c7-591a-42e2-8233-7a0a00f7a000';
 const POSTOMАТ_TYPE  = 'f9316480-5f2d-425d-bc2c-ac7cd29decf0';
-const NP_API_KEY     = process.env.REACT_APP_NOVA_POSHTA_API_KEY ?? '';
+const NP_API_KEY     = 'cd69e16d2f7d7eab264687e030d3a09b';
 const NP_API_URL     = 'https://api.novaposhta.ua/v2.0/json/';
 const QUICK_CITIES   = ['Вінниця', 'Одеса', 'Харків', 'Дніпро', 'Київ', 'Львів'];
 
 const NpLogo = () => (
-    <svg viewBox="0 0 80 22" fill="none" xmlns="http://www.w3.org/2000/svg"
-        style={{ height: 20, width: 'auto', flexShrink: 0, marginLeft: 'auto' }}>
-        <rect width="80" height="22" rx="3" fill="#EE3124"/>
-        <text x="6" y="15" fontFamily="Arial" fontWeight="700" fontSize="10" fill="white">Нова Пошта</text>
-    </svg>
+    <img src={npIcon} alt="Нова Пошта" className={styles.npLogo} />
 );
 
 async function fetchCities(query: string): Promise<NovaPoshtaCity[]> {
@@ -63,15 +65,27 @@ async function fetchWarehouses(cityRef: string, typeRef: string): Promise<NovaPo
 }
 
 interface CheckoutFormData {
-    firstName:     string;
-    lastName:      string;
-    patronymic:    string;
-    phone:         string;
-    email:         string;
-    deliveryType:  'postomат' | 'warehouse' | 'express' | 'courier';
-    paymentMethod: 'cash' | 'online' | 'card' | 'privat' | 'apple' | 'google';
-    comment?:      string;
+    firstName:       string;
+    lastName:        string;
+    patronymic:      string;
+    phone:           string;
+    email:           string;
+    deliveryType:    'postomат' | 'warehouse' | 'express' | 'courier';
+    paymentMethod:   'cash' | 'online' | 'card' | 'privat' | 'apple' | 'google';
+    comment?:        string;
+    expressAddress?: string;
+    courierCity?:    string;
+    courierAddress?: string;
 }
+
+const PAYMENT_OPTIONS: { value: CheckoutFormData['paymentMethod']; label: string }[] = [
+    { value: 'cash',   label: 'Оплата при отриманні' },
+    { value: 'online', label: 'Оплатити зараз'       },
+    { value: 'card',   label: 'Карткою онлайн'       },
+    { value: 'privat', label: 'Privat Pay'            },
+    { value: 'apple',  label: 'Apple Pay'             },
+    { value: 'google', label: 'Google Pay'            },
+];
 
 export const CheckoutPage = () => {
     const navigate = useNavigate();
@@ -154,11 +168,95 @@ export const CheckoutPage = () => {
         }
     };
 
-    const needsLocationPicker = deliveryType === 'warehouse' || deliveryType === 'postomат';
     const hasItems = !!(cart.items && cart.items.length > 0);
-
     const savedAmount = cart.items?.reduce((sum, item) =>
         sum + (item.price * 0.1) * item.quantity, 0) ?? 0;
+
+    const renderNpPicker = (type: 'postomат' | 'warehouse') => (
+        <div className={styles.npPicker} onClick={e => e.preventDefault()}>
+            <div className={styles.field} style={{ position: 'relative' }}>
+                <label className={styles.label}>Місто</label>
+                <input
+                    className={styles.input}
+                    value={cityInput}
+                    placeholder="Введіть місто..."
+                    autoComplete="off"
+                    onChange={e => { setCityInput(e.target.value); setSelectedCity(null); }}
+                    onFocus={() => cityOptions.length > 0 && setShowCityList(true)}
+                    onBlur={() => setTimeout(() => setShowCityList(false), 150)}
+                />
+                {showCityList && cityOptions.length > 0 && (
+                    <ul className={styles.dropdown}>
+                        {cityOptions.map(c => (
+                            <li key={c.Ref} onMouseDown={() => handleCitySelect(c)}>
+                                {c.Description}
+                                <span className={styles.dropdownSub}> {c.AreaDescription} обл.</span>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+            <div className={styles.quickCities}>
+                {QUICK_CITIES.map(name => (
+                    <button key={name} type="button" className={styles.quickCity}
+                        onMouseDown={e => { e.preventDefault(); handleQuickCity(name); }}>
+                        {name}
+                    </button>
+                ))}
+            </div>
+            <div className={styles.field} style={{ position: 'relative' }}>
+                    <label className={styles.label}>
+                        {type === 'postomат' ? 'Адреса поштомату' : 'Адреса відділення'}
+                    </label>
+                    <input
+                        className={styles.input}
+                        value={warehouseInput}
+                        placeholder={npLoading ? 'Завантаження...' : selectedCity ? `Пошук ${type === 'postomат' ? 'поштомату' : 'відділення'}...` : 'Спочатку виберіть місто'}
+                        autoComplete="off"
+                        disabled={npLoading || !selectedCity}
+                        onChange={e => { setWarehouseInput(e.target.value); setShowWarehouseList(true); }}
+                        onFocus={() => setShowWarehouseList(true)}
+                        onBlur={() => setTimeout(() => setShowWarehouseList(false), 150)}
+                    />
+                    {showWarehouseList && filteredWarehouses.length > 0 && (
+                        <ul className={styles.dropdown}>
+                            {filteredWarehouses.slice(0, 20).map(wh => (
+                                <li key={wh.Ref} onMouseDown={() => handleWarehouseSelect(wh)}>
+                                    {wh.Description}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+        </div>
+    );
+
+    const renderCourierPicker = () => (
+        <div className={styles.npPicker} onClick={e => e.preventDefault()}>
+            <div className={styles.field}>
+                <label className={styles.label}>Місто</label>
+                <input {...register('courierCity')} className={styles.input} placeholder="Введіть місто доставки..." />
+            </div>
+            <div className={styles.field}>
+                <label className={styles.label}>Адреса доставки</label>
+                <input
+                    {...register('courierAddress')}
+                    className={styles.input}
+                    placeholder={watch('courierCity') ? 'Вул. Назва, буд. №, кв. №' : 'Спочатку виберіть місто'}
+                    disabled={!watch('courierCity')}
+                />
+            </div>
+        </div>
+    );
+
+    const renderExpressPicker = () => (
+        <div className={styles.npPicker} onClick={e => e.preventDefault()}>
+            <div className={styles.field}>
+                <label className={styles.label}>Адреса доставки (Київ)</label>
+                <input {...register('expressAddress')} className={styles.input} placeholder="Вул. Назва, буд. №, кв. №" />
+            </div>
+        </div>
+    );
 
     return (
         <div className={styles.wrapper}>
@@ -166,7 +264,6 @@ export const CheckoutPage = () => {
             <div className={styles.titleDivider} />
 
             <div className={styles.container}>
-
                 <div className={styles.formSection}>
                     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
 
@@ -204,112 +301,69 @@ export const CheckoutPage = () => {
                             <h2 className={styles.blockTitle}>Доставка</h2>
 
                             <label className={`${styles.radioRow} ${deliveryType === 'postomат' ? styles.radioRowActive : ''}`}>
-                                <input type="radio" {...register('deliveryType')} value="postomат" />
-                                <span>Нова Пошта до поштомату</span>
-                                <NpLogo />
+                                <div className={styles.radioRowTop}>
+                                    <input type="radio" {...register('deliveryType')} value="postomат" />
+                                    <span>Нова Пошта до поштомату</span>
+                                    <NpLogo />
+                                </div>
+                                {deliveryType === 'postomат' && renderNpPicker('postomат')}
                             </label>
 
                             <label className={`${styles.radioRow} ${deliveryType === 'warehouse' ? styles.radioRowActive : ''}`}>
-                                <input type="radio" {...register('deliveryType')} value="warehouse" />
-                                <span>Нова Пошта до відділення</span>
-                                <NpLogo />
+                                <div className={styles.radioRowTop}>
+                                    <input type="radio" {...register('deliveryType')} value="warehouse" />
+                                    <span>Нова Пошта до відділення</span>
+                                    <NpLogo />
+                                </div>
+                                {deliveryType === 'warehouse' && renderNpPicker('warehouse')}
                             </label>
 
-                            {needsLocationPicker && (
-                                <div className={styles.npPicker}>
-                                    <div className={styles.field} style={{ position: 'relative' }}>
-                                        <label className={styles.label}>Місто</label>
-                                        <input
-                                            className={styles.input}
-                                            value={cityInput}
-                                            placeholder="Введіть місто..."
-                                            autoComplete="off"
-                                            onChange={e => { setCityInput(e.target.value); setSelectedCity(null); }}
-                                            onFocus={() => cityOptions.length > 0 && setShowCityList(true)}
-                                            onBlur={() => setTimeout(() => setShowCityList(false), 150)}
-                                        />
-                                        {showCityList && (
-                                            <ul className={styles.dropdown}>
-                                                {cityOptions.map(c => (
-                                                    <li key={c.Ref} onMouseDown={() => handleCitySelect(c)}>
-                                                        {c.Description}
-                                                        <span className={styles.dropdownSub}>{c.AreaDescription} обл.</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
-                                    </div>
-                                    <div className={styles.quickCities}>
-                                        {QUICK_CITIES.map(name => (
-                                            <button key={name} type="button" className={styles.quickCity} onClick={() => handleQuickCity(name)}>
-                                                {name}
-                                            </button>
-                                        ))}
-                                    </div>
-                                    {selectedCity && (
-                                        <div className={styles.field} style={{ position: 'relative' }}>
-                                            <label className={styles.label}>
-                                                {deliveryType === 'postomат' ? 'Поштомат' : 'Відділення'}
-                                            </label>
-                                            <input
-                                                className={styles.input}
-                                                value={warehouseInput}
-                                                placeholder={npLoading ? 'Завантаження...' : `Пошук ${deliveryType === 'postomат' ? 'поштомату' : 'відділення'}...`}
-                                                autoComplete="off"
-                                                disabled={npLoading}
-                                                onChange={e => { setWarehouseInput(e.target.value); setShowWarehouseList(true); }}
-                                                onFocus={() => setShowWarehouseList(true)}
-                                                onBlur={() => setTimeout(() => setShowWarehouseList(false), 150)}
-                                            />
-                                            {showWarehouseList && filteredWarehouses.length > 0 && (
-                                                <ul className={styles.dropdown}>
-                                                    {filteredWarehouses.slice(0, 20).map(wh => (
-                                                        <li key={wh.Ref} onMouseDown={() => handleWarehouseSelect(wh)}>
-                                                            {wh.Description}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-
                             <label className={`${styles.radioRow} ${deliveryType === 'express' ? styles.radioRowActive : ''}`}>
-                                <input type="radio" {...register('deliveryType')} value="express" />
-                                <span>Експрес-доставка по Києву</span>
+                                <div className={styles.radioRowTop}>
+                                    <input type="radio" {...register('deliveryType')} value="express" />
+                                    <span>Експрес-доставка по Києву</span>
+                                </div>
+                                {deliveryType === 'express' && renderExpressPicker()}
                             </label>
 
                             <label className={`${styles.radioRow} ${deliveryType === 'courier' ? styles.radioRowActive : ''}`}>
-                                <input type="radio" {...register('deliveryType')} value="courier" />
-                                <span>Нова Пошта кур'єром</span>
-                                <NpLogo />
+                                <div className={styles.radioRowTop}>
+                                    <input type="radio" {...register('deliveryType')} value="courier" />
+                                    <span>Нова Пошта кур'єром</span>
+                                    <NpLogo />
+                                </div>
+                                {deliveryType === 'courier' && renderCourierPicker()}
+                            </label>
+                        </div>
+                        <div className={styles.formBlock}>
+                            <h2 className={styles.blockTitle}>Оплата</h2>
+                        <div className={`${styles.paymentGroup} ${paymentMethod === 'cash' ? styles.paymentGroupActive : ''}`}
+                            style={{ marginBottom: 8 }}>
+                            <label className={`${styles.paymentRow} ${paymentMethod === 'cash' ? styles.paymentRowActive : ''}`}>
+                                <input type="radio" {...register('paymentMethod')} value="cash" />
+                                <span>Оплата при отриманні</span>
                             </label>
                         </div>
 
-                        <div className={styles.formBlock}>
-                            <h2 className={styles.blockTitle}>Оплата</h2>
-                            {(['cash', 'online', 'card', 'privat', 'apple', 'google'] as const).map(val => (
-                                <label key={val} className={`${styles.radioRow} ${paymentMethod === val ? styles.radioRowActive : ''}`}>
-                                    <input type="radio" {...register('paymentMethod')} value={val} />
-                                    <span>
-                                        {val === 'cash'   && 'Оплата при отриманні'}
-                                        {val === 'online' && 'Оплатити зараз'}
-                                        {val === 'card'   && 'Карткою онлайн'}
-                                        {val === 'privat' && 'Privat Pay'}
-                                        {val === 'apple'  && 'Apple Pay'}
-                                        {val === 'google' && 'Google Pay'}
-                                    </span>
-                                    {val === 'online' && paymentMethod === 'online' && (
-                                        <div className={styles.payIcons}>
-                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa" />
-                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/200px-Google_Pay_Logo.svg.png" alt="G Pay" />
-                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Apple_Pay_logo.svg/200px-Apple_Pay_logo.svg.png" alt="A Pay" />
-                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="MC" />
-                                        </div>
-                                    )}
-                                </label>
-                            ))}
+                        <div className={`${styles.paymentGroup} ${paymentMethod && paymentMethod !== 'cash' ? styles.paymentGroupActive : ''}`}>
+                                {PAYMENT_OPTIONS.filter(o => o.value !== 'cash').map(({ value, label }) => (
+                                    <label
+                                        key={value}
+                                        className={`${styles.paymentRow} ${paymentMethod === value ? styles.paymentRowActive : ''}`}
+                                    >
+                                        <input type="radio" {...register('paymentMethod')} value={value} />
+                                        <span>{label}</span>
+                                        {value === 'online' && (
+                                            <div className={styles.payIcons}>
+                                                <img src={visaIcon}       alt="Visa" />
+                                                <img src={googlePayIcon}  alt="G Pay" />
+                                                <img src={applePayIcon}   alt="A Pay" />
+                                                <img src={mastercardIcon} alt="MC" />
+                                            </div>
+                                        )}
+                                    </label>
+                                ))}
+                            </div>
                         </div>
 
                         <button type="button" className={styles.submitBtn} onClick={() => navigate(-1)}>
@@ -322,7 +376,7 @@ export const CheckoutPage = () => {
                     <div className={styles.summaryCard}>
                         <div className={styles.summaryHeader}>
                             <h3 className={styles.summaryTitle}>Замовлення</h3>
-                            <button type="button" className={styles.editBtn} onClick={() => setIsEditModalOpen(true)} title="Редагувати">
+                            <button type="button" className={styles.editBtn} onClick={() => setIsEditModalOpen(true)}>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
@@ -364,7 +418,6 @@ export const CheckoutPage = () => {
                                             </div>
                                         ))}
                                     </div>
-
                                     <div className={styles.orderSummary}>
                                         <div className={styles.summaryRow}>
                                             <span>Загальна сума</span>

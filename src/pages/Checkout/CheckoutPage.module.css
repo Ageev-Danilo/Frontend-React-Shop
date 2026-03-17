@@ -11,7 +11,7 @@
     font-weight: 400;
     font-size: 30px;
     line-height: 100%;
-    letter-spacing: 0.03em; 
+    letter-spacing: 0.03em;
     text-transform: uppercase;
     color: #0c122a;
     margin: 0 0 24px;
@@ -48,8 +48,8 @@
     font-size: 24px;
     line-height: 100%;
     letter-spacing: 0.03em;
-    text-transform: none; 
-    color: #0c122a;        
+    text-transform: none;
+    color: #0c122a;
     margin: 0 0 24px;
 }
 
@@ -64,14 +64,14 @@
 .label {
     font-size: 13px;
     font-weight: 400;
-    color: #0c122a; 
+    color: #0c122a;
     letter-spacing: 0.01em;
 }
 
 .input, .textarea {
     width: 100%;
     padding: 11px 14px;
-    border: 1px solid #d4d4d8; 
+    border: 1px solid #d4d4d8;
     border-radius: 4px;
     font-size: 14px;
     color: #0c122a;
@@ -92,16 +92,11 @@
     padding-top: 10px;
 }
 
-.fieldError {
-    font-size: 11px;
-    color: #ef4444;
-}
+.fieldError { font-size: 11px; color: #ef4444; }
 
 .radioRow {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 13px 14px;
+    flex-direction: column;
     border: 1px solid #d4d4d8;
     border-radius: 4px;
     margin-bottom: 8px;
@@ -112,9 +107,20 @@
     transition: border-color 0.2s;
     user-select: none;
     background: #fff;
+    overflow: visible;
 }
 .radioRow:last-of-type { margin-bottom: 0; }
-.radioRowActive { border-color: #0c122a; background: #fafafa; }
+.radioRowActive { border-color: #0c122a; }
+
+.radioRowTop {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .radioRow input[type='radio'] {
     cursor: pointer;
     width: 16px;
@@ -126,27 +132,26 @@
 .npLogo {
     height: 20px;
     width: auto;
+    object-fit: contain;
     margin-left: auto;
     flex-shrink: 0;
 }
 
 .npPicker {
-    background: #fafafa;
-    border: 1px solid #d4d4d8;
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-    padding: 16px;
-    margin-top: -8px;
-    margin-bottom: 8px;
+    background: #fff;
+    border-top: 1px solid #e4e4e7;
+    padding: 16px 14px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    overflow: visible;
 }
 
 .quickCities {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    margin-top: -8px;
+    margin-bottom: 12px;
 }
 
 .quickCity {
@@ -154,13 +159,13 @@
     border: none;
     padding: 0;
     font-size: 12px;
-    color: #71717a;
+    color: #0c122a;
     text-decoration: underline;
     cursor: pointer;
     font-family: inherit;
     transition: color 0.2s;
 }
-.quickCity:hover { color: #0c122a; }
+.quickCity:hover { color: #71717a; }
 
 .dropdown {
     position: absolute;
@@ -174,7 +179,7 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    z-index: 100;
+    z-index: 200;
     max-height: 220px;
     overflow-y: auto;
     box-shadow: 0 8px 16px rgba(0,0,0,0.08);
@@ -186,19 +191,60 @@
     cursor: pointer;
     border-bottom: 1px solid #f4f4f5;
     transition: background 0.15s;
+    white-space: normal;
+    word-break: break-word;
 }
 .dropdown li:last-child { border-bottom: none; }
 .dropdown li:hover { background: #f4f4f5; }
 .dropdownSub { font-size: 11px; color: #a1a1aa; margin-left: 4px; }
 
+.paymentGroup {
+    border: 1px solid #d4d4d8; 
+    border-radius: 4px;
+    overflow: hidden;
+}
+.paymentGroupActive {
+    border-color: #0c122a; 
+}
+
+.paymentRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #0c122a;
+    font-weight: 400;
+    user-select: none;
+    background: #fff;
+    border-bottom: none; 
+    box-sizing: border-box;
+}
+.paymentRow:last-of-type { border-bottom: none; }
+.paymentRowActive { background: #fff; }
+
+.paymentRow input[type='radio'] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    accent-color: #0c122a;
+    flex-shrink: 0;
+}
+
 .payIcons {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     margin-left: auto;
     flex-shrink: 0;
 }
-.payIcons img { height: 20px; object-fit: contain; }
+.payIcons img {
+    height: 18px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
 
 .submitBtn {
     display: inline-flex;
@@ -223,13 +269,13 @@
 
 .summarySection {
     position: sticky;
-    top: 80px;  
+    top: 80px;
 }
 
 .summaryCard {
     border: 1px solid #e4e4e7;
     border-radius: 8px;
-    padding: 0;           
+    padding: 0;
     background: #fff;
     overflow: hidden;
 }
@@ -238,7 +284,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 20px;    
+    padding: 16px 20px;
     border-bottom: 1px solid #e4e4e7;
 }
 
@@ -247,7 +293,6 @@
     font-weight: 600;
     color: #0c122a;
     margin: 0;
-    letter-spacing: 0.01em;
 }
 
 .editBtn {
@@ -262,31 +307,18 @@
 }
 .editBtn:hover { color: #0c122a; }
 
-.summaryContent {
-    padding: 20px;
-}
+.summaryContent { padding: 20px; }
 
 .summaryLoading {
     text-align: center;
-    padding: 40px 20px;
+    padding: 40px 0;
     color: #a1a1aa;
     font-size: 14px;
 }
 
-.summaryEmpty {
-    text-align: center;
-    padding: 40px 20px;
-}
-.summaryEmpty p {
-    font-size: 14px;
-    color: #a1a1aa;
-    margin: 0 0 12px;
-}
-.catalogLink {
-    font-size: 13px;
-    color: #0c122a;
-    text-decoration: underline;
-}
+.summaryEmpty { text-align: center; padding: 40px 0; }
+.summaryEmpty p { font-size: 14px; color: #a1a1aa; margin: 0 0 12px; }
+.catalogLink { font-size: 13px; color: #0c122a; text-decoration: underline; }
 
 .cartItems {
     display: flex;
@@ -323,35 +355,11 @@
     box-sizing: border-box;
 }
 
-.itemDetails {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    min-width: 0;
-}
-
-.itemName {
-    font-size: 13px;
-    font-weight: 500;
-    color: #0c122a;
-    line-height: 1.3;
-}
-
-.itemPricing {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-.itemPrice {
-    font-size: 14px;
-    font-weight: 600;
-    color: #ef4444;
-}
-.itemDiscount {
-    font-size: 12px;
-    color: #a1a1aa;
-    text-decoration: line-through;
-}
+.itemDetails { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.itemName { font-size: 13px; font-weight: 500; color: #0c122a; line-height: 1.3; }
+.itemPricing { display: flex; gap: 8px; align-items: center; }
+.itemPrice { font-size: 14px; font-weight: 600; color: #ef4444; }
+.itemDiscount { font-size: 12px; color: #a1a1aa; text-decoration: line-through; }
 
 .itemQty {
     font-size: 13px;
@@ -362,11 +370,7 @@
     flex-shrink: 0;
 }
 
-.orderSummary {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-}
+.orderSummary { display: flex; flex-direction: column; margin-bottom: 20px; }
 
 .summaryRow {
     display: flex;
@@ -389,11 +393,7 @@
     margin-top: 4px;
 }
 
-.totalHighlight {
-    color: #ef4444;
-    font-weight: 700;
-    font-size: 16px;
-}
+.totalHighlight { color: #ef4444; font-weight: 700; font-size: 16px; }
 
 .checkoutBtn {
     width: 100%;
@@ -423,7 +423,6 @@
 @media (max-width: 768px) {
     .wrapper { padding: 60px 20px 60px; }
     .title { font-size: 24px; }
-    .summaryCard { padding: 0; }
 }
 @media (max-width: 480px) {
     .wrapper { padding: 50px 16px 40px; }
