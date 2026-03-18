@@ -8,30 +8,31 @@ interface UseGetSameProducts {
     error: string | null;
 }
 
-export function useGetPopularProducts(): UseGetSameProducts {
+export function useGetSameProducts(): UseGetSameProducts {
     const [products, setProducts] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        async function getPopularProducts() {
+        async function getSameProducts() {
             try {
-                
                 setIsLoading(true);
-                const response = await fetch(`${API_URL}/products/same`, {
-                    method: "GET",
-                    body: "product",
-                    headers:  {"Content-Type": "application/json"}
-                });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                // const response = await fetch(`${API_URL}/products/same`, {
+                //     method: "GET",
+                //     headers: {"Content-Type": "application/json"}
+                // });
 
-                const data: Product[] = await response.json();
-                setProducts(data);
+                // if (!response.ok) {
+                //     throw new Error(`HTTP error! status: ${response.status}`);
+                // }
+
+                // const data: Product[] = await response.json();
+                // setProducts(data);
+
+                setProducts([]);
+
             } catch (error) {
-                console.error(error);
                 if (error instanceof Error) {
                     setError(error.message);
                 }
@@ -40,7 +41,7 @@ export function useGetPopularProducts(): UseGetSameProducts {
             }
         }
 
-        getPopularProducts();
+        getSameProducts();
     }, []);
 
     return { products, isLoading, error };

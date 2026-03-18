@@ -17,20 +17,22 @@ export function useGetNewProducts(): UseGetNewProducts {
         async function getNewProducts() {
             try {
                 setIsLoading(true);
-                const response = await fetch(`${API_URL}/products/suggestions?newProducts=true&limitPerPage=4`, {
-                    method: "GET",
-                    body: "product",
-                    headers:  {"Content-Type": "application/json"}
-                });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                // const response = await fetch(`${API_URL}/products/suggestions?newProducts=true&limitPerPage=4`, {
+                //     method: "GET",
+                //     headers: {"Content-Type": "application/json"}
+                // });
 
-                const data: Product[] = await response.json();
-                setProducts(data);
+                // if (!response.ok) {
+                //     throw new Error(`HTTP error! status: ${response.status}`);
+                // }
+
+                // const data: Product[] = await response.json();
+                // setProducts(data);
+
+                setProducts([]);
+
             } catch (error) {
-                console.error(error);
                 if (error instanceof Error) {
                     setError(error.message);
                 }
@@ -38,7 +40,7 @@ export function useGetNewProducts(): UseGetNewProducts {
                 setIsLoading(false);
             }
         }
-        
+
         getNewProducts();
     }, []);
 
