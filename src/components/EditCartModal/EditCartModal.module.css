@@ -1,0 +1,254 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.modal {
+    background: #fff;
+    border-radius: 10px;
+    width: 520px;
+    max-width: calc(100vw - 32px);
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+    animation: slideUp 0.22s ease;
+    overflow: hidden;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #e4e4e7;
+    flex-shrink: 0;
+}
+
+.title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0c122a;
+    margin: 0;
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #a1a1aa;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+    border-radius: 50%;
+}
+.closeBtn:hover { color: #0c122a; }
+
+.items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f4f4f5;
+}
+.item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.itemImage {
+    width: 76px;
+    height: 76px;
+    background: #f4f4f5;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.itemImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 4px;
+}
+
+.itemDetails {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.itemName {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0c122a;
+    line-height: 1.3;
+}
+
+.itemPricing {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.oldPrice {
+    font-size: 12px;
+    color: #a1a1aa;
+    text-decoration: line-through;
+}
+
+.newPrice {
+    font-size: 13px;
+    font-weight: 700;
+    color: #cb3923;
+}
+
+.itemControls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.circleBtn {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #d4d4d8;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 17px;
+    color: #0c122a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+    transition: all 0.2s;
+}
+.circleBtn:hover {
+    border-color: #0c122a;
+    background: #f4f4f5;
+}
+
+.qty {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0c122a;
+    min-width: 18px;
+    text-align: center;
+}
+
+.deleteBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #a1a1aa;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+    margin-left: 2px;
+}
+.deleteBtn:hover { color: #d9381e; }
+
+.summary {
+    padding: 14px 24px;
+    border-top: 1px solid #e4e4e7;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #0c122a;
+}
+
+.oldTotal { color: #a1a1aa; text-decoration: line-through; }
+.saved    { color: #a1a1aa; }
+
+.summaryTotalRow {
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px solid #f4f4f5;
+}
+
+.total {
+    color: #cb3923;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 24px;
+    border-top: 1px solid #e4e4e7;
+    flex-shrink: 0;
+}
+
+.cancelBtn,
+.saveBtn {
+    padding: 0 24px;
+    height: 40px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: inherit;
+}
+
+.cancelBtn {
+    background: transparent;
+    color: #0c122a;
+    border: 1.5px solid #d4d4d8;
+}
+.cancelBtn:hover { border-color: #0c122a; background: #f4f4f5; }
+
+.saveBtn {
+    background: #0c122a;
+    color: #fff;
+    border: none;
+}
+.saveBtn:hover { background: #1e2540; }
